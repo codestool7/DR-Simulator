@@ -42,14 +42,13 @@ div.MainTitle {
 
 .button {
   background-color: #751c81; /* Green */
-  border: none;
+  border-radius: 30px;
   color: rgba(255, 255, 255, 0.90);
-  padding: 16px 32px;
+  padding: 10px 16px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-  margin: 4px 2px;
   transition-duration: 0.4s;
   cursor: pointer;
 }
@@ -60,7 +59,18 @@ button.MainButton {
   border: 2px solid #751c81;
 }
 
+button.predef {
+  background-color: rgba(255, 255, 255, 0.90); 
+  color: black; 
+  border: 2px solid #c4c4c4;
+}
+
 button.MainButton:hover {
+  background-color: #751c81;
+  color: white;
+}
+
+button.predef:hover {
   background-color: #751c81;
   color: white;
 }
@@ -70,6 +80,35 @@ td {
   border-collapse: collapse;
   text-align: center;
   padding: 1px;
+}
+
+a {
+  outline: none;
+  text-decoration: none;
+  padding: 2px 1px 0;
+}
+
+a:link {
+  color: #350153;
+}
+
+a:visited {
+  color: #350153;
+}
+
+a:focus {
+  border-bottom: 1px solid;
+  background: #9a46ca;
+}
+
+a:hover {
+  border-bottom: 1px solid;
+  background: #9a46ca;
+}
+
+a:active {
+  background: #350153;
+  color: #9a46ca;
 }
 
 

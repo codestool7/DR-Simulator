@@ -1,4 +1,29 @@
+//#region Initialisers
+let CurrentSeason;
+//#endregion
 //#region Classes
+class Season {
+  constructor(Name, Cast, Host, Finale, Lipsync, Premiere)
+  {
+    this.seasonname = Name;
+    this.fullCast = Cast;
+    this.currentCast  = Cast;
+    this.eliminatedCast = [];
+    this.episodes = [];
+    this.doubleShantay = false;
+    this.doubleSashay = false;
+    this.enableSaves = true;
+    this.host = Host;
+    this.finaleformat = Finale;
+    this.lipsyncformat = Lipsync;
+    this.premiereformat = Premiere;
+  }
+
+  getFullCast()
+  {
+    return(this.fullCast);
+  }
+}
 class Queen {
 
   constructor(Name, Acting, Improv, Comedy, Dance, Design, Runway, Lipsync, Branding, Charisma, Kindness, Shadyness, Image = "noimage", Promo = "nopromo", OriginalSeason = "noseason", IsCustom = false)
@@ -16,6 +41,8 @@ class Queen {
       this.kindness = Kindness;
       this.shadyness = Shadyness;
 
+      this.trackrecord = [];
+
       this.ppe = 0;
       this.episodeson = 0;
 
@@ -24,6 +51,8 @@ class Queen {
       this.safes = 0;
       this.lows = 0;
       this.bottoms = 0;
+
+      this.minichallengeswins = 0;
 
       this.image = "Images/Queens/"+Image+".webp";
       this.promo = "Images/Promos/"+Promo+"Promo.webp";
@@ -85,13 +114,16 @@ class Screen {
     this.MainScreen.append(text);
   }
 
+  createBigText(Text) {
+    let MainTitle = document.querySelector("div.MainTitle");
+    MainTitle.innerHTML = '<h1>'+Text+'</h1>';
+  }
+
   createRupaulAnnouncement(Text) {
     let text = document.createElement("h2");
     text.innerHTML = Text;
     this.MainScreen.append(text);
   }
-
-  
 
   createImage(Source, Color)
   {
@@ -109,6 +141,27 @@ class Screen {
   this.MainScreen.appendChild(image); 
   }
 
+  createVideo(Country)
+  {
+    let video = document.createElement("video");
+    let source = document.createElement("source")
+    switch(Country)
+    {
+      case "Canada":
+        source.setAttribute("src","Videos/CDR.mp4");
+        source.setAttribute("type","video/mp4");
+        break;
+    }
+    video.autoplay = true;
+    video.controls = true;
+    video.append(source);
+    this.MainScreen.append(video);
+    let br = document.createElement("br");
+    this.MainScreen.append(br);
+    this.MainScreen.append(br);
+    this.MainScreen.append(br);
+  }
+
   createButton(Text,Onclick) {
     let btn = document.createElement("button");
     btn.innerHTML = Text;
@@ -124,8 +177,8 @@ class Screen {
 
       let tbody = document.createElement("tbody");
 
-      let rows = ~~(fullCast.length/5);
-      let rest = fullCast.length%5;
+      let rows = ~~(fullCast.length/4);
+      let rest = fullCast.length%4;
 
       if(rest!=0)
       {
@@ -138,28 +191,28 @@ class Screen {
         if(i!=rows-1 || rest==0)
         {
           console.log("First case");
-          for(let q = 0; q<5;q++)
+          for(let q = 0; q<4;q++)
           {
             let td = document.createElement("td");
-            if(eliminatedCast.indexOf(fullCast[q+(i*5)])!=-1)
+            if(CurrentSeason.eliminatedCast.indexOf(fullCast[q+(i*4)])!=-1)
             {
-              td.setAttribute("style", "background: url("+ fullCast[q+(i*5)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 195px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+              td.setAttribute("style", "background: url("+ fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 195px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
             }
             else
             {
-            td.setAttribute("style", "background: url("+ fullCast[q+(i*5)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 195px;");
+            td.setAttribute("style", "background: url("+ fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 195px;");
             }
             tr.append(td);
           }
           tbody.append(tr);
           let tr2 = document.createElement("tr");
-          for(let q = 0; q<5;q++)
+          for(let q = 0; q<4;q++)
           {
             let td = document.createElement("td");
             let name = document.createElement("p");
             name.setAttribute("style","font-weight: bold; font-size: 15px;");
             let placement = document.createElement("p");
-            switch(fullCast[q+(i*5)].GetPlacement())
+            switch(fullCast[q+(i*4)].GetPlacement())
             {
               case 0:
                 placement.innerHTML = "TBA";
@@ -171,9 +224,9 @@ class Screen {
               case 3:
                 placement.innerHTML = "3rd";
               default:
-                placement.innerHTML = fullCast[q+(i*5)].GetPlacement()+"th";
+                placement.innerHTML = fullCast[q+(i*4)].GetPlacement()+"th";
             }
-            name.innerHTML = fullCast[q+(i*5)].GetName();
+            name.innerHTML = fullCast[q+(i*4)].GetName();
             td.append(name);
             td.append(placement);
             tr2.append(td);
@@ -186,13 +239,13 @@ class Screen {
           for(let q = 0; q<rest; q++)
           {
             let td = document.createElement("td");
-            if(eliminatedCast.indexOf(fullCast[q+(i*5)])!=-1)
+            if(CurrentSeason.eliminatedCast.indexOf(fullCast[q+(i*4)])!=-1)
             {
-              td.setAttribute("style", "background: url("+ fullCast[q+(i*5)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 195px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+              td.setAttribute("style", "background: url("+ fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 195px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
             }
             else
             {
-            td.setAttribute("style", "background: url("+ fullCast[q+(i*5)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 195px;");
+            td.setAttribute("style", "background: url("+ fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 195px;");
             }
             tr.append(td);
           }
@@ -204,7 +257,7 @@ class Screen {
             let name = document.createElement("p");
             name.setAttribute("style","font-weight: bold; font-size: 15px;");
             let placement = document.createElement("p");
-            switch(fullCast[q+(i*5)].GetPlacement())
+            switch(fullCast[q+(i*4)].GetPlacement())
             {
               case 0:
                 placement.innerHTML = "TBA";
@@ -216,9 +269,9 @@ class Screen {
               case 3:
                 placement.innerHTML = "3rd";
               default:
-                placement.innerHTML = fullCast[q+(i*5)].GetPlacement()+"th";
+                placement.innerHTML = fullCast[q+(i*4)].GetPlacement()+"th";
             }
-            name.innerHTML = fullCast[q+(i*5)].GetName();
+            name.innerHTML = fullCast[q+(i*4)].GetName();
             td.append(name);
             td.append(placement);
             tr2.append(td);
@@ -230,35 +283,16 @@ class Screen {
       }
       table.append(thead);
       table.append(tbody);
-
-      putincenter.append(table)
+      let br = document.createElement("br");
+      putincenter.append(table);
       this.MainScreen.append(putincenter);
+      this.MainScreen.append(br);
   }
 }
-function LaunchMiniChallenge()
-{
-  let Mini = new Screen();
-  Mini.clean();
-  Mini.createImage(brookehost.outofdrag,"blue");
-  Mini.createText("Welcome to another week queens! Congratulations for surviving until now.","Bold");
-  for(let i = 0; i < currentCast.length; i++)
-  {
-    Mini.createImage(currentCast[i].image,"black");
-  }
-  Mini.createImage(brookehost.outofdrag,"blue");
-  Mini.createText("As you may all have guessed, yes.","Bold");
-  Mini.createText("Today is the snatch game!","Bold");
-  Mini.createText("I will let you all prepare for a bit, before coming back later. Good luck!","Bold");
-  Mini.createButton("Proceed","SnatchGameWalkthrought()");
-}
+
 class MiniChallenge{
   constructor()
   {
-    this.challenge = 5;
-  }
-
-  ReadingChallenge(){
-    
   }
 
 }
@@ -281,9 +315,9 @@ class SnatchGameCharacter
 
 //#region Queens
 let anastarzia = new Queen("Anastarzia Anaquway", 7, 6, 8, 7, 9, 8, 6, 8, 10, 5, 0, "Anastarzia", "Anastarzia", "CA1", false);
-let boa = new Queen("BOA", 7, 9, 9, 7, 6, 5, 5, 9, 12, 3, 0, "Boa", "Boa", "CA1", false);
-let ilona = new Queen("Ilona Verley", 6, 7, 9, 7, 9, 8, 11, 8, 8, 2, 2, "Ilona", "Ilona","CA1",false);
-let jimbo = new Queen("Jimbo", 12, 10, 14, 4, 8, 7, 3, 9, 12, 1, 4, "Jimbo", "Jimbo", false);
+let boa = new Queen("BOA", 7, 9, 9, 7, 6, 5, 5, 9, 12, 3, 0, "BOA", "BOA", "CA1", false);
+let ilona = new Queen("Ilona Verley", 6, 7, 9, 7, 9, 8, 11, 8, 8, 2, 4, "Ilona", "Ilona","CA1",false);
+let jimbo = new Queen("Jimbo", 12, 10, 14, 4, 8, 7, 3, 9, 12, 2, 4, "Jimbo", "Jimbo", false);
 let juice = new Queen("Juice Boxx", 7, 6, 7, 6, 5, 9, 6, 7, 10, 4, 1, "Juice", "Juice", "CA1", false);
 let kiara = new Queen("Kiara",8, 9, 6, 7, 10, 8, 7, 5, 6, 3, 0, "Kiara", "Kiara", "CA1", false);
 let kyne = new Queen("Kyne", 7, 8, 6, 8, 7, 6, 6, 10, 12, 2, 5, "Kyne", "Kyne", "CA1", false);
@@ -293,29 +327,30 @@ let rita = new Queen("Rita Baga", 8, 10, 12, 6, 10, 8, 12, 8, 10, 4, 1, "Rita", 
 let scarlettbobo = new Queen("Scarlett BoBo", 12, 10, 8, 8, 10, 11, 13, 12, 10, 4, 1, "ScarlettBoBo", "ScarlettBoBo", "CA1", false);
 let tynomi = new Queen("Tynomi Banks", 6, 7, 9, 12, 8, 8, 13, 12, 10, 4, 2, "Tynomi", "Tynomi", "CA1", false);
 
-let brookehost = new Host("Brooke Lynn Hytes", "BrookeOut", "BrookeIn");
+let can_1 = [anastarzia,boa,ilona,jimbo,juice,kiara,kyne,lemon,priyanka,rita,scarlettbobo,tynomi];
+
+let brookehost = new Host("Brooke Lynn Hytes", "BrookeIn", "BrookeOut");
 //#endregion
 
-let fullCast = [anastarzia,boa,ilona,jimbo,juice,kiara,kyne,lemon,priyanka,rita,scarlettbobo,tynomi];
-let currentCast = [anastarzia,boa,ilona,jimbo,juice,kiara,kyne,lemon,priyanka,rita,scarlettbobo,tynomi];
-let eliminatedCast = [];
-for(let i = 0; i<4; i++)
-{
-  console.log(i)
-  let elim = getRandomInt(0,currentCast.length-1);
-  eliminatedCast.unshift(currentCast[elim]);
-  currentCast.splice(elim,1);
-  eliminatedCast[0].placement = currentCast.length+1;
-}
+
 //#region Commands
 function GetPromoTable()
   {
     document.body.style.backgroundImage = 'url("../Images/Backgrounds/bg.png");';
     Main = new Screen();
     Main.clean();
-    Main.createPromoTable(fullCast);
-    Main.createButton("Proceed","ChallengeAnnouncement()");
+    Main.createPromoTable(CurrentSeason.getFullCast());
+    Main.createButton("Proceed","Intro()");
   }
+
+function LaunchMiniChallenge()
+{
+  if(CurrentSeason.episodes.length == 0 && CurrentSeason.lipsyncformat == "LIFE")
+  {
+    Main = new Screen();
+    Main.clean();
+  }
+}
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -323,14 +358,43 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min +1)) + min;
 }
 
+function Intro()
+{
+  Video = new Screen();
+  Video.clean();
+  Video.createVideo("Canada");
+  Video.createBigText("Welcome to "+CurrentSeason.seasonname+'!');
+  Video.createButton("Proceed","ChallengeAnnouncement()");
+}
+
 function ChallengeAnnouncement(){
-  Announcement = new Screen();
-  Announcement.clean();
-  document.body.style.backgroundImage = "url('Images/Backgrounds/RChallenge.png')";
-  Announcement.createRupaulAnnouncement("Hello my queens !");
-  Announcement.createRupaulAnnouncement("Snatching is really important for us. We've got to be 24/7!");
-  Announcement.createRupaulAnnouncement("So will you be able to snatch our interest, or will you snatch the trophy home ?");
-  Announcement.createRupaulAnnouncement("Only fate will decide which.");
-  Announcement.createButton("Proceed","LaunchMiniChallenge()");
+  if(CurrentSeason.episodes.length==0 && CurrentSeason.premiereformat == "NORMAL")
+  {
+    Announcement = new Screen();
+    Announcement.clean();
+    document.body.style.backgroundImage = "url('Images/Backgrounds/RChallenge.png')";
+    Announcement.createRupaulAnnouncement("Welcome queens!");
+    Announcement.createRupaulAnnouncement("First of all let me give you all a warm welcome.");
+    Announcement.createRupaulAnnouncement("You all made it here. You are all the very best.");
+    Announcement.createRupaulAnnouncement("Now, let the olympics begin !");
+    Announcement.createButton("Proceed","LaunchMiniChallenge()");
+  }
+  else
+  {
+    Announcement = new Screen();
+    Announcement.clean();
+    document.body.style.backgroundImage = "url('Images/Backgrounds/RChallenge.png')";
+    Announcement.createRupaulAnnouncement("Hello my queens !");
+    Announcement.createRupaulAnnouncement("Snatching is really important for us. We've got to be 24/7!");
+    Announcement.createRupaulAnnouncement("So will you be able to snatch our interest, or will you snatch the trophy home ?");
+    Announcement.createRupaulAnnouncement("Only fate will decide which.");
+    Announcement.createButton("Proceed","LaunchMiniChallenge()");
+  }
+}
+
+function CreateSeason()
+{
+  CurrentSeason = new Season("Canada's Drag Season 1", can_1, brookehost, "TOP3", "LIFE", "NORMAL");
+  GetPromoTable(CurrentSeason.getFullCast());
 }
 //#endregion
