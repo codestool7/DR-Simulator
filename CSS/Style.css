@@ -6,6 +6,10 @@ body {
     padding: 20px;
     font-size: 13px;
     background-image: url("../Images/Backgrounds/bg.png");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
   
 div.MainArea {
