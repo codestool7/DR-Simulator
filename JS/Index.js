@@ -1,5 +1,6 @@
 //#region Initialisers
 let CurrentSeason;
+let CurrentChallenge;
 
 let SlayedChallenge = [];
 let GreatChallenge = [];
@@ -9,6 +10,10 @@ let FloppedChallenge = [];
 let Tops = [];
 let Bottoms = [];
 let Safes = [];
+let Critiqued = [];
+let Steps = 0;
+let CritiquesChoice = 0;
+
 //#endregion
 //#region Classes
 class Season {
@@ -88,6 +93,7 @@ class Queen {
 
       this.perfomancescore = 0;
       this.runwayscore = 0;
+      this.finalscore = 0;
   }
 
   GetScore(min, max, stat)
@@ -110,10 +116,12 @@ class Queen {
     if(getRandomInt(0,1)==0 && this.miniwinner == true)
     {
       this.perfomancescore = this.GetScore(10,50,this.design+bonus);
+      this.finalscore = this.perfomancescore;
     }
     else
     {
       this.perfomancescore = this.GetScore(10,50,this.design);
+      this.finalscore = this.perfomancescore;
     }
   }
 }
@@ -354,7 +362,7 @@ class SnatchGame{
 class DesignChallenge{
   constructor()
   {
-    
+    this.winner = false;
     this.brief = [
       "The queens will have to make outfits with summer items.",
       "The queens will have to make outfits with boxes from past contestants.",
@@ -407,11 +415,54 @@ class DesignChallenge{
       }
     }
 
+    Tops = [];
+    Bottoms = [];
+    Critiqued = [];
+    Safes = [];
+
+    if(CurrentSeason.currentCast.length>=12)
+    {
+      for(let i = 0; i<4; i++)
+      {
+        Tops.push(CurrentSeason.currentCast[i]);
+        Bottoms.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
+
+        Critiqued.push(CurrentSeason.currentCast[i]);
+        Critiqued.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
+      }
+    }
+    else
+    {
+      for(let i = 0; i<3; i++)
+      {
+        Tops.push(CurrentSeason.currentCast[i]);
+        Bottoms.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
+
+        Critiqued.push(CurrentSeason.currentCast[i]);
+        Critiqued.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
+      }
+    }
+
+    for(let i = 0; i<CurrentSeason.currentCast.length; i++)
+    {
+      if(Tops.indexOf(CurrentSeason.currentCast[i],0) == -1 && Bottoms.indexOf(CurrentSeason.currentCast[i],0) == -1)
+      {
+        CurrentSeason.currentCast[i].trackrecord.push("SAFE");
+        CurrentSeason.currentCast[i].ppe += 3;
+        Safes.push(CurrentSeason.currentCast[i]);
+      }
+    }
+
     shuffle(SlayedChallenge);
     shuffle(GreatChallenge);
     shuffle(GoodChallenge);
     shuffle(BadChallenge);
     shuffle(FloppedChallenge);
+  }
+
+  createBrief()
+  {
+    Main.createText(this.brief[this.chosen]);
   }
 
   createPerformances()
@@ -421,11 +472,7 @@ class DesignChallenge{
     let goodtext = "";
     let badtext = "";
     let floptext = "";
-
-
-
-    Main.createText(this.brief[this.chosen]);
-    Main.createLine();
+    
 
     if(SlayedChallenge.length!=0)
     {
@@ -601,6 +648,229 @@ let ES2 = [marina, estrella, venedita, juriji, sethlas, diamante, onyx, jota, sa
 
 
 //#region Commands
+
+function WhoGetsCritiques()
+{
+  let Main = new Screen();
+  Main.clean();
+  let firstnames = "";
+  let critiquedtext = "";
+  if(Steps == 0)
+  {
+    Main.createBigText("On the main stage...");
+    Main.createText("If I call your names, please step forward.","Bold");
+    CritiquesChoice = getRandomInt(0,1);
+    if(CritiquesChoice == 0)
+    {
+      for(let i = 0; i < Safes.length; i++)
+      {
+        Main.createImage(Safes[i].image, "#7971c7");
+        if(i!=Safes.length-1)
+          {
+            firstnames += Safes[i].GetName()+", ";
+          }
+          else
+          {
+            if(Safes.length!=1)
+            {
+              firstnames += " and "+Safes[i].GetName();
+            }
+            else
+            {
+              firstnames += Safes[i].GetName();
+            }
+          }
+      }
+      Main.createText(firstnames+".","Bold");
+    }
+    else
+    {
+      for(let i = 0; i < Critiqued.length; i++)
+      {
+        Main.createImage(Critiqued[i].image, "#7971c7");
+        if(i!=Critiqued.length-1)
+          {
+            critiquedtext += Critiqued[i].GetName()+", ";
+          }
+          else
+          {
+            if(Critiqued.length!=1)
+            {
+              critiquedtext += " and "+Critiqued[i].GetName();
+            }
+            else
+            {
+              critiquedtext += Critiqued[i].GetName();
+            }
+          }
+      }
+      Main.createText(critiquedtext+".","Bold");
+
+    }
+    Main.createButton("Proceed", "WhoGetsCritiques()");
+  }
+  if(Steps == 1)
+  {
+    Main.clean();
+    Main.createBigText("On the main stage...");
+    Main.createText("If I call your names, please step forward.","Bold");
+    firstnames = "";
+    critiquedtext = "";
+    CritiquesChoice = getRandomInt(0,1);
+    if(CritiquesChoice == 0)
+    {
+      for(let i = 0; i < Safes.length; i++)
+      {
+        Main.createImage(Safes[i].image, "#7971c7");
+        if(i!=Safes.length-1)
+          {
+            firstnames += Safes[i].GetName()+", ";
+          }
+          else
+          {
+            if(Safes.length!=1)
+            {
+              firstnames += " and "+Safes[i].GetName();
+            }
+            else
+            {
+              firstnames += Safes[i].GetName();
+            }
+          }
+      }
+      Main.createText(firstnames+" you are all safe. You may go untuck backstage.","Bold");
+
+      Main.createLine();
+      for(let i = 0; i < Critiqued.length; i++)
+      {
+        Main.createImage(Critiqued[i].image, "#83ebe5");
+        if(i!=Critiqued.length-1)
+          {
+            critiquedtext += Critiqued[i].GetName()+", ";
+          }
+          else
+          {
+            if(Critiqued.length!=1)
+            {
+              critiquedtext += " and "+Critiqued[i].GetName();
+            }
+            else
+            {
+              critiquedtext += Critiqued[i].GetName();
+            }
+          }
+      }
+      Main.createText(critiquedtext+", you are the tops and bottoms of the week.","Bold");
+    }
+    else
+    {
+      for(let i = 0; i < Critiqued.length; i++)
+      {
+        Main.createImage(Critiqued[i].image, "#83ebe5");
+        if(i!=Critiqued.length-1)
+          {
+            critiquedtext += Critiqued[i].GetName()+", ";
+          }
+          else
+          {
+            if(Critiqued.length!=1)
+            {
+              critiquedtext += " and "+Critiqued[i].GetName();
+            }
+            else
+            {
+              critiquedtext += Critiqued[i].GetName();
+            }
+          }
+      }
+      Main.createText(critiquedtext+", you are the tops and bottoms of the week.","Bold");
+      Main.createLine();
+      for(let i = 0; i < Safes.length; i++)
+      {
+        Main.createImage(Safes[i].image, "#7971c7");
+        if(i!=Safes.length-1)
+          {
+            firstnames += Safes[i].GetName()+", ";
+          }
+          else
+          {
+            if(Safes.length!=1)
+            {
+              firstnames += " and "+Safes[i].GetName();
+            }
+            else
+            {
+              firstnames += Safes[i].GetName();
+            }
+          }
+      }
+      Main.createText(firstnames+" you are all safe. You may go untuck backstage.","Bold");
+    }
+    Main.createButton("Proceed", "UntuckedPart1()");
+  }
+  if(Steps == 0)
+  {
+    Steps++;
+  }
+  else
+  {
+    Steps = 0;
+  }
+}
+
+function UntuckedPart1() {
+  Main = new Screen();
+  Main.clean();
+  Main.createButton("Proceed", "Critiques()");
+}
+
+function Critiques() {
+  Main = new Screen();
+  Main.clean();
+  Main.createButton("Proceed", "UntuckedPart2()");
+}
+
+function UntuckedPart2() {
+  Main = new Screen();
+  Main.clean();
+  Main.createButton("Proceed", "Placements()");
+}
+
+function Placements() {
+  Tops.sort((a, b) => a.finalscore - b.finalscore);
+  Bottoms.sort((a, b) => a.finalscore - b.finalscore);
+  Main = new Screen();
+  Main.clean();
+
+  if(Tops.length!=0)
+  {
+    let randomtop = getRandomInt(0,Tops.length-1);
+    if(Tops[randomtop].GetName() == Tops[0].GetName())
+    {
+      Main.createImage(Tops[randomtop].image,"#1741ff");
+      Main.createText(Tops[randomtop].GetName()+", CONDRAGULATIONS! You're the winner of this week main challenge.","Bold");
+    }
+    else
+    {
+      Main.createImage(Tops[randomtop].image,"#17d4ff");
+      Main.createText(Tops[randomtop].GetName()+", you are safe. Great job this week.");
+    }    
+  }
+  if(Tops.length == 0 && Bottoms.length == 0)
+  {
+    Main.createButton("Proceed", "Lipsync()");
+  }
+  else
+  {
+    Main.createButton("Proceed", "Placements()");
+  }
+}
+
+function Lipsync() {
+  Main = new Screen();
+  Main.clean();
+}
+
 function shuffle(array) {
   let currentIndex = array.length,  randomIndex;
 
@@ -621,19 +891,35 @@ function shuffle(array) {
 
 function GenerateChallenge()
 {
-  let Challenge;
-  document.body.style.backgroundImage = 'url("Images/Backgrounds/bg.png")';
+  document.body.style.backgroundImage = 'url("Images/Backgrounds/MS.png")';
   Main = new Screen();
   Main.clean();
-  if(CurrentSeason.episodes == 0)
+  CurrentChallenge.createBrief();
+  if(CurrentSeason.episodes[CurrentSeason.episodes.length-1]=="Design")
   {
-    Challenge = new DesignChallenge();
-    CurrentSeason.episodes.push("Design");
-    CurrentSeason.designchallenges++;
-    Challenge.rankPerfomances();
-    Challenge.createPerformances();
+    for(let i = 0; i < CurrentSeason.currentCast.length; i++)
+    {
+      if(CurrentSeason.currentCast[i].miniwinner == true && CurrentChallenge.boxes.indexOf(CurrentChallenge.chosen) == -1)
+      {
+        
+        Main.createImage(CurrentSeason.currentCast[i].image,'blue');
+        Main.createText(CurrentSeason.currentCast[i].GetName()+" as the winner of this week mini-challenge! You get 15 seconds of advance on the other queens.");
+        Main.createLine();
+      }
+      else if(CurrentSeason.currentCast[i].miniwinner == true)
+      {
+        Main.createImage(CurrentSeason.currentCast[i].image,'blue');
+        Main.createText(CurrentSeason.currentCast[i].GetName()+" as the winner of this week mini-challenge! You get to assign boxes to the other queens.");
+        Main.createLine();
+      }
+    }
   }
-
+  else
+  {
+    Main.createLine();
+  }
+  CurrentChallenge.rankPerfomances();
+  CurrentChallenge.createPerformances();
 }
 function GetPromoTable()
   {
@@ -649,7 +935,7 @@ function LaunchMiniChallenge()
   Main = new Screen();
   Main.createBigText("In the workroom...");
   document.body.style.backgroundImage = 'url("Images/Backgrounds/Workroom.png")';
-  if(CurrentSeason.episodes.length == 0 && CurrentSeason.lipsyncformat == "LIFE")
+  if(CurrentSeason.episodes.length == 1 && CurrentSeason.lipsyncformat == "LIFE")
   {
     Main.clean();
     Main.createImage(CurrentSeason.host.outofdrag,'blue');
@@ -702,6 +988,11 @@ function ChallengeAnnouncement(){
   document.body.style.backgroundImage = "url('Images/Backgrounds/RChallenge.png')";
   if(CurrentSeason.episodes.length==0 && CurrentSeason.premiereformat == "NORMAL")
   {
+
+      CurrentChallenge = new DesignChallenge();
+      CurrentSeason.episodes.push("Design");
+      CurrentSeason.designchallenges++;
+
     Announcement = new Screen();
     Announcement.clean();
     
@@ -713,6 +1004,7 @@ function ChallengeAnnouncement(){
   }
   else
   {
+    
     Announcement = new Screen();
     Announcement.clean();
     Announcement.createRupaulAnnouncement("Hello my queens !");
