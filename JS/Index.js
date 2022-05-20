@@ -13,6 +13,9 @@ let Safes = [];
 let Critiqued = [];
 let Steps = 0;
 let CritiquesChoice = 0;
+let BottomQueens = [];
+let randomtop;
+let randombtm;
 
 //#endregion
 //#region Classes
@@ -717,7 +720,7 @@ function WhoGetsCritiques()
     firstnames = "";
     critiquedtext = "";
     CritiquesChoice = getRandomInt(0,1);
-    if(CritiquesChoice == 0)
+    if(CritiquesChoice == 1)
     {
       for(let i = 0; i < Safes.length; i++)
       {
@@ -838,23 +841,112 @@ function UntuckedPart2() {
 
 function Placements() {
   Tops.sort((a, b) => a.finalscore - b.finalscore);
-  Bottoms.sort((a, b) => a.finalscore - b.finalscore);
+  Bottoms.sort((a, b) => b.finalscore - a.finalscore);
   Main = new Screen();
   Main.clean();
-
-  if(Tops.length!=0)
+  let hightext = "";
+  if(Tops.length!=0 || Bottoms.length!=0)
   {
-    let randomtop = getRandomInt(0,Tops.length-1);
-    if(Tops[randomtop].GetName() == Tops[0].GetName())
+    if(Tops.length!=0)
     {
-      Main.createImage(Tops[randomtop].image,"#1741ff");
-      Main.createText(Tops[randomtop].GetName()+", CONDRAGULATIONS! You're the winner of this week main challenge.","Bold");
+      if(Steps == 0)
+      {
+        randomtop = getRandomInt(0,Tops.length-1);
+        Main.createImage(Tops[randomtop].image,"#17d4ff");
+        Main.createText(Tops[randomtop].GetName()+"...");
+      }
+      else
+      {
+        if(Tops[randomtop].GetName() == Tops[0].GetName() && CurrentChallenge.winner == false)
+        {
+          Main.createImage(Tops[randomtop].image,"#1741ff");
+          Main.createText(Tops[randomtop].GetName()+", CONDRAGULATIONS! You're the winner of this week main challenge.","Bold");
+          CurrentChallenge.winner = true;
+          Tops[randomtop].trackrecord.push("WIN");
+          Tops.splice(randomtop,1);
+          if(Tops.length!=0)
+          {
+            Main.createLine();
+            for(let i = 0; i < Tops.length; i++)
+            {
+              Main.createImage(Tops[i].image,"#17d4ff");
+              Tops[i].trackrecord.push("HIGH");
+              if(i==Tops.length-1)
+              {
+                hightext += Tops[i].GetName();
+              }
+              else
+              {
+                hightext += Tops[i].GetName()+" and ";
+              }
+            }
+            Tops = [];
+            Main.createText(hightext+", you are safe. Great job this week.");
+          }
+        }
+        else
+        {
+          Main.createImage(Tops[randomtop].image,"#17d4ff");
+          Main.createText(Tops[randomtop].GetName()+", you are safe. Great job this week.");
+          Tops[randomtop].trackrecord.push("HIGH");
+          Tops.splice(randomtop,1);
+        }
+      }
+      if(Steps == 0)
+      {
+        Steps++;
+      }
+      else
+      {
+        Steps = 0;
+      }
     }
     else
     {
-      Main.createImage(Tops[randomtop].image,"#17d4ff");
-      Main.createText(Tops[randomtop].GetName()+", you are safe. Great job this week.");
-    }    
+      if(Steps == 0)
+      {
+        randombtm = getRandomInt(0,Bottoms.length-1);
+        Main.createImage(Bottoms[randombtm].image,"#17d4ff");
+        Main.createText(Bottoms[randombtm].GetName()+"...");
+      }
+      else
+      {
+        if((Bottoms[randombtm].GetName() == Bottoms[0].GetName()) && (BottomQueens.length < 2))
+        {
+          Main.createImage(Bottoms[randombtm].image,"#fa2525");
+          Main.createText(Bottoms[randombtm].GetName()+", I'm sorry my dear but you are up for elimination.","Bold");
+          BottomQueens.push(Bottoms[randombtm])
+          Bottoms.splice(randombtm,1);
+        }
+        else
+        {
+          Main.createImage(Bottoms[randombtm].image,"#ff8a8a");
+          Main.createText(Bottoms[randombtm].GetName()+", you are safe.");
+          Bottoms[randombtm].trackrecord.push("LOW");
+          Bottoms.splice(randombtm,1);
+          if(BottomQueens.length==0)
+          {
+            Main.createLine();
+            for(let i = 0; i < Bottoms.length; i++)
+            {
+              Main.createImage(Bottoms[i].image,"#fa2525");
+              BottomQueens.push(Bottoms[i]);
+            }
+            Bottoms = [];
+            Main.createText(BottomQueens[0].GetName()+" and "+BottomQueens[1].GetName()+", I'm sorry my dears but you are both up for elimination.");
+          }
+        }
+      }
+
+      if(Steps == 0)
+      {
+        Steps++;
+      }
+      else
+      {
+        Steps = 0;
+      }
+    }
   }
   if(Tops.length == 0 && Bottoms.length == 0)
   {
