@@ -163,7 +163,8 @@ class Queen {
 
   getFinalScore()
   {
-    this.finalscore = this.GetLipsync();
+    this.GetLipsync();
+    this.finalscore = this.lipsyncscore;
   }
 
   getRunway() {
@@ -1624,6 +1625,8 @@ function Finale()
             CurrentSeason.currentCast[i].getFinalScore();
             Main.createImage(CurrentSeason.currentCast[i].image,"#f0bb86");
           }
+
+          CurrentSeason.currentCast.sort((a, b) => a.finalscore - b.finalscore);
           if(CurrentSeason.currentCast.length==3)
           {
             Main.createText(CurrentSeason.currentCast[0].GetName() + ", "+CurrentSeason.currentCast[1].GetName()+ " and "+CurrentSeason.currentCast[0].GetName()+".", "Bold");
@@ -1643,7 +1646,7 @@ function Finale()
         case 5:
           CurrentSeason.episodes.push("Finale");
           done = true;
-          CurrentSeason.currentCast.sort((a, b) => a.finalscore - b.finalscore);
+          
           if(CurrentSeason.currentCast[0].finalscore > 25 && CurrentSeason.currentCast[1].finalscore > 25)
           {
             Main.createImage(CurrentSeason.currentCast[0].image,"#ffb300");
