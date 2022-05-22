@@ -2,7 +2,7 @@
   --maple: "m-90 2030 45-863a95 95 0 0 0-111-98l-859 151 116-320a65 65 0 0 0-20-73l-941-762 212-99a65 65 0 0 0 34-79l-186-572 542 115a65 65 0 0 0 73-38l105-247 423 454a65 65 0 0 0 111-57l-204-1052 327 189a65 65 0 0 0 91-27l332-652 332 652a65 65 0 0 0 91 27l327-189-204 1052a65 65 0 0 0 111 57l423-454 105 247a65 65 0 0 0 73 38l542-115-186 572a65 65 0 0 0 34 79l212 99-941 762a65 65 0 0 0-20 73l116 320-859-151a95 95 0 0 0-111 98l45 863z";
 }
 body {
-    font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: rubik,helvetica,arial,sans-serif;
     padding: 20px;
     font-size: 13px;
     background-image: url("../Images/Backgrounds/bg.png");
@@ -19,9 +19,9 @@ div.MainArea {
     margin-right: 10%;
     text-align: center;
     /* border-radius */
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
     /* box-shadow */
     -webkit-box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
     -moz-box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
@@ -35,9 +35,9 @@ div.MainTitle {
     margin-right: 30%;
     text-align: center;
     /* border-radius */
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
     /* box-shadow */
     -webkit-box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
     -moz-box-shadow: rgba(0,0,0,0.2) 0px 1px 3px;
@@ -60,13 +60,13 @@ div.MainTitle {
 button.MainButton {
   background-color: rgba(255, 255, 255, 0.90); 
   color: black; 
-  border: 2px solid #751c81;
+  border: 1px solid #751c81;
 }
 
 button.predef {
   background-color: rgba(255, 255, 255, 0.90); 
   color: black; 
-  border: 2px solid #c4c4c4;
+  border: 1px solid #c4c4c4;
 }
 
 button.MainButton:hover {
@@ -79,11 +79,49 @@ button.predef:hover {
   color: white;
 }
 
-td {
+td.promos {
   border: black solid 1px;
   border-collapse: collapse;
   text-align: center;
   padding: 1px;
+}
+
+table.tr{
+  margin-bottom:1em;
+  border-collapse: collapse;
+  color:#3A3A3A;
+  background-color:#E9DFE9;
+
+  border: 1px solid #C6BFC6;
+  padding: 0.2em 0.4em;
+}
+
+th.tr{
+  font-weight:bold;
+  padding:10px;
+  background-color:#E9DFE9;
+  border: 1px solid #C6BFC6;
+  font-size: 20px;
+
+  width: 30px;
+}
+
+th,
+td.tr{
+  padding:0.5em;
+  border: 1px solid #C6BFC6;
+  background-color:#F5EBF5;
+  font-size: 15px;
+  text-align: center;
+}
+
+td.trq{
+  padding:0.5em;
+  border: 1px solid #C6BFC6;
+  background-color:#F5EBF5;
+  font-weight: bold;
+  font-size: 15px;
+  text-align: center;
 }
 
 a {
