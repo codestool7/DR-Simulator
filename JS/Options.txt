@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 TOP3
 
 LIFE 
 
 NORMAL
+=======
+TOP3
+
+LIFE 
+
+NORMAL
+>>>>>>> 8bf4986aff244a7414971c2aeda774c168ce9e1b
