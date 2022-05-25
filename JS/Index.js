@@ -371,42 +371,42 @@ class Queen {
 
   GetImprov()
   {
-    this.perfomancescore = this.GetScore(15,35,this.improv);
+    this.perfomancescore = this.GetScore(15,40,this.improv);
   }
 
   GetStandUp()
   {
-    this.perfomancescore = this.GetScore(25,45,this.comedy+this.charisma);
+    this.perfomancescore = this.GetScore(25,50,this.comedy+this.charisma);
   }
 
   GetActing()
   {
-    this.perfomancescore = this.GetScore(15,35,this.acting);
+    this.perfomancescore = this.GetScore(15,40,this.acting);
   }
 
   GetDancing()
   {
-    this.perfomancescore = this.GetScore(15,35,this.dance);
+    this.perfomancescore = this.GetScore(15,40,this.dance);
   }
 
   GetSnatchGame()
   {
-    this.perfomancescore = this.GetScore(25,45,this.comedy+this.acting);
+    this.perfomancescore = this.GetScore(25,50,this.comedy+this.acting);
   }
 
   GetRusical()
   {
-    this.perfomancescore = this.GetScore(35,65,this.dance+this.charisma+this.acting);
+    this.perfomancescore = this.GetScore(35,70,this.dance+this.charisma+this.acting);
   }
 
   GetRumix()
   {
-    this.perfomancescore = this.GetScore(35,55,this.charisma+this.dance+this.branding);
+    this.perfomancescore = this.GetScore(35,60,this.charisma+this.dance+this.branding);
   }
 
   GetMusicV()
   {
-    this.perfomancescore = this.GetScore(15,35,this.dance);
+    this.perfomancescore = this.GetScore(15,40,this.dance);
   }
 
   getFinalScore()
@@ -416,7 +416,7 @@ class Queen {
   }
 
   getRunway() {
-    this.runwayscore = this.GetScore(10, 40, this.runway);
+    this.runwayscore = this.GetScore(0, this.runway);
   }
 
   GetDesignScore(bonus = 0)
@@ -534,6 +534,127 @@ class Screen {
     btn.setAttribute("onclick",Onclick);
     btn.setAttribute("class","button MainButton");
     this.MainScreen.append(btn);
+  }
+
+  createQueensStats(){
+    let putincenter = document.createElement("center");
+    let table = document.createElement("table");
+    let thead = document.createElement("thead");
+  
+    let tbody = document.createElement("tbody");
+  
+    let treps = document.createElement("tr");
+    
+    for (let i = 0; i < 13; i++) {
+      let thq = document.createElement("th");
+      switch(i){
+        case 0:
+          thq.innerHTML = "Queen's Name";
+          break;
+        case 1:
+          thq.innerHTML = "Acting Stat";
+          break;
+        case 2:
+          thq.innerHTML = "Improv Stat";
+          break;
+        case 3:
+          thq.innerHTML = "Comedy Stat";
+          break;
+        case 4:
+          thq.innerHTML = "Dance Stat";
+          break;
+        case 5:
+          thq.innerHTML = "Design Stat";
+          break;
+        case 6:
+          thq.innerHTML = "Runway Stat";
+          break;
+        case 7:
+          thq.innerHTML = "Lipsync Stat";
+          break;
+        case 8:
+          thq.innerHTML = "Branding Stat";
+          break;
+        case 9:
+          thq.innerHTML = "Charisma Stat";
+          break;
+        case 10:
+          thq.innerHTML = "Kindness Stat";
+          break;
+        case 11:
+          thq.innerHTML = "Shadyness Stat";
+          break;
+        case 12:
+          thq.innerHTML = "Overall Stats";
+          break;
+      }
+      
+    
+      thq.setAttribute("class","tr");
+      treps.append(thq);
+    }
+    for(let q = 0; q < AllQueens.length; q++)
+    {
+      let treps = document.createElement("tr");
+      for(let t = 0; t < 13; t++)
+      {
+        let thq = document.createElement("th");
+      switch(t){
+        case 0:
+          thq.innerHTML = AllQueens[q].GetName();
+          break;
+        case 1:
+          thq.innerHTML = AllQueens[q].acting;
+          break;
+        case 2:
+          thq.innerHTML = AllQueens[q].improv;
+          break;
+        case 3:
+          thq.innerHTML = AllQueens[q].comedy;
+          break;
+        case 4:
+          thq.innerHTML = AllQueens[q].dance;
+          break;
+        case 5:
+          thq.innerHTML = AllQueens[q].design;
+          break;
+        case 6:
+          thq.innerHTML = AllQueens[q].runway;
+          break;
+        case 7:
+          thq.innerHTML = AllQueens[q].lipsync;
+          break;
+        case 8:
+          thq.innerHTML = AllQueens[q].branding;
+          break;
+        case 9:
+          thq.innerHTML = AllQueens[q].charisma;
+          break;
+        case 10:
+          thq.innerHTML = AllQueens[q].kindness;
+          break;
+        case 11:
+          thq.innerHTML = AllQueens[q].shadyness;
+          break;
+        case 12:
+          thq.innerHTML = AllQueens[q].acting+AllQueens[q].improv+AllQueens[q].comedy+AllQueens[q].dance+AllQueens[q].design+AllQueens[q].runway+AllQueens[q].lipsync+AllQueens[q].branding+AllQueens[q].charisma;
+          break;
+      }
+      treps.append(thq);
+    }
+    tbody.append(treps);
+    }
+
+
+    thead.append(treps);
+    table.append(thead);
+    table.append(tbody);
+
+    let br = document.createElement("br");
+    putincenter.append(table);
+
+    this.MainScreen.append(putincenter);
+    this.MainScreen.append(br);
   }
 
   createTrackRecords(){
@@ -738,6 +859,7 @@ class Screen {
 
       let putincenter = document.createElement("center");
       let table = document.createElement("table");
+      table.setAttribute("style", "border-spacing: 15px 12px");
       let thead = document.createElement("thead");
 
       let tbody = document.createElement("tbody");
@@ -759,11 +881,11 @@ class Screen {
             let td = document.createElement("td");
             if(CurrentSeason.eliminatedCast.indexOf(CurrentSeason.fullCast[q+(i*4)])!=-1)
             {
-              td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 195px; width: 195px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+              td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 195px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
             }
             else
             {
-            td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 195px; width: 195px;");
+            td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 195px;");
             }
             td.setAttribute("class","promos");
             tr.append(td);
@@ -809,11 +931,11 @@ class Screen {
             let td = document.createElement("td");
             if(CurrentSeason.eliminatedCast.indexOf(CurrentSeason.fullCast[q+(i*4)])!=-1)
             {
-              td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 195px; width: 195px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+              td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 105px; width: 195px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
             }
             else
             {
-            td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 195px; width: 195px;");
+            td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 195px;");
             }
             td.setAttribute("class","promos");
             tr.append(td);
@@ -4727,21 +4849,6 @@ let willow = new Queen("Willow Pill", 12, 13, 11, 8, 14, 10, 12, 12, 13, 5, 1, "
 
 let US14 = shuffle([alyssah, angeria, bosco, daya, deja, jasminek, jorgeous, junej, kerri, kornbread, camden, maddym, orion, willow]);
 
-let icesis = new Queen("Icesis Couture", 8, 9, 10, 11, 12, 14, 12, 10, 8, 4, 0, "Icesis", "Icesis", "CA2", false);
-let kendall = new Queen("Kendall Gender", 7, 9, 10, 8, 6, 10, 14, 10, 11, 4, 1, "Kendall", "Kendall", "CA2", false);
-let eve = new Queen("Eve 6000", 10, 8, 10, 4, 6, 12, 6, 15, 15, 4, 2, "Eve", "Eve", "CA2", false);
-let giam = new Queen("Gia Metric", 8, 10, 12, 14, 7, 10, 10, 6, 12, 2, 1, "Gia", "Gia", "CA2", false);
-let pythia = new Queen("Pythia", 10, 11, 8, 7, 12, 10, 5, 12, 13, 5, 0, "Pythia", "Pythia", "CA2", false);
-let adriana = new Queen("Adriana", 13, 9, 6, 7, 9, 12, 9, 12, 9, 3, 1, "Adrianna", "Adrianna", "CA2", false);
-let kimoraa = new Queen("Kimora Amour", 10, 9, 11, 8, 12, 8, 7, 12, 10, 5, 0, "Kimora", "Kimora", "CA2", false);
-let synthia = new Queen("Synthia Kiss", 11, 8, 12, 10, 5, 8, 13, 10, 12, 4, 0, "Synthia", "Synthia", "CA2", false);
-let suki = new Queen("Suki Doll", 10, 8, 7, 8, 15, 15, 6, 10, 11, 4, 0, "Suki", "Suki", "CA2", false);
-let oceane = new Queen("Océane Aqua-Black", 9, 10, 11, 6, 7, 10, 12, 10, 12, 5, 0, "Oceane", "Oceane", "CA2");
-let beth = new Queen("Beth", 8, 9, 10, 6, 5, 10, 8, 10, 10, 4, 0, "Beth", "Beth", "CA2", false);
-let stephanie = new Queen("Stephanie Prince", 8, 9, 7, 6, 10, 12, 10, 14, 10, 4 , 0, "Stephanie", "Stephanie", "CA2", false);
-
-let CA2 = shuffle([icesis, kendall, eve, giam, pythia, adriana, kimoraa, synthia, suki, oceane, beth, stephanie]);
-
 let anastarzia = new Queen("Anastarzia Anaquway", 7, 6, 8, 7, 9, 8, 6, 8, 10, 5, 0, "Anastarzia", "Anastarzia", "CA1", false);
 let boa = new Queen("BOA", 7, 9, 9, 7, 6, 5, 5, 9, 12, 3, 0, "BOA", "Boa", "CA1", false);
 let ilona = new Queen("Ilona Verley", 6, 7, 9, 7, 9, 8, 11, 8, 8, 2, 4, "Ilona", "Ilona","CA1",false);
@@ -4756,6 +4863,22 @@ let scarlettbobo = new Queen("Scarlett BoBo", 12, 10, 8, 8, 10, 11, 13, 12, 10, 
 let tynomi = new Queen("Tynomi Banks", 6, 7, 9, 12, 8, 8, 13, 12, 10, 4, 2, "Tynomi", "Tynomi", "CA1", false);
 
 let CA1 = shuffle([anastarzia,boa,ilona,jimbo,juice,kiara,kyne,lemon,priyanka,rita,scarlettbobo,tynomi]);
+
+
+let icesis = new Queen("Icesis Couture", 8, 9, 10, 11, 12, 14, 12, 10, 8, 4, 0, "Icesis", "Icesis", "CA2", false);
+let kendall = new Queen("Kendall Gender", 7, 9, 10, 8, 6, 10, 14, 10, 11, 4, 1, "Kendall", "Kendall", "CA2", false);
+let eve = new Queen("Eve 6000", 10, 8, 10, 4, 6, 12, 6, 15, 15, 4, 2, "Eve", "Eve", "CA2", false);
+let giam = new Queen("Gia Metric", 8, 10, 12, 14, 7, 10, 10, 6, 12, 2, 1, "Gia", "Gia", "CA2", false);
+let pythia = new Queen("Pythia", 10, 11, 8, 7, 12, 10, 5, 12, 13, 5, 0, "Pythia", "Pythia", "CA2", false);
+let adriana = new Queen("Adriana", 13, 9, 6, 7, 9, 12, 9, 12, 9, 3, 1, "Adriana", "Adrianna", "CA2", false);
+let kimoraa = new Queen("Kimora Amour", 10, 9, 11, 8, 12, 8, 7, 12, 10, 5, 0, "Kimora", "Kimora", "CA2", false);
+let synthia = new Queen("Synthia Kiss", 11, 8, 12, 10, 5, 8, 13, 10, 12, 4, 0, "Synthia", "Synthia", "CA2", false);
+let suki = new Queen("Suki Doll", 10, 8, 7, 8, 15, 15, 6, 10, 11, 4, 0, "Suki", "Suki", "CA2", false);
+let oceane = new Queen("Océane Aqua-Black", 9, 10, 11, 6, 7, 10, 12, 10, 12, 5, 0, "Oceane", "Oceane", "CA2");
+let beth = new Queen("Beth", 8, 9, 10, 6, 5, 10, 8, 10, 10, 4, 0, "Beth", "Beth", "CA2", false);
+let stephanie = new Queen("Stephanie Prince", 8, 9, 7, 6, 10, 12, 10, 14, 10, 4 , 0, "Stephanie", "Stephanie", "CA2", false);
+
+let CA2 = shuffle([icesis, kendall, eve, giam, pythia, adriana, kimoraa, synthia, suki, oceane, beth, stephanie]);
 
 let brookehost = new Host("Brooke Lynn Hytes", "BrookeIn", "BrookeOut");
 
@@ -4776,6 +4899,18 @@ let supremmehost = new Host("Supremme De Luxe","SupremmeIn","SupremmeOut");
 let rupaulhost = new Host("Rupaul","RuIn","RuOut");
 
 let ES2 = shuffle([marina, estrella, venedita, juriji, sethlas, diamante, onyx, jota, samantha, arielr, marisa]);
+
+let AllQueens = [
+  akashia, bebes1, jades, ninas1, onginas1, rebecca, shannels1, tammies1, victoriap,
+  jessicaw, jujus2, morganmcs2, mystique, npb, pandoras2, sahara, shangela, kylies2, tatis2, james,
+  jaida, crystalm, gigi, jackie, heidi, widow, jan, brita, aiden, nicky, rock, dahlia,
+  denali, eliott, gottmik, joey, kahmora, kandy, lalari, liv, rose, symone, tamisha, tina, utica,
+  alyssah, angeria, bosco, daya, deja, jasminek, jorgeous, junej, kerri, kornbread, camden, maddym, orion, willow,
+  anastarzia,boa,ilona,jimbo,juice,kiara,kyne,lemon,priyanka,rita,scarlettbobo,tynomi,
+  icesis, kendall, eve, giam, pythia, adriana, kimoraa, synthia, suki, oceane, beth, stephanie,
+  marina, estrella, venedita, juriji, sethlas, diamante, onyx, jota, samantha, arielr, marisa
+];
+
 //#endregion
 
 
@@ -5865,6 +6000,12 @@ function TrackRecords()
 function CreateEntrances()
 {
 
+}
+
+function GetQueensStats()
+{
+  Stats = new Screen();
+  Stats.createQueensStats();
 }
 
 function CreateSeason(Name, Cast, Host, Finale, LC, LS, Premiere, Country)
