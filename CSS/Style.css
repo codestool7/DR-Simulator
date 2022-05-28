@@ -1,9 +1,44 @@
 :root{
   --maple: "m-90 2030 45-863a95 95 0 0 0-111-98l-859 151 116-320a65 65 0 0 0-20-73l-941-762 212-99a65 65 0 0 0 34-79l-186-572 542 115a65 65 0 0 0 73-38l105-247 423 454a65 65 0 0 0 111-57l-204-1052 327 189a65 65 0 0 0 91-27l332-652 332 652a65 65 0 0 0 91 27l327-189-204 1052a65 65 0 0 0 111 57l423-454 105 247a65 65 0 0 0 73 38l542-115-186 572a65 65 0 0 0 34 79l212 99-941 762a65 65 0 0 0-20 73l116 320-859-151a95 95 0 0 0-111 98l45 863z";
 }
+.topnav {
+  background-color: rgba(255, 255, 255, 0.90);
+  border: 2px;
+  overflow: hidden;
+}
+
+.topnav a {
+  float: left;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  
+}
+
+.topnav a.right {
+  float: right;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  
+}
+
+.topnav a:hover {
+  background-color: white;
+  color: black;
+}
+.topnav a.active {
+  background: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);
+  color: white;
+}
+
 body {
+    margin: 0;
     font-family: rubik,helvetica,arial,sans-serif;
-    padding: 20px;
     font-size: 13px;
     background-image: url("../Images/Backgrounds/bg.png");
     background-attachment: fixed;
@@ -13,7 +48,7 @@ body {
   }
   
 div.MainArea {
-    background: rgba(255, 255, 255, 0.90);;
+    background: rgba(255, 255, 255, 0.90);
     padding: 10px;
     margin-left: 5%;
     margin-right: 5%;
@@ -46,9 +81,9 @@ div.MainTitle {
 
 .button {
   background-color: #751c81; /* Green */
-  border-radius: 20px;
+  border-radius: 30px;
   color: rgba(255, 255, 255, 0.90);
-  padding: 10px 16px;
+  padding: 15px 20px;
   margin-left: 5px;
   text-align: center;
   text-decoration: none;
@@ -71,20 +106,22 @@ button.predef {
 }
 
 button.MainButton:hover {
-  background-color: #751c81;
+  background: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);
   color: white;
 }
 
 button.predef:hover {
-  background-color: #751c81;
+  background: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);
   color: white;
 }
 
+
+
 td.promos {
   border: black solid 1px;
-  border-collapse: collapse;
   text-align: center;
-  padding: 1px;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 table.tr{
@@ -92,7 +129,6 @@ table.tr{
   border-collapse: collapse;
   color:#3A3A3A;
   background-color:#E9DFE9;
-
   border: 1px solid #C6BFC6;
   padding: 0.2em 0.4em;
 }
@@ -102,8 +138,8 @@ th.tr{
   padding:5px;
   background-color:#E9DFE9;
   border: 1px solid #C6BFC6;
-  font-size: 17px;
-  width: 30px;
+  font-size: 16px;
+  width: 75px;
 }
 
 th,
@@ -124,32 +160,36 @@ td.trq{
   text-align: center;
 }
 
-a {
-  outline: none;
-  text-decoration: none;
-  padding: 2px 1px 0;
+select {
+  width: 50%;
+  height: 50px;
+  font-size: 100%;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 0;
+  background: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);
+  border: none;
+  border-bottom: 2px solid #DCDCDC;
+  color: white;
+  appearance: none;
+  padding: 10px;
+  padding-right: 38px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  transition: color 0.3s ease, background-color 0.3s ease, border-bottom-color 0.3s ease;
 }
 
-a:link {
-  color: #350153;
+/* For IE <= 11 */
+select::-ms-expand {
+  display: none; 
 }
 
-a:visited {
-  color: #350153;
+select:hover,
+select:focus {
+  color: black;
+  background: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);
+  border-bottom-color: #DCDCDC;
 }
 
-a:focus {
-  border-bottom: 1px solid;
-  background: #9a46ca;
-}
 
-a:hover {
-  border-bottom: 1px solid;
-  background: #9a46ca;
-}
-
-a:active {
-  background: #350153;
-  color: #9a46ca;
-}
 
