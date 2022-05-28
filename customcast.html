@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+    <link id="style" href="CSS/Style.css" rel="stylesheet">
+    <link rel="icon" href="IMAGES/icon.ico">
+    <script type="text/javascript" src="JS/Index.js"></script>
+    <title>Valestal's Drag Race Simulator</title>
+</head>
+<div class="topnav">
+    <a href="index.html">Home</a>
+    <a class="active" href="customcast.html">Customs Casts</a>
+    <a href="predefcast.html">Predefineds Casts</a>
+    <a href="queensstats.html">Queens Stats</a>
+    <a class="right" href="settings.html">Settings</a>
+  </div>
+<body>
+    <br>
+    <div class="MainTitle"  >
+        <h1>Valestal's Drag Race Simulator</h1>
+    </div>
+        <br>
+        <div class="MainArea">
+            <div id="first">
+
+            </div>
+            <select id="aq" onchange="LoadPhoto()">
+            </select>
+            <span>
+
+            </span>
+            
+            <button class="button MainButton" onclick="AddToCast()">Add to cast</button>
+            <br>
+            <br>
+            <input type ="text" id="search" placeholder="Search..." style="height: 40px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <button class="button MainButton" onclick="SearchQueen()">Search</button>
+            <div id="clean">
+
+            </div>
+            <br>
+            <select id="ct" onchange="LoadPhoto()">
+            </select>
+            <span>
+
+            </span>
+            
+            <button class="button MainButton" id="ctbtn" onclick="RemoveFromCast()">Remove from cast</button>
+
+            <br>
+            <br>
+            <select id="format" style="width: 15%;">
+                <option value="0" selected disabled>-- Finale Format --</option>
+                <option value="TOP3">TOP 2</option>
+            </select>
+            <select id="premiere" style="width: 15%;">
+                <option value="0" selected disabled>-- Premiere Format --</option>
+                <option value="TOP3">Normal</option>
+            </select>
+            <select id="lipsync" style="width: 15%;" onchange="CheckAS7()">
+                <option value="0" selected disabled>-- Lipsync Format --</option>
+                <option value="LIFE">Regular</option>
+                <option value="AS7">All Stars 7</option>
+            </select>
+            <select id="host" style="width: 15%;">
+                <option value="0" selected disabled>-- Host --</option>
+                <option value="BH">Brooke Lynn Hytes</option>
+                <option value="RP">Rupaul Charles</option>
+                <option value="SP">Supremme De Luxe</option>
+            </select>
+            <select id="lc" style="width: 15%;">
+                <option value="0" selected disabled>-- Last Challenge --</option>
+                <option value="RUMIX">Rumix</option>
+                <option value="MUSICV">Music Video</option>
+            </select>
+            <select id="country" style="width: 15%;">
+                <option value="0" selected disabled>-- Country --</option>
+                <option value="UK">United Kingdom</option>
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+                <option value="ES">Spain</option>
+            </select>
+            <br>
+            <br>
+            <input type ="text" id="sname" placeholder="Name of the season" style="height: 40px; width: 91%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <button class="button MainButton" id="ctbtn" onclick="LaunchCustomCast()">Start the season</button>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+    </body>
+    
+</html>
+<script>
+    LoadCasts();
+</script>

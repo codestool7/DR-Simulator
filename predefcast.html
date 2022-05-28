@@ -7,13 +7,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=0.5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link id="style" href="CSS/Style.css" rel="stylesheet">
     <link rel="icon" href="IMAGES/icon.ico">
     <script type="text/javascript" src="JS/Index.js"></script>
     <title>Valestal's Drag Race Simulator</title>
 </head>
+<div class="topnav">
+    <a href="index.html">Home</a>
+    <a href="customcast.html">Customs Casts</a>
+    <a class="active" href="predefcast.html">Predefineds Casts</a>
+    <a href="queensstats.html">Queens Stats</a>
+    <a class="right" href="settings.html">Settings</a>
+  </div>
 <body>
     <br>
     <div class="MainTitle">
@@ -21,7 +28,7 @@
     </div>
         <br>
         <div class="MainArea">
-            <h1> US Seasons </h1>
+            <h1> Drag Race US </h1>
             <button class="button MainButton" onclick="CreateSeason('Drag Race Season 1',US1,rupaulhost, 'TOP3', 'MUSICVIDEO', 'LIFE', 'NORMAL', 'US')">US Season 1</button>
             <button class="button MainButton" onclick="CreateSeason('Drag Race Season 2',US2,rupaulhost, 'TOP3', 'MUSICVIDEO', 'LIFE', 'NORMAL', 'US')">US Season 2</button>
             <button class="button MainButton" onclick="CreateSeason()">US Season 3</button>
@@ -40,20 +47,62 @@
             <button class="button MainButton" onclick="CreateSeason('Drag Race Season 14',US14,rupaulhost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'US')">US Season 14</button>
             <br>
             <br>
-            <h1> UK Seasons </h1>
+            <h1> Drag Race All Stars US</h1>
+            <button class="button MainButton" onclick="CreateSeason()">All Stars Season 1 (Not Working)</button>
+            <button class="button MainButton" onclick="CreateSeason()">All Stars Season 2 (Not Working)</button>
+            <button class="button MainButton" onclick="CreateSeason()">All Stars Season 3 (Not Working)</button>
+            <button class="button MainButton" onclick="CreateSeason()">All Stars Season 4 (Not Working)</button>
+            <button class="button MainButton" onclick="CreateSeason()">All Stars Season 5 (Not Working)</button>
+            <br>
+            <br>
+            <button class="button MainButton" onclick="CreateSeason()">All Stars Season 6 (Not Working)</button>
+            <button class="button MainButton" onclick="CreateSeason('All Stars Season 7',AS7,rupaulhost, 'AS7', 'AS7', 'AS7', 'NORMAL', 'US')">All Stars Season 7</button>
+            <br>
+            <br>
+            <h1> Drag Race VS The World</h1>
+            <button class="button MainButton" onclick="CreateSeason('Drag Race Season 1',US1,rupaulhost, 'TOP3', 'MUSICVIDEO', 'LIFE', 'NORMAL', 'US')">UK VS The World</button>
+            <button class="button MainButton" onclick="CreateSeason('Drag Race Season 2',US2,rupaulhost, 'TOP3', 'MUSICVIDEO', 'LIFE', 'NORMAL', 'US')">Canada VS The World</button>
+            <br>
+            <br>
+            <h1> Drag Race UK </h1>
             <button class="button MainButton" onclick="CreateSeason()">UK Season 1</button>
             <button class="button MainButton" onclick="CreateSeason()">UK Season 2</button>
             <button class="button MainButton" onclick="CreateSeason()">UK Season 3</button>
             <br>
             <br>
-            <h1> CAN Seasons </h1>
-            <button class="button MainButton" onclick="CreateSeason('Drag Race Canada Season 1',CA1,brookehost, 'TOP3NE', 'RUMIX', 'LIFE', 'NORMAL', 'CANADA')">CAN Season 1</button>
-            <button class="button MainButton" onclick="CreateSeason('Drag Race Canada Season 2',CA2,brookehost, 'TOP3NE', 'RUMIX', 'LIFE', 'NORMAL', 'CANADA')">CAN Season 2</button>
+            <h1> Canada's Drag Race </h1>
+            <button class="button MainButton" onclick="CreateSeason('Drag Race Canada Season 1',CA1,brookehost, 'TOP3NE', 'RUMIX', 'LIFE', 'NORMAL', 'CANADA')">Canada Season 1</button>
+            <button class="button MainButton" onclick="CreateSeason('Drag Race Canada Season 2',CA2,brookehost, 'TOP3NE', 'RUMIX', 'LIFE', 'NORMAL', 'CANADA')">Canada Season 2</button>
             <br>
             <br>
-            <h1> ES Seasons </h1>
-            <button class="button MainButton" onclick="CreateSeason()">ES Season 1</button>
-            <button class="button MainButton" onclick="CreateSeason('Drag Race España Season 2',ES2,supremmehost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'ESPANA')">ES Season 2</button>
+            <h1> Drag Race España </h1>
+            <button class="button MainButton" onclick="CreateSeason('Drag Race España Season 1',ES1,supremmehost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'ESPANA')">España Season 1</button>
+            <button class="button MainButton" onclick="CreateSeason('Drag Race España Season 2',ES2,supremmehost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'ESPANA')">España Season 2</button>
+            <br>
+            <br>
+            <h1> Drag Race Thailand </h1>
+            <button class="button MainButton" onclick="CreateSeason('Drag Race Thailand Season 1',TH1,arthost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'THAILAND')">Thailand Season 1</button>
+            <button class="button MainButton" onclick="CreateSeason('Drag Race Thailand Season 2',TH2,arthost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'THAILAND')">Thailand Season 2</button>
+            <br>
+            <br>
+            <h1> Drag Race Holland </h1>
+            <button class="button MainButton" onclick="CreateSeason('Drag Race Thailand Season 1',TH1,arthost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'THAILAND')">Thailand Season 1</button>
+            <button class="button MainButton" onclick="CreateSeason('Drag Race Thailand Season 2',TH2,arthost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'THAILAND')">Thailand Season 2</button>
+            <br>
+            <br>
+            <h1> Drag Race Down Under </h1>
+            <button class="button MainButton" onclick="CreateSeason('Drag Race Down Under Season 1',DU1,rupaulhost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'THAILAND')">Down Under Season 1</button>
+            <br>
+            <br>
+            <h1> Drag Race Italia </h1>
+            <button class="button MainButton" onclick="CreateSeason()">Italia Season 1</button>
+            <br>
+            <br>
         </div>
+        <br>
+        <br>
+        <br>
+        <br>
     </body>
+    
 </html>
