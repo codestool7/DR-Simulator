@@ -7394,6 +7394,7 @@ function Finale()
               }
             }
             Main.createText(losersqueen+", you will not be participating in tonight's lipsync smackdown.","Bold");
+            Steps++;
           }
 
           break;
