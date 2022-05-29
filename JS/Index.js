@@ -640,17 +640,17 @@ class Screen {
         {
           case "L3RD":
             trtr.innerHTML = "LOST <br> 3RD ROUND";
-            trtr.setAttribute("style","background: #FFD100; font-weight: bold; color: white;");
+            trtr.setAttribute("style","background: #FFD100; font-weight: bold;");
             break;
           
           case "L2RD":
-            trtr.innerHTML = "LOST <br> 2RND ROUND";
-            trtr.setAttribute("style","background: #FFAE00; font-weight: bold; color: white;");
+            trtr.innerHTML = "LOST <br> 2ND ROUND";
+            trtr.setAttribute("style","background: #FFAE00; font-weight: bold;");
             break;
           
           case "L1RD":
             trtr.innerHTML = "LOST <br> 1ST ROUND";
-            trtr.setAttribute("style","background: #FF7C00; font-weight: bold; color: white;");
+            trtr.setAttribute("style","background: #FF7C00; font-weight: bold;");
             break;
 
           case "ELIM ":
@@ -774,17 +774,17 @@ class Screen {
         {
           case "L3RD":
             trtr.innerHTML = "LOST <br> 3RD ROUND";
-            trtr.setAttribute("style","background: #FFD100; font-weight: bold; color: white;");
+            trtr.setAttribute("style","background: #FFD100; font-weight: bold; ");
             break;
           
           case "L2RD":
-            trtr.innerHTML = "LOST <br> 2RND ROUND";
-            trtr.setAttribute("style","background: #FFAE00; font-weight: bold; color: white;");
+            trtr.innerHTML = "LOST <br> 2ND ROUND";
+            trtr.setAttribute("style","background: #FFAE00; font-weight: bold; ");
             break;
           
           case "L1RD":
             trtr.innerHTML = "LOST <br> 1ST ROUND";
-            trtr.setAttribute("style","background: #FF7C00; font-weight: bold; color: white;");
+            trtr.setAttribute("style","background: #FF7C00; font-weight: bold; ");
             break;
 
           case "ELIM ":
@@ -6851,7 +6851,9 @@ let DragRaceQueens = [
   marina, estrella, venedita, juriji, sethlas, diamante, onyx, jota, samantha, arielr, marisa,
 
   amadiva, année, bella, bbf, dearis, jaja, meannie, morrigan, natalia, petchra,
-  angele, bandit, genie, gimhuay, kana, kandyz, katy, mstranger, maya, mocha, silvers, srimala, tormai, vanda
+  angele, bandit, genie, gimhuay, kana, kandyz, katy, mstranger, maya, mocha, silvers, srimala, tormai, vanda,
+
+  anita, arts, cocoj, elektra, etc, jojoz, karenf, kita, maxi
 
 ].sort((a, b) => a.GetName().localeCompare(b.GetName()));
 
@@ -7270,7 +7272,7 @@ function Finale()
 
             if(temp.length>4 && top4.length==0)
             {
-              for (let index = 0; index < temp; index++) {
+              for (let index = 0; index < temp.length; index++) {
                 top4.push(temp[index])
               }
               if(softlock==0)
@@ -7283,7 +7285,7 @@ function Finale()
             {
               if(temp.length==4 && top4.length==0)
               {
-                for (let index = 0; index < temp; index++) {
+                for (let index = 0; index < temp.length; index++) {
                   top4.push(temp[index])
                 }
                 Steps = 3;
@@ -7318,7 +7320,7 @@ function Finale()
               Main.createImage(originaltop[index].image,"springgreen");
               if(index != originaltop.length-1)
               {
-                queentext += originaltop[index].GetName()+",";
+                queentext += originaltop[index].GetName()+", ";
               }
               else
               {
@@ -7345,15 +7347,15 @@ function Finale()
           else if(top4.length>4)
           {
             let queentext = "";
-            for (let index = 0; index < originaltop.length; index++) {
-              Main.createImage(originaltop[index].image,"springgreen");
-              if(index != originaltop.length-1)
+            for (let index = 0; index < top4.length; index++) {
+              Main.createImage(top4[index].image,"springgreen");
+              if(index != top4.length-1)
               {
-                queentext += originaltop[index].GetName()+",";
+                queentext += top4[index].GetName()+", ";
               }
               else
               {
-                queentext += " and "+originaltop[index].GetName();
+                queentext += " and "+top4[index].GetName();
               }
             }
               Main.createText(queentext+", you are all at the top but unfortunately you can not all make it.","Bold");
@@ -7364,19 +7366,33 @@ function Finale()
           {
             let queentext = "";
             let losersqueen = ""
-            for (let index = 0; index < originaltop.length; index++) {
-              Main.createImage(originaltop[index].image,"springgreen");
-              if(index != originaltop.length-1)
+            for (let index = 0; index < top4.length; index++) {
+              Main.createImage(top4[index].image,"springgreen");
+              if(index != top4.length-1)
               {
-                queentext += originaltop[index].GetName()+",";
+                queentext += top4[index].GetName()+", ";
               }
               else
               {
-                queentext += " and "+originaltop[index].GetName();
+                queentext += " and "+top4[index].GetName();
               }
             }
               Main.createText(queentext+", you are all in the top 4! ","Bold");
               Main.createText("Unfortunately that means...","Bold");
+            for (let index = 0; index < CurrentSeason.currentCast.length; index++) {
+              if(top4.indexOf(CurrentSeason.currentCast[index])== -1)
+              {
+                Main.createImage(CurrentSeason.currentCast[index].image,"sienna");
+                if(index != CurrentSeason.currentCast.length-1)
+                {
+                  losersqueen += CurrentSeason.currentCast[index].GetName()+", ";
+                }
+                else
+                {
+                  losersqueen += " and "+CurrentSeason.currentCast[index].GetName();
+                }
+              }
+            }
             Main.createText(losersqueen+", you will not be participating in tonight's lipsync smackdown.","Bold");
           }
 
@@ -7389,7 +7405,7 @@ function Finale()
               Main.createImage(originaltop[index].image,"springgreen");
               if(index != originaltop.length-1)
               {
-                queentext += originaltop[index].GetName()+",";
+                queentext += originaltop[index].GetName()+", ";
               }
               else
               {
@@ -7441,13 +7457,13 @@ function Finale()
             top4.push(temp[rdm]);
             if(index != getnum-1)
             {
-              queentext += temp[rdm].GetName()+",";
+              queentext += temp[rdm].GetName()+", ";
             }
             else
             {
               queentext += " and "+temp[rdm].GetName();
             }
-            temp.splice(temp.indexOf(temp[rdm],1));
+            temp.splice(rdm,1);
           }
           Main.createText(queentext+", congratulations! Your fellow competitors has given you another chance!.","Bold");
         }
@@ -7463,13 +7479,26 @@ function Finale()
             Main.createImage(top4[index],"springgreen");
             if(index != 3)
             {
-              queentext += top4[index].GetName()+",";
+              queentext += top4[index].GetName()+", ";
             }
             else
             {
               queentext += " and "+top4[index].GetName();
             }
           }
+          Main.createText(queentext+", congratulations! You have all made it to the top 4.","Bold");
+          for (let index = 0; index < temp.length; index++) {
+            Main.createImage(top4[index],"sienna");
+            if(index != 3)
+            {
+              queentext += top4[index].GetName()+", ";
+            }
+            else
+            {
+              queentext += " and "+top4[index].GetName();
+            }
+          }
+          Main.createText(queentext+", I am sorry but you will not make it to tonight's lipsync smackdown.","Bold");
         }
 
 
@@ -7904,8 +7933,8 @@ function Placements() {
           {
             if(CurrentSeason.episodes.length == 11)
             {
-              Main.createImage(TopsQueens[0].image,"deepskyblue");
-            Main.createText(TopsQueens[0].GetName()+", you have received three stars!", "Bold");
+              Main.createImage(TopsQueens[1].image,"deepskyblue");
+            Main.createText(TopsQueens[1].GetName()+", you have received three stars!", "Bold");
               TopsQueens[1].stars += 3;
             }
             else
@@ -8598,7 +8627,7 @@ function ChallengeAnnouncement(){
         CurrentChallenge.createMessage();
         Announcement.createButton("Proceed","LaunchMiniChallenge()");
         break;
-      case 2:
+      case 11:
         CurrentChallenge = new Ball();
         CurrentEpisode = new Episode(CurrentChallenge.balls[CurrentChallenge.chosen][0], "Ball");
         CurrentSeason.episodes.push(CurrentEpisode);
@@ -8671,7 +8700,7 @@ function ChallengeAnnouncement(){
         CurrentChallenge.createMessage();
         Announcement.createButton("Proceed","LaunchMiniChallenge()");
         break;
-      case 11:
+      case 2:
         CurrentEpisode = new Episode("The Grand Lipsync Smackdown", "Talent Show");
         CurrentSeason.episodes.push(CurrentEpisode);
         Announcement.clean();
