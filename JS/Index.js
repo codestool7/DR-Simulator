@@ -9906,7 +9906,7 @@ function GetSong(){
       ];
       let chosenho = songho[getRandomInt(0,songho.length-1)];
       songho.splice(songho.indexOf(chosenho),1);
-      return(chosendu);
+      return(chosenho);
       break;
   }
 }
