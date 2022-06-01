@@ -3,6 +3,8 @@ let CurrentSeason;
 let CurrentChallenge;
 let CurrentEpisode;
 
+let entrancepos = 0;
+
 let CustomCast = [];
 
 let done = false;
@@ -45,8 +47,8 @@ let starscount = [];
 let CustomQueens = [];
 
 let reads = [
-  ", you’re so old you’re still on MySpace.com.",
-  "Sweetie, I’m sorry! If you don’t have a wrist band you can’t be in here for the meet and greet!"
+  ", you\'re so old you\'re still on MySpace.com.",
+  "Sweetie, I\'m sorry! If you don\'t have a wrist band you can\'t be in here for the meet and greet!"
 ];
 
 let rusicalcastsizes = 
@@ -629,7 +631,7 @@ class Screen {
     for(let i = 0; i < CurrentSeason.episodes.length; i++)
     {
       let thep = document.createElement("th");
-      thep.innerHTML = "<p style='font-size:10px;'>"+CurrentSeason.episodes[i].name+"</p><p style='font-size:8px;'>("+CurrentSeason.episodes[i].type+")</p>";
+      thep.innerHTML = "<p style='font-size:13px;'>"+CurrentSeason.episodes[i].name+"</p><p style='font-size:10px;'>("+CurrentSeason.episodes[i].type+")</p>";
       thep.setAttribute("class","tr");
       treps.append(thep);
     }
@@ -6447,7 +6449,7 @@ class TalentShow{
     let Top = [
     "This week, you spun straw into gold.",
     "Not only did you turn it out, girl, you turned it upside down.",
-    "Tonight, you didn’t just kill it. You were a mass murderer.",
+    "Tonight, you didn\'t just kill it. You were a mass murderer.",
     "This week, you came, you saw, and you came again.",
     "You navigated this challenge beautifully, and we were swept away.",
     "You were serving, and left us gagging for more.",
@@ -6462,12 +6464,12 @@ class TalentShow{
   {
     
     let Btm = [
-    ", you are a fierce queen, but this week, you put the ain’t in entertaintment",
+    ", you are a fierce queen, but this week, you put the ain\'t in entertaintment",
     ", the judges were Mad About You — but not in a good way.",
     ", You are a smart cookie, but tonight, you crumbled.",
     ", your big opening was a little sloppy.",
     ", your charisma, uniqueness, nerver & talent got lost in the mail.",
-    ", you made a meal out of this challenge, but it left a bad taste in some of the judges’ mouths.",
+    ", you made a meal out of this challenge, but it left a bad taste in some of the judges\' mouths.",
     ", your talent needed a boost, but you only slowled down.",
     ];
     return(Btm[getRandomInt(0,Btm.length-1)]);
@@ -6733,7 +6735,7 @@ let US5 = shuffle([alaska, alyssae, coco, detox, honeym, jadej, ivyw, jinkxs5, s
 let adore = new Queen("Adore Delano",7,6,9,15,8,10,12,13,13,5,1,"Adore","Adore","US6",false);
 let april = new Queen("April Carrión",4,5,5,4,9,10,10,6,10,4,1,"April","April","US6",false);
 let ben = new Queen("BenDeLaCreme",8,14,8,12,9,12,8,6,12,5,1,"Ben","Ben","US6",false);
-let bianca = new Queen("Biance Del Rio",14,13,15,8,12,11,6,13,13,4,5,"Bianca","Bianca","US6",false);
+let bianca = new Queen("Bianca Del Rio",14,13,15,8,12,11,6,13,13,4,5,"Bianca","Bianca","US6",false);
 let courtney = new Queen("Courtney Act",9,8,8,15,8,13,6,6,12,4,2,"Courtney","Courtney","US6",false);
 let darienne = new Queen("Darienne Lake",13,7,12,7,4,6,14,5,8,3,3,"Darienne","Darienne","US6",false);
 let giag = new Queen("Gia Gunn",7,4,6,7,10,10,11,8,8,1,5,"Gia","Gia","US6",false);
@@ -6960,7 +6962,7 @@ let vanity = new Queen('Vanity Milan', 8, 9, 8, 12, 7, 10, 15, 10, 13, 4, 1, 'Va
 let scarletth = new Queen('Scarlett Harlett', 9, 10, 7, 8, 14, 10, 13, 10, 11, 3, 3, "Scarlett", "Scarlett", 'UK3', false);
 let choriza = new Queen('Choriza May', 9, 8, 10, 7, 6, 12, 7, 10, 15, 5, 0, "Choriza", "Choriza", "UK3", false);
 let river = new Queen('River Medway', 10, 9, 8, 9, 10, 11, 8, 10, 11, 5, 1, 'River', 'River', 'UK3', false);
-let charity = new Queen('Charity Case', 8, 9, 7, 7, 13, 15, 9, 12, 8, 1, 3, 'Charity', 'Charity', 'UK3', false);
+let charity = new Queen('Charity Kase', 8, 9, 7, 7, 13, 15, 9, 12, 8, 1, 3, 'Charity', 'Charity', 'UK3', false);
 let veronicas3 = new Queen('Veronica Green', 9, 10, 11, 8, 6, 7, 13, 10, 11, 4, 1, "Veronica", "Veronica", "UK3", false);
 let victorias = new Queen('Victoria Scone', 9, 10, 12, 8, 9, 13, 9, 10, 12, 5, 0, 'Victoria', 'Victoria', 'UK3', false);
 let elektraf = new Queen("Elektra Fence", 9, 7, 8, 13, 7, 8, 14, 10, 11, 5, 1, 'Elektra', 'Elektra', 'UK3', false);
@@ -9008,7 +9010,7 @@ function ChallengeAnnouncement(){
     }
 
   }
-  else if(CurrentSeason.episodes.length==0 && CurrentSeason.premiereformat == "NORMAL" && CurrentSeason.lipsyncformat=="LIFE")
+  else if(CurrentSeason.episodes.length==0 && CurrentSeason.premiereformat=="NORMAL" && CurrentSeason.lipsyncformat=="LIFE")
   {
 
     CurrentChallenge = new DesignChallenge();
@@ -9289,7 +9291,7 @@ function TrackRecords()
     MainScreen.createButton("Proceed","ChallengeAnnouncement()");
   }
 
-  MainScreen.createButton("Dowload", "convertToImage()");
+  MainScreen.createButton("Download", "convertToImage()");
 }
 
 function convertToImage() {
@@ -9317,7 +9319,39 @@ function download(filename, image) {
 
 function CreateEntrances()
 {
+  let Main = new Screen();
+  Main.clean();
 
+  if(entrancepos < CurrentSeason.fullCast.length)
+  {
+    if(Steps == 0)
+    {
+      Main.createImage("Images/Queens/Hidden.webp");
+      Main.createText(GetEntrance(CurrentSeason.fullCast[entrancepos]),'Bold');
+      Main.createText('Entering the work-room : It is ...','Bold');
+      Steps++;
+    }
+    else
+    {
+      Main.createImage(CurrentSeason.fullCast[entrancepos].image);
+      Main.createText('Entering the work-room : It is '+CurrentSeason.fullCast[entrancepos].GetName()+' !','Bold');
+      Steps = 0;
+      entrancepos++;
+    }
+  }
+
+  
+
+  if(entrancepos == CurrentSeason.fullCast.length)
+  {
+    Main.createButton("Proceed","GetPromoTable()");
+  }
+  else
+  {
+    Main.createButton("Proceed","CreateEntrances()");
+  }
+
+  Main.createButton("Skip","GetPromoTable()");
 }
 
 function LoadPhoto()
@@ -9395,8 +9429,7 @@ function LoadCasts()
 function CreateSeason(Name, Cast, Host, Finale, LC, LS, Premiere, Country)
 {
   CurrentSeason = new Season(Name, Cast, Host, Finale, LC, LS, Premiere, Country);
-
-  GetPromoTable();
+  CreateEntrances();
 }
 
 function CheckAS7(){
@@ -9488,7 +9521,7 @@ function GetRandowRunway() {
   let RunwaysTheme = [
     "Color Blocking",
     "Recreation Runway",
-    "What’s Your Zodiac Sign?",
+    "What\'s Your Zodiac Sign?",
     "Fringe",
     "Orange Alert",
     "All That Glitters",
@@ -9536,7 +9569,7 @@ function GetRandowRunway() {
     "Latina Eleganza",
     "Pasteloquence",
     "Lame You Stay",
-    "We’re Sheer",
+    "We\'re Sheer",
     "Daytime Drama Rama",
     "Night Time",
     "Lady!",
@@ -9549,7 +9582,7 @@ function GetRandowRunway() {
     "Drag Dopplegangers",
     "BEAST Couture",
     "Haute Pockets",
-    "Love The Skin You’re In",
+    "Love The Skin You\'re In",
     "Three Looks in One",
     "Camo Couture",
     "Prom Queen Fantasy",
@@ -10004,50 +10037,6 @@ function GetSong(){
       return(chosenit);
       break;
 
-    case "UK":
-      let songuk = [
-        '"New Rules" by Dua Lipa',
-        '"Venus" by Bananarama',
-        '"Would I Lie To You?" by Eurythmics',
-        '"Spice Up Your Life" by The Spice Girls',
-        '"Power" by Little Mix',
-        '"Call My Name (Wideboys Remix)" by Cheryl Cole',
-        '"Tears Dry On Their Own" by Amy Winehouse',
-        '"I\'m Your Man" by Wham!',
-        '"Relax" by Frankie Goes to Hollywood',
-        '"Memory" by Elaine Paige',
-        '"Don\'t Start Now" by Dua Lipa',
-        '"You Keep Me Hangin\' On" by Kim Wilde',
-        '"Don\'t Leave Me This Way" by The Communards',
-        '"Touch Me" by Cathy Dennis',
-        '"Don\'t Be So Hard On Yourself" by Jess Glynne',
-        '"You Don\'t Have To Say You Love Me" by Dusty Springfield',
-        '"Last Thing On My Mind" by Steps',
-        '"I\'m Still Standing" by Elton John',
-        '"Total Eclipse of the Heart" by Bonnie Tyler',
-        '"Something New" by Girls Aloud',
-        '"Sweet Melody" by Little Mix',
-        '"Moving On Up" by M People',
-        '"I\'ve Got The Music In Me" by The Kiki Dee Band',
-        '"Who Do You Think You Are" by Spice Girls',
-        '"Big Spender" by Shirley Bassey',
-        '"Shout" by Lulu',
-        '"Scandalous" by Mis-Teeq',
-        '"Hallucinate" by Dua Lipa',
-        '"You Don\'t Own Me" by Dusty Springfield',
-        '"Say You\'ll Be There" by The Spice Girls',
-        '"Supermodel (El Lay Toya Jam)" by RuPaul',
-        '"We Like To Party! (The Vengabus)" by Vengaboys',
-        '"Let It Go" by Alexandra Burke',
-        '"Toy" by Netta',
-        '"Domino" by Jessie J',
-        '"The Reflex" by Duran Duran',
-        '"Supernova" by Kylie Minogue'
-      ];
-      let chosenuk = songuk[getRandomInt(0,songuk.length-1)];
-      songuk.splice(songuk.indexOf(chosenuk),1);
-      return(chosenuk);
-      break;
 
     case "THAILAND":
       let songth = [
@@ -10116,4 +10105,140 @@ function GetSong(){
       break;
   }
 }
+
+  function GetEntrance(queen){
+    switch(queen.ogseason.substring(0,2))
+    {
+      default:
+        let songsus = [
+          'Wooh, my God! Look at this! Wow, crazy, crazy, crazy!',
+          'Hi!',
+          'Hello, what\'s up?',
+          'Hi, you guys are fabulous!',
+          'Hey girls, what\'s going on?',
+          'Hello somebody!',
+          'What\'s up bitches?',
+          'What a sin!',
+          'Hey fake ladies!',
+          'Hey, hey, hey! How\'s everybody doing?',
+          'Well, hello, hello! How are y\'all doing?',
+          'Eat it!',
+          'Hey, there\'s a new girl in town! Let\'s get to business!',
+          'Bonjour ladies!',
+          'Holy shit, we\'re here!',
+          'This is the best quinceanera present ever!',
+          'Oh boys, the diva has arrived!',
+          'You know, I can hear the cackling from down the street!',
+          'Oh, y\'all wanted a twist, ey? Come on '+CurrentSeason.name+', let\'s get sickening! Yassss!',
+          'Is this America\'s Next Top Model? Oh, sorry… just kidding!',
+          'Hey bitches, y\'all ready to rock and roll? Woooh!',
+          'Well well well, I hope you bitches are ready.',
+          'Greetings earth queens, I come in peace.',
+          'I\'m here! We made it bitches',
+          'This isn\'t Maury Povich!',
+          'Well, it\'s about time!',
+          'Check your lipstick before you come for me.',
+          'What\'s up nerds?',
+          'Laissez les bon temps roulez!',
+          'Alright ladies, let\'s turn up the juice and see what shakes loose!',
+          'Oh my gosh! Heyyyy!',
+          'How\'d ya like them egg rolls, Mr Charles?',
+          'Your edges are officially snatched!',
+          'Mother Monster has arrived!',
+          'Okay, it\'s time for dinner!',
+          'Well I auditioned for the Pit Crew, but this is gonna be way more fun!',
+          'Guess who finally decided to crash the party?',
+          '10s, 10s, 10s across the board!',
+          'Who\'s ready to party and play? Checkers anyone?',
+          'Vegas is back in the house, and this time we\'re hitting the jackpot.',
+          'Here we go, sis! Y\'all thirsty?',
+          'Relax your throat bitches, \'cos y\'all gagging.',
+          'Hey bitches! She\'s here!',
+          'Hey y\'all, let\'s play some basketball!',
+          'Filler queen.',
+          'Ah-choo! She’s sickening!',
+          'The Mackie doll is finally out of her box.',
+          'Where am I?',
+          'Don\'t let the smooth taste fool ya, baby!',
+          'Oh this, y\'all? Is just the entry look.',
+          'Hello, RuPaul? Yes, we\'ve been trying to reach you regarding your car\'s extended warranty? Oh, perfect, well then I just have one more question for you. Are you ready boots?',
+          'Is you hungry, \'cause bitch, I\'m baked!',
+          'Ow! Like that!',
+          'You\'ve been expecting me.',
+          'You guys like fried chicken? \'Cause bitch... I\'m serving',
+          'Get ready to synthesize.',
+          'Never a bad angle, because I\'m stunning!',
+          'Um, you like that?',
+          'Attention 5’s, a 10 has arrived.',
+          'Oh wow, oh my God! Okay. I’m going to spin in a circle.',
+          'RuPaul\'s Drag Race... what a load of old shit!',
+          'Sex on legs has arrived!',
+          'Click click bitch, there really is no place like home.',
+          'I’m vegan!',
+          'I’m like the Loch Ness monster, a legend!',
+          'Woah woah woah woah, this doesn’t look like Barry Island, but it sure will do.',
+          'Don’t get too comfy girls, this is gonna take two minute.',
+          'So this is what it looks like.',
+          'Maybe she’s born with it, maybe it’s body dysmorphia.',
+          'Did somebody order a delivery? Because I’m about to take away the crown!'
+        ];
+        let chosen = songsus[getRandomInt(0,songsus.length-1)];
+        return(chosen);
+        break;
+  
+      case "ES":
+        let songses = [
+          '¿Alguien ha pedido una cebra a domicilio?',
+          'No soy perra, no soy gata. Soy una estrella y eso te mata.',
+          'Hola, chicas. No me toquéis el chichi, que todavía no me lo han puesto.',
+          'Las puertas del cielo ya están abiertas. Arriba les espero.',
+          'Ajustad las antenas, llegó la tele a color.',
+          '¡Oh! ¿Pero qué "what happen"? ¿Qué "what happen" en Drag Race España?',
+          'Y el karma ya llegó.',
+          'Porque tú lo que quieres es que me coma el tigre, que me coma el tigre, que me coma el tigre, pero en este concurso el tigre me lo como yo.',
+          'Qué pasa, maricones? He traído chicharrones.',
+          '¿Alguien ha pedido una zorra a domicilio?',
+          'I have fought many battles with company, but this war I\'ll win alone.',
+          'Vaya cuadro.',
+          '¿Tenéis un enchufe?'
+        ];
+        let chosenes = songses[getRandomInt(0,songses.length-1)];
+        return(chosenes);
+        break;
+  
+      case "IT":
+        let songsit = [
+          'La stallona piemontese è approdata negli studi, stronzette.',
+          'LET\'S GOOOOOOOOOOOOOO... sì.',
+          'Scusate, ma chi sono queste? Non avevate detto che ero sola? Vabbè. Potete scaricare i miei bauli allora.',
+          'Mi disegnano come una stronza, ma non è così... io sono la regina delle stronze!',
+          'Get ready girls.',
+          'I\'m here!',
+          'The queen of Italia, has arrived.',
+          'Occhi di gatto, ecco fatto!',
+        ];
+        let chosenit = songsit[getRandomInt(0,songsit.length-1)];
+        return(chosenit);
+        break;
+      
+      case "HO":
+        let songho = [
+          'Buongiorno, principesse. The queen has arrived.',
+          'I\'ve got some tricks up my sleeve.',
+          'If eyes linger any longer, I\'ll have to charge rent.',
+          'You poor, unfortunate soul! A new fabulous mermaid has arrived.',
+          'Is that an eggplant in your pocket, or are you just gagging at my extravaganza?!',
+          'Vroom vroom bitches!',
+          'Welke queen gaat er door de knieën en heeft er nog wat op te biechten?',
+          'Nou meiden, dat zit wel snor.',
+          'Well, I’m here, I’m ready to win!',
+          'Nou meiden, valt er hier nog wat te naaien?',
+          'Je dacht toch niet dat ik het feestje echt aan mij voorbij liet gaan?',
+          'The OG fish is back!',
+        ];
+        let chosenho = songho[getRandomInt(0,songho.length-1)];
+        return(chosenho);
+        break;
+    }
+  }
 //#endregion
