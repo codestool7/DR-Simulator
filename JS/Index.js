@@ -98,7 +98,6 @@ class Season {
     this.premiereformat = Premiere;
     this.country = Country;
 
-
     this.events = [];
 
     this.snatchgamecharacter;
@@ -121,6 +120,10 @@ class Season {
   {
     return(this.fullCast);
   }
+
+  PushEvent(Event){
+    this.events.push(Event);
+  }
 }
 
 class Episode{
@@ -130,6 +133,82 @@ class Episode{
     this.type = Type;
   }
 }
+
+class Relation {
+
+  constructor(FirstQ, SecondQ)
+  {
+    this.points = 0
+    this.status = "Neutral"
+    this.fqueen = FirstQ;
+    this.squeen = SecondQ;
+  }
+
+  SetRelation(points)
+  {
+    this.points += points;
+  }
+
+  GetRelation()
+  {
+    return(this.points);
+  }
+
+  UpdateStatus()
+  {
+    if(this.points<=10 && this.points >= 10)
+    {
+      this.status = "Neutral";
+    }
+    else if(this.points > 10 && this.points <= 30)
+    {
+      this.status = "Friendly";
+    }
+    else if(this.points > 30 && this.points<=50)
+    {
+      this.status = "Friends";
+    }
+    else if(this.points > 50)
+    {
+      this.status = "Best Friends";
+    }
+
+    else if(this.points < -10 && this.points >= -30)
+    {
+      this.status = "Hostile";
+    }
+    else if(this.points < -30 && this.points >= -50)
+    {
+      this.status = "Ennemies";
+    }
+    else(this.points > 50)
+    {
+      this.status = "Worst Ennemies";
+    }
+  }
+
+  Sabotage()
+  {
+    if(getRandomInt(this.points,100)<0)
+    {
+      return(true);
+    }
+    else
+    {
+      return(false);
+    }
+  }
+}
+
+class Event {
+  constructor(FirstQ, SecondQ, WhatHappenned)
+  {
+    this.fqueen = FirstQ;
+    this.squeen = SecondQ;
+    this.event = WhatHappenned;
+  }
+}
+
 class Queen {
 
   constructor(Name, Acting, Improv, Comedy, Dance, Design, Runway, Lipsync, Branding, Charisma, Kindness, Shadyness, Image = "noimage", Promo = "nopromo", OriginalSeason = "noseason", IsCustom = false)
@@ -159,6 +238,8 @@ class Queen {
 
       this.premieregroup = "NONE";
 
+      this.relationsships
+
       this.miniwinner = false;
       this.miniwon = [];
 
@@ -181,8 +262,17 @@ class Queen {
       this.iscustom = IsCustom;
       this.placement = 0;
 
-      this.image = "Images/Queens/"+this.ogseason+"/"+Image+".webp";
-      this.promo = "Images/Promos/"+this.ogseason+"/"+Promo+".webp";
+
+      if(this.iscustom==false)
+      {
+        this.image = "Images/Queens/"+this.ogseason+"/"+Image+".webp";
+        this.promo = "Images/Promos/"+this.ogseason+"/"+Promo+".webp";
+      }
+      else
+      {
+        this.image = Image;
+        this.promo = Promo;
+      }
 
       this.perfomancescore = 0;
       this.runwayscore = 0;
@@ -297,7 +387,7 @@ class Queen {
 
     this.ballthilook = this.GetScore(15,35,this.design);
 
-    this.finalescore = this.ballthilook+(17-this.ballfirlook)+(17-this.ballseclook);
+    this.finalscore = this.ballthilook+(17-this.ballfirlook)+(17-this.ballseclook);
   }
 
   GetDesignScore(bonus = 0)
@@ -6673,7 +6763,7 @@ let US1 = shuffle([akashia, bebes1, jades, ninas1, onginas1, rebecca, shannels1,
 
 let jessicaw = new Queen("Jessica Wild", 10, 11, 7, 12, 9, 10, 5, 6, 12, 5, 0, "Jessica", "Jessica", "US2", false);
 let jujus2 = new Queen("Jujubee", 8, 9, 12, 8, 7, 6, 15, 10, 13, 3, 1, "Jujubee", "Jujubee", "US2", false);
-let morganmcs2 = new Queen("Morgan McMicheals", 8, 7, 6, 10, 13, 10, 11, 8, 14, 2, 4, "Morgan","Morgan","US2",false);
+let morganmcs2 = new Queen("Morgan McMichaels", 8, 7, 6, 10, 13, 10, 11, 8, 14, 2, 4, "Morgan","Morgan","US2",false);
 let mystique = new Queen("Mystique Summers Madison", 6, 8, 9, 11, 7, 5, 10, 8, 14, 2, 2, "Mystique", "Mystique", "US2", false);
 let npb = new Queen("Nicole Paige Brooks", 7, 6, 8, 4, 8, 10, 7, 5, 5, 4, 0, "Nicole", "Nicole", "US2", false);
 let pandoras2 = new Queen("Pandora Boxx", 8, 9 ,12, 7, 5, 5, 6, 7, 10, 4, 1, "Pandora", "Pandora", "US2",false);
@@ -6685,7 +6775,7 @@ let james = new Queen("James Ross", 14, 10, 12, 6, 12, 10, 14, 12, 8, 1, 4, "Jam
 
 let US2 = shuffle([jessicaw, jujus2, morganmcs2, mystique, npb, pandoras2, sahara, shangela, kylies2, tatis2, james]);
 
-let alexiss3 = new Queen("Alexis Matteo",8,14,12,7,5,8,13,13,14,5,4,"Alexis","Alexis","US3",false);
+let alexiss3 = new Queen("Alexis Mateo",8,14,12,7,5,8,13,13,14,5,4,"Alexis","Alexis","US3",false);
 let carmenc = new Queen("Carmen Carrera",6,8,10,7,5,8,6,6,8,1,5,"Carmen","Carmen","US3",false);
 let delta = new Queen("Delta Work",4,4,5,7,6,10,11,7,8,3,3,"Delta","Delta","US3",false);
 let indias3 = new Queen("India Ferrah",5,3,4,8,7,7,10,3,6,1,4,'India',"India","US3",false);
@@ -6701,10 +6791,10 @@ let yaras3 = new Queen("Yara Sofia",8,6,10,10,13,12,5,6,13,5,1,"Yara","Yara","US
 let US3 = shuffle([alexiss3, carmenc, delta, indias3, manilas3, mariahs3, phoenix, rajas3, shangelas3, stacy, venus, yaras3]);
 
 let alisa = new Queen("Alisa Summers",4,5,4,5,4,6,4,5,5,3,1,"Alisa","Alisa","US4",false);
-let chads4 = new Queen("Chad Micheals",12,14,12,10,6,13,8,7,10,5,1,"Chad","Chad","US4",false);
+let chads4 = new Queen("Chad Michaels",12,14,12,10,6,13,8,7,10,5,1,"Chad","Chad","US4",false);
 let dida = new Queen("Dida Ritz",7,5,7,8,6,7,15,4,10,3,2,"Dida","Dida","US4",false);
 let jiggly = new Queen("Jiggly Caliente",9,4,6,10,2,6,13,4,8,3,3,"Jiggly",'Jiggly',"US4",false);
-let kenya = new Queen("Kenya Micheals",6,4,6,7,5,6,6,8,8,2,3,"Kenya","Kenya","US4",false);
+let kenya = new Queen("Kenya Michaels",6,4,6,7,5,6,6,8,8,2,3,"Kenya","Kenya","US4",false);
 let lashauwn = new Queen("Lashauwn Beyond",6,4,7,6,12,11,8,6,7,1,5,"Lashauwn","Lashauwn","US4",false);
 let latrice = new Queen("Latrice Royale",12,5,9,12,5,6,14,6,15,5,1,"Latrice","Latrice","US4",false);
 let madamel = new Queen("Madame LaQueer",4,7,7,11,7,8,7,6,7,3,1,"Madame","Madame","US4",false);
@@ -6741,7 +6831,7 @@ let darienne = new Queen("Darienne Lake",13,7,12,7,4,6,14,5,8,3,3,"Darienne","Da
 let giag = new Queen("Gia Gunn",7,4,6,7,10,10,11,8,8,1,5,"Gia","Gia","US6",false);
 let joslyn = new Queen("Joslyn Fox",8,6,6,10,6,9,11,6,12,5,1,"Joslyn","Joslyn","US6",false);
 let kelly = new Queen("Kelly Mantle",8,6,8,8,3,6,5,8,7,5,1,"Kelly","Kelly","US6",false);
-let laganja = new Queen("Laganja Estranga",7,5,6,7,8,9,15,12,8,2,3,"Laganja","Laganja","US6",false);
+let laganja = new Queen("Laganja Estranja",7,5,6,7,8,9,15,12,8,2,3,"Laganja","Laganja","US6",false);
 let magnolia = new Queen("Magnolia Crawford",5,4,4,5,3,4,4,6,6,3,3,"Magnolia","Magnolia","US6",false);
 let milk = new Queen("Milk",7,4,7,5,10,11,6,7,9,3,1,"Milk","Milk","US6",false);
 let trinity = new Queen("Trinity K. Bonet",7,5,9,5,10,12,15,10,10,1,1,"Trinity","Trinity","US6",false);
@@ -6750,7 +6840,7 @@ let vivacious = new Queen("Vivacious",4,4,5,8,4,7,10,8,8,5,1,"Vivacious","Vivaci
 let US6 = shuffle([adore, april, ben, bianca, courtney, darienne, giag, joslyn, kelly, laganja, magnolia, milk, trinity, vivacious]);
 
 let ginger = new Queen("Ginger Minj",13,14,13,7,6,6,10,13,10,4,2,"Ginger","Ginger","US7",false);
-let jaidynn = new Queen("Jaidynn Dior Fierce",5,5,8,12,7,7,13,8,12,5,1,"Jaidynn","Jaidynn","US7",false);
+let jaidynn = new Queen("Jaidynn Diore Fierce",5,5,8,12,7,7,13,8,12,5,1,"Jaidynn","Jaidynn","US7",false);
 let jasmine = new Queen("Jasmine Masters",4,4,7,7,5,7,4,7,8,1,3,"Jasmine","Jasmine","US7",false);
 let kandyh = new Queen("Kandy Ho",5,5,5,10,5,10,14,6,8,4,1,"Kandy","Kandy","US7",false);
 let katya = new Queen("Katya Zamolodchikova",13,11,13,12,7,9,8,13,15,5,1,"Katya","Katya","US7",false);
@@ -6804,7 +6894,7 @@ let blair = new Queen("Blair St. Clair", 8,8,8,10,10,10,4,8,10,5,1, "Blair", "Bl
 let dusty = new Queen("Dusty Ray Bottoms",7,7,7,7,5,10,9,7,8,5,1, "Dusty", "Dusty", "US10", false);
 let eurekas10 = new Queen("Eureka O'Hara",7,13,13,7,10,11,11,13,10,3,3,"Eureka", "Eureka", "US10", false);
 let kalorie = new Queen("Kalorie Karbdashian-Williams",6,5,6,7,4,9,10,7,7,5,1, "Kalorie", "Kalorie", "US10", false);
-let kameron = new Queen("Kameron Micheals",6,10,7,14,10,10,15,6,8,1,1,"Kameron", "Kameron", "US10", false);
+let kameron = new Queen("Kameron Michaels",6,10,7,14,10,10,15,6,8,1,1,"Kameron", "Kameron", "US10", false);
 let mayhem = new Queen("Mayhem Miller",6,6,8,11,14,11,10,6,8,5,1,"Mayhem","Mayhem","US10",false);
 let miz = new Queen("Miz Cracker",8,6,13,10,13,12,7,14,12,4,1,"Miz", "Miz", "US10", false);
 let monet = new Queen("Monét X Change",11,11,11,11,4,4,15,10,13,5,1,"Monet","Monet", "US10", false);
@@ -6849,7 +6939,7 @@ let US12 = shuffle([jaida, crystalm, gigi, jackie, heidi, widow, jan, brita, aid
 
 
 let denali = new Queen("Denali Foxx", 5, 10, 9, 14, 8, 10, 15, 11, 6, 4, 1, "Denali", "Denali", "US13", false);
-let eliott = new Queen("Eliott with 2 Ts", 8, 9, 5, 14, 10, 8, 12, 8, 7, 0, 2, "Eliott", "Eliott", "US13", false);
+let eliott = new Queen("Elliott with 2 Ts", 8, 9, 5, 14, 10, 8, 12, 8, 7, 0, 2, "Eliott", "Eliott", "US13", false);
 let gottmik = new Queen("Gottmik", 9, 11, 12, 6, 12, 15, 6, 9, 12, 4, 0, "Gottmik", "Gottmik", "US13", false);
 let joey = new Queen("Joey Jay", 9, 8, 10, 7, 5, 5, 8, 12, 10, 4, 1, "Joey", "Joey", "US13", false);
 let kahmora = new Queen("Kahmora Hall", 5, 6, 5, 6, 8, 15, 5, 8, 12, 3, 1, "Kahmora", "Kahmora", "US13", false);
@@ -6873,7 +6963,7 @@ let jasminek = new Queen("Jasmine Kennedie", 8, 7, 9, 15, 6, 10, 15, 12, 10, 5, 
 let jorgeous = new Queen("Jorgeous", 9, 8, 10, 15, 6, 8, 15, 12, 12, 4, 1, "Jorgeous", "Jorgeous", "US14", false);
 let junej = new Queen("June Jambalaya", 6, 7, 10, 12, 6, 8, 10, 8, 10, 3, 1, "June", "June", "US14", false);
 let kerri = new Queen("Kerri Colby", 10, 9, 10, 7, 5, 8, 5, 10, 15, 5, 0, "Kerri", "Kerri", "US14", false);
-let kornbread = new Queen("Kornbred \"The Snack\" Jeté", 11, 12, 13, 6, 6, 8, 8, 12, 10, 5, 1, "Kornbread", "Kornbread", "US14", false);
+let kornbread = new Queen("Kornbread \"The Snack\" Jeté", 11, 12, 13, 6, 6, 8, 8, 12, 10, 5, 1, "Kornbread", "Kornbread", "US14", false);
 let camden = new Queen("Lady Camden", 14, 10, 10, 11, 10, 8, 12, 8, 8, 4, 0, "Camden", "Camden", "US14", false);
 let maddym = new Queen("Maddy Morphosis", 12, 10, 12, 6, 5, 6, 7, 6, 12, 3, 1, "Maddy", "Maddy", "US14", false);
 let orion = new Queen("Orion Story", 7, 8, 9, 7, 10, 10, 12, 10, 14, 4, 2, "Orion", "Orion","US14", false);
@@ -6928,7 +7018,7 @@ let CA2 = shuffle([icesis, kendall, eve, giam, pythia, adriana, kimoraa, synthia
 let brookehost = new Host("Brooke Lynn Hytes", "BrookeIn", "BrookeOut");
 
 let viv = new Queen("The Vivienne", 10, 11, 12, 6, 11, 12, 10, 10, 12, 3, 3, "Viv", "Viv", "UK1", false);
-let blus1 = new Queen("Blu Hydreangea", 8, 10, 11, 13, 8, 10, 9, 9, 9, 2, 3, "Blu", "Blu", "UK1", false);
+let blus1 = new Queen("Blu Hydrangea", 8, 10, 11, 13, 8, 10, 9, 9, 9, 2, 3, "Blu", "Blu", "UK1", false);
 let cheryls1 = new Queen("Cheryl Hole", 7, 7, 7, 7, 7, 7, 7, 10, 7, 4, 1, "Cheryl", "Cheryl", "UK1", false);
 let crystal = new Queen("Crystal", 8, 10, 6, 10, 12, 8, 10, 6, 6, 2, 2, "Crystal", "Crystal", "UK1", false);
 let divina = new Queen("Divina De Campo", 11, 12, 8, 13, 12, 12, 8, 10, 12, 3, 3, 'Divina', 'Divina', 'UK1', false);
@@ -6950,7 +7040,7 @@ let tia = new Queen("Tia Kofi", 9, 10, 7, 6, 6, 8, 13, 10, 15, 5, 1, 'Tia', 'Tia
 let joe = new Queen("Joe Black", 8, 9, 10, 6, 7, 8, 5, 10, 12, 4, 1, "Joe", "Joe", "UK2", false);
 let veronicas2 = new Queen("Veronica Green", 10, 6, 8, 10, 8, 10, 10, 8, 9, 2, 3, "Veronica", "Veronica", "UK2", false);
 let ginny = new Queen("Ginny Lemon", 8, 6, 8, 6, 4, 5, 7, 15, 15, 4, 1, "Ginny", "Ginny", "UK2", false);
-let asstina = new Queen("Asstina Mandela", 9, 10, 9, 8, 4, 10, 13, 10, 15, 4, 1, "Asstina", "Asstina","UK2", false);
+let asstina = new Queen("Asttina Mandela", 9, 10, 9, 8, 4, 10, 13, 10, 15, 4, 1, "Asstina", "Asstina","UK2", false);
 let cherry = new Queen("Cherry Valentine", 6, 7, 8, 7, 12, 14, 7, 8, 9, 5, 1, "Cherry", "Cherry", "UK2", false);
 
 let UK2 = shuffle([lawrence,bimini,tayce,ellie,awhora,sister,tia,joe, veronicas2, ginny, asstina, cherry]);
@@ -6974,7 +7064,7 @@ let envy = new Queen("Envy Peru", 12,11,11,12,8,15,12,12,10,3,2,"Envy", "Envy", 
 let janeys1 = new Queen("Janey Jacké", 9,9,9,12,10,12,12,8,10,3,4, "Janey", "Janey", "HO1", false);
 let mamaq = new Queen("Ma'Ma Queen", 10,10,9,6,12,12,7,8,10,5,1, "Mama", "Mama", "HO1", false);
 let abbyomg = new Queen("Miss Abby OMG", 6,7,6,11,7,9,12,10,11,5,5,"AbbyOMG","AbbyOMG",'HO1',false);
-let chelsea = new Queen("ChealseaBoy", 12,11,13,10,11,9,8,10,9,4,2,"Chelsea", "Chelsea", "HO1", false);
+let chelsea = new Queen("ChelseaBoy", 12,11,13,10,11,9,8,10,9,4,2,"Chelsea", "Chelsea", "HO1", false);
 let sederginne = new Queen("Sederginne",12,11,12,5,8,11,6,8,9,2,5,"Sederginne","Serderginne","HO1",false);
 let madamem = new Queen("Madame Madness",7,7,8,6,11,8,7,8,7,2,3,"Madame","Madame","HO1",false);
 let megan = new Queen("Megan Schoonbrood",7,7,9,8,7,7,10,7,9,4,1,"Megan","Megan","HO1",false);
@@ -7011,7 +7101,7 @@ let macarena = new Queen("The Macarena", 6, 6, 7, 7, 5, 7, 6, 9, 10, 5, 1, "Mara
 let ES1 = shuffle([carmenf, killer, sagi, pupi, dovima, hug, arantxa, inti, dragv, macarena]);
 
 let marina = new Queen("Marina", 9, 8, 11, 10, 6, 8, 15, 8, 10, 3, 1, "Marina", "Marina", "ES2", false);
-let estrella = new Queen("Estrella Extravanganza", 11, 10, 12, 9, 5, 6, 8, 8, 10, 3, 2, "Estrella", "Estrella", "ES2", false);
+let estrella = new Queen("Estrella Extravaganza", 11, 10, 12, 9, 5, 6, 8, 8, 10, 3, 2, "Estrella", "Estrella", "ES2", false);
 let venedita = new Queen("Venedita Von Däsh", 9, 13, 10, 8, 8, 12, 10, 8, 8, 2, 0, "Venedita", "Venedita", "ES2", false);
 let juriji = new Queen("Juriji Der Klee", 12, 7, 7, 9, 10, 10, 9, 12, 15, 2, 2, "Juriji", "Juriji", "ES2", false);
 let sethlas = new Queen("Drag Sethlas", 8, 9, 7, 8, 12, 10, 8, 12, 10, 3, 2, "Sethlas", "Sethlas", "ES2", false);
@@ -7094,6 +7184,21 @@ let jayedith = new Queen("Jayedith", 12, 11, 7, 4, 8, 10, 9, 15, 12, 4, 5, "Jay"
 
 let FL1 = shuffle([yassified,yassifiedjan,keep,abbylee,beyo,izzy,o,jayedith]);
 
+let elips = new Queen("Elips",7 ,7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Elips","Elips","FR1",false);
+let kam = new Queen("Kam Hugh", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Kam","Kam", "FR1",false);
+let bertha = new Queen("La Big Bertha", 7,7,7,7,7,7,7,7,7,2,2, "Bertha", "Bertha", "FR1", false);
+let briochée = new Queen("La Briochée", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Briochée", "Briochée", "FR1", false);
+let dame = new Queen("La Grande Dame", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Dame", "Dame", "FR1", false);
+let kahena = new Queen("La Kahena", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Kahena", "Kahena", "FR1", false);
+let lolita = new Queen("Lolita Banana", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Lolita", "Lolita", "FR1", false);
+let lova = new Queen("Lova Ladiva", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Lova", "Lova", "FR1", false);
+let paloma = new Queen("Paloma", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Paloma", "Paloma", "FR1", false);
+let soa = new Queen("Soa De Muse", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Soa", "Soa","FR1", false);
+
+let FR1 = shuffle([elips, kam, bertha, briochée, dame, kahena, lolita, lova, paloma, soa]);
+
+let nickyhost = new Host("Nicky Doll", 'NickyIn', "NickyOut");
+
 let DragRaceQueens = [
 
   akashia, bebes1, jades, ninas1, onginas1, rebecca, shannels1, tammies1, victoriap,
@@ -7131,7 +7236,9 @@ let DragRaceQueens = [
 
   anita, arts, cocoj, elektra, etc, jojoz, karenf, kita, maxi,
 
-  ava ,divinity ,elecktra, enorma, farida, ivana, leriche, luquisha
+  ava ,divinity ,elecktra, enorma, farida, ivana, leriche, luquisha,
+
+  elips, kam, bertha, briochée, dame, kahena, lolita, lova, paloma, soa
 
 ].sort((a, b) => a.GetName().localeCompare(b.GetName()));
 
@@ -7233,7 +7340,15 @@ function WhoGetsCritiques()
                 }
               }
           }
-          Main.createText(firstnames+" you are all safe. You may go untuck backstage.","Bold");
+          if(Safes.length == 1)
+          {
+            Main.createText(Safes[0].GetName()+" you are safe. You may go untuck backstage.","Bold");
+          }
+          else
+          {
+            Main.createText(firstnames+" you are all safe. You may go untuck backstage.","Bold");
+          }
+          
 
           Main.createLine();
           for(let i = 0; i < Critiqued.length; i++)
@@ -7299,7 +7414,14 @@ function WhoGetsCritiques()
                 }
               }
           }
-          Main.createText(firstnames+" you are all safe. You may go untuck backstage.","Bold");
+          if(Safes.length == 1)
+          {
+            Main.createText(Safes[0].GetName()+" you are safe. You may go untuck backstage.","Bold");
+          }
+          else
+          {
+            Main.createText(firstnames+" you are all safe. You may go untuck backstage.","Bold");
+          }
         }
         Main.createButton("Proceed", "UntuckedPart1()");
       }
@@ -7348,6 +7470,11 @@ function UntuckedPart1() {
   Main = new Screen();
   Main.clean();
   Main.createButton("Proceed", "Critiques()");
+
+  if(Safes.length == 1)
+  {
+
+  }
 }
 
 function Critiques() {
@@ -8029,11 +8156,13 @@ function Placements() {
                   {
                     Tops[randomtop].trackrecord.push("WIN");
                     Tops[randomtop].favoritism += 3;
+                    Tops[randomtop].wins++;
                   }
                   else
                   {
                     Tops[randomtop].trackrecord.push("DOUBLEWIN");
                     Tops[randomtop].favoritism += 3;
+                    Tops[randomtop].wins++;
                   }
                   CurrentChallenge.winner = true;
                 }
@@ -8045,6 +8174,7 @@ function Placements() {
                     Main.createText(Tops[randomtop].GetName()+", great job this week. You are safe.","");
                     Tops[randomtop].trackrecord.push("HIGH");
                     Tops[randomtop].favoritism += 1;
+                    Tops[randomtop].highs++;
                   }
                   else if(CurrentChallenge.winner == true && doublewin == true)
                   {
@@ -8052,6 +8182,7 @@ function Placements() {
                     Main.createText(Tops[randomtop].GetName()+", CONDRAGULATIONS! You're the other winner of this week main challenge.","Bold");
                     Tops[randomtop].trackrecord.push("DOUBLEWIN");
                     Tops[randomtop].favoritism += 3;
+                    Tops[randomtop].wins++;
                   }
                   else
                   {
@@ -8059,6 +8190,7 @@ function Placements() {
                     Main.createText(Tops[randomtop].GetName()+", great job this week. You are safe.","");
                     Tops[randomtop].trackrecord.push("HIGH");
                     Tops[randomtop].favoritism += 1;
+                    Tops[randomtop].highs++;
                   }
                 }
                 Tops.splice(randomtop,1);
@@ -8087,6 +8219,7 @@ function Placements() {
             {
               Main.createImage(Bottoms[randombtm].image,"#fa2525");
               Main.createText(Bottoms[randombtm].GetName()+", I'm sorry my dear but you are up for elimination.","Bold");
+              Bottoms[randombtm].bottoms++;
               Bottoms.splice(randombtm,1);
             }
             else
@@ -8095,6 +8228,7 @@ function Placements() {
               Main.createText(Bottoms[randombtm].GetName()+", you are safe.");
               Bottoms[randombtm].trackrecord.push("LOW");
               Bottoms[randombtm].favoritism += -1;
+              Bottoms[randombtm].lows++;
               Bottoms.splice(randombtm,1);
             }
           }
@@ -9174,71 +9308,138 @@ function RankQueens(){
       case "LIFE":
       if(CurrentSeason.currentCast.length>=14)
       {
-        for(let i = 0; i<4; i++)
-        {
-          Tops.push(CurrentSeason.currentCast[i]);
-          Bottoms.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
+        for(let i = 0; i<getRandomInt(3,5); i++)
+          {
+            Tops.push(CurrentSeason.currentCast[i]);
+          }
 
-          Critiqued.push(CurrentSeason.currentCast[i]);
-          Critiqued.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
-        }
+          for(let i = 0; i<getRandomInt(3,5); i++)
+          {
+            Bottoms.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
+          }
       }
       else
       {
-        if(CurrentSeason.currentCast.length==5)
+        if(CurrentSeason.currentCast.length==7)
         {
             Tops.push(CurrentSeason.currentCast[0]);
             Tops.push(CurrentSeason.currentCast[1]);
-            Tops.push(CurrentSeason.currentCast[2]);
+              if(CurrentSeason.currentCast[2].finalscore <= 10)
+              {
+                Tops.push(CurrentSeason.currentCast[2]);
+              }
+              else
+              {
+                Safes.push(CurrentSeason.currentCast[2]);
+              }
+
+              if(CurrentSeason.currentCast[3].finalscore <= 10)
+              {
+                Tops.push(CurrentSeason.currentCast[3]);
+              }
+              else
+              {
+                Safes.push(CurrentSeason.currentCast[3]);
+              }
+
+              if(CurrentSeason.currentCast[4].finalscore <= 10)
+              {
+                Safes.push(CurrentSeason.currentCast[4]);
+              }
+              else
+              {
+                Bottoms.push(CurrentSeason.currentCast[4]);
+              }
+            Bottoms.push(CurrentSeason.currentCast[5]);
+            Bottoms.push(CurrentSeason.currentCast[6]);
+        }
+        else if(CurrentSeason.currentCast.length==6)
+        {
+            Tops.push(CurrentSeason.currentCast[0]);
+            Tops.push(CurrentSeason.currentCast[1]);
+              if(CurrentSeason.currentCast[2].finalscore <= 10)
+              {
+                Tops.push(CurrentSeason.currentCast[2]);
+              }
+              else
+              {
+                Safes.push(CurrentSeason.currentCast[2]);
+              }
+
+              if(CurrentSeason.currentCast[3].finalscore <= 10)
+              {
+                Safes.push(CurrentSeason.currentCast[3]);
+              }
+              else
+              {
+                Bottoms.push(CurrentSeason.currentCast[3]);
+              }
+            Bottoms.push(CurrentSeason.currentCast[4]);
+            Bottoms.push(CurrentSeason.currentCast[5]);
+
+        }
+        else if(CurrentSeason.currentCast.length==5)
+        {
+            Tops.push(CurrentSeason.currentCast[0]);
+            Tops.push(CurrentSeason.currentCast[1]);
+              if(CurrentSeason.currentCast[2].finalscore <= 10)
+              {
+                Tops.push(CurrentSeason.currentCast[2]);
+              }
+              else
+              {
+                Bottoms.push(CurrentSeason.currentCast[2]);
+              }
             Bottoms.push(CurrentSeason.currentCast[3]);
             Bottoms.push(CurrentSeason.currentCast[4]);
-          for(let i = 0; i<5; i++)
-          {
-            Critiqued.push(CurrentSeason.currentCast[i]);
-          }
-
         }
         else if(CurrentSeason.currentCast.length==4)
         {
           Tops.push(CurrentSeason.currentCast[0]);
-          Tops.push(CurrentSeason.currentCast[1]);
+            if(CurrentSeason.currentCast[1].finalscore <= 10)
+            {
+              Tops.push(CurrentSeason.currentCast[1]);
+            }
+            else
+            {
+              Bottoms.push(CurrentSeason.currentCast[1]);
+            }
           Bottoms.push(CurrentSeason.currentCast[2]);
           Bottoms.push(CurrentSeason.currentCast[3]);
-        for(let i = 0; i<4; i++)
-        {
-          Critiqued.push(CurrentSeason.currentCast[i]);
-        }
         }
         else if(CurrentSeason.currentCast.length==3)
         {
           Tops.push(CurrentSeason.currentCast[0]);
           Tops.push(CurrentSeason.currentCast[1]);
           Tops.push(CurrentSeason.currentCast[2]);
-        for(let i = 0; i<3; i++)
-        {
-          Critiqued.push(CurrentSeason.currentCast[i]);
-        }
         }
         else
         {
-          for(let i = 0; i<3; i++)
+          for(let i = 0; i<getRandomInt(2,4); i++)
           {
             Tops.push(CurrentSeason.currentCast[i]);
-            Bottoms.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
-
             Critiqued.push(CurrentSeason.currentCast[i]);
-            Critiqued.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
+          }
+
+          for(let i = 0; i<getRandomInt(3,4); i++)
+          {
+            Bottoms.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
           }
         }
       }
 
+
       for(let i = 0; i<CurrentSeason.currentCast.length; i++)
       {
-        if(Tops.indexOf(CurrentSeason.currentCast[i],0) == -1 && Bottoms.indexOf(CurrentSeason.currentCast[i],0) == -1)
+        if(Tops.indexOf(CurrentSeason.currentCast[i]) == -1 && Bottoms.indexOf(CurrentSeason.currentCast[i]) == -1)
         {
           CurrentSeason.currentCast[i].trackrecord.push("SAFE");
           CurrentSeason.currentCast[i].ppe += 3;
           Safes.push(CurrentSeason.currentCast[i]);
+        }
+        else
+        {
+          Critiqued.push(CurrentSeason.currentCast[i]);
         }
       }
 
@@ -9944,6 +10145,51 @@ function GetSong(){
       return(chosen);
       break;
 
+    case "UK":
+      let songsuk = [
+        '"New Rules" by Dua Lipa',
+        '"Venus" by Bananarama',
+        '"Would I Lie To You?" by Eurythmics',
+        '"Spice Up Your Life" by Spice Girls',
+        '"Power" by Little Mix',
+        '"Call My Name (Wideboys Remix)" by Cheryl Cole',
+        '"Tears Dry On Their Own" by Amy Winehouse',
+        '"I\'m Your Man" by Wham!',
+        '"Relax" by Frankie Goes to Hollywood',
+        '"Memory" by Elaine Paige',
+        '"Don\'t Start Now" by Dua Lipa',
+        '"You Keep Me Hangin\' On" by Kim Wilde',
+        '"Don\'t Leave Me This Way" by The Communards',
+        '"Touch Me" by Cathy Dennis',
+        '"Don\'t Be So Hard On Yourself" by Jess Glynne',
+        '"You Don\'t Have To Say You Love Me" by Dusty Springfield',
+        '"Last Thing On My Mind" by Steps',
+        '"I\'m Still Standing" by Elton John',
+        '"Total Eclipse of the Heart" by Bonnie Tyler',
+        '"Something New" by Girls Aloud',
+        '"Sweet Melody" by Little Mix',
+        '"Moving On Up" by M People',
+        '"I\'ve Got The Music In Me" by The Kiki Dee Band',
+        '"Who Do You Think You Are" by Spice Girls',
+        '"Big Spender" by Shirley Bassey',
+        '"Shout" by Lulu',
+        '"Scandalous" by Mis-Teeq',
+        '"Hallucinate" by Dua Lipa',
+        '"You Don\'t Own Me" by Dusty Springfield',
+        '"Say You\'ll Be There" by Spice Girls',
+        '"Supermodel (El Lay Toya Jam)" by RuPaul',
+        '"We Like To Party! (The Vengabus)" by Vengaboys',
+        '"Let It Go" by Alexandra Burke',
+        '"Toy" by Netta',
+        '"Domino" by Jessie J',
+        '"The Reflex" by Duran Duran',
+        '"Supernova" by Kylie Minogue'
+      ];
+      let chosenuk = songsuk[getRandomInt(0,songsuk.length-1)];
+      songsuk.splice(songsuk.indexOf(chosenuk),1);
+      return(chosenuk);
+      break;
+
     case "CANADA":
       let songscan = [
         '"I Really Like You" by Carly Rae Jepsen',
@@ -10103,6 +10349,32 @@ function GetSong(){
       songho.splice(songho.indexOf(chosenho),1);
       return(chosenho);
       break;
+
+    case "FRANCE":
+      let songfr = [
+        '"Le sens de la vie" by TAL',
+        '"Femme est la nuit" by Dalida ',
+        '"Mourir sur scène" by Dalida',
+        '"Euphories" by Video Club',
+        '"Partenaire Particulier" by Partenaire Particulier',
+        '"Le Passé" by TAL',
+        '"Amour Censure" by Hoshi',
+        '"Aurélie" by Colonel Reyel',
+        '"Tiago" by Kendji Girac',
+        '"Mafiosa" by Lartiste (ft. Caroliina)',
+        '"Pookie" by Aya Nakamura',
+        '"Salope" by Therapie TAXI',
+        '"Candide Crush" by Therapie TAXI',
+        '"À l\'international" by TAL',
+        '"Dernière Danse" by Indila',
+        '"Et même après je t\'aimerai" by Hoshi',
+        '"Je Suis Malade" by Lara Fabian',
+        '"Je T\'aime" by Lara Fabian'
+      ];
+      let chosenfr = songfr[getRandomInt(0,songfr.length-1)];
+      songfr.splice(songfr.indexOf(chosenfr),1);
+      return(chosenfr);
+      break;
   }
 }
 
@@ -10241,4 +10513,9 @@ function GetSong(){
         break;
     }
   }
+
+function CreateCustomQueen()
+{
+  //TO DO
+}
 //#endregion
