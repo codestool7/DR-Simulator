@@ -9443,7 +9443,7 @@ function RankQueens(){
       {
         if((Tops.indexOf(CurrentSeason.currentCast[i]) == -1 && Bottoms.indexOf(CurrentSeason.currentCast[i]) == -1))
         {
-          if(Safes.index(CurrentSeason.currentCast[i])==-1)
+          if(Safes.indexOf(CurrentSeason.currentCast[i])==-1)
           {
             CurrentSeason.currentCast[i].trackrecord.push("SAFE");
             CurrentSeason.currentCast[i].ppe += 3;
