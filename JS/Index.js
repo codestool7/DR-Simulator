@@ -9694,7 +9694,7 @@ function LaunchCustomCast(){
 
   if(isgood==true)
   {
-    GetPromoTable();
+    CreateEntrances();
   }
   else
   {
