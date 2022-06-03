@@ -9331,6 +9331,8 @@ function RankQueens(){
               else
               {
                 Safes.push(CurrentSeason.currentCast[2]);
+                CurrentSeason.currentCast[2].trackrecord.push("SAFE");
+                CurrentSeason.currentCast[2].ppe += 3;
               }
 
               if(CurrentSeason.currentCast[3].finalscore <= 10)
@@ -9340,11 +9342,15 @@ function RankQueens(){
               else
               {
                 Safes.push(CurrentSeason.currentCast[3]);
+                CurrentSeason.currentCast[3].trackrecord.push("SAFE");
+                CurrentSeason.currentCast[3].ppe += 3;
               }
 
               if(CurrentSeason.currentCast[4].finalscore <= 10)
               {
                 Safes.push(CurrentSeason.currentCast[4]);
+                CurrentSeason.currentCast[4].trackrecord.push("SAFE");
+                CurrentSeason.currentCast[4].ppe += 3;
               }
               else
               {
@@ -9364,15 +9370,20 @@ function RankQueens(){
               else
               {
                 Safes.push(CurrentSeason.currentCast[2]);
+                CurrentSeason.currentCast[2].trackrecord.push("SAFE");
+                CurrentSeason.currentCast[2].ppe += 3;
               }
 
               if(CurrentSeason.currentCast[3].finalscore <= 10)
               {
                 Safes.push(CurrentSeason.currentCast[3]);
+                CurrentSeason.currentCast[3].trackrecord.push("SAFE");
+                CurrentSeason.currentCast[3].ppe += 3;
               }
               else
               {
                 Bottoms.push(CurrentSeason.currentCast[3]);
+                
               }
             Bottoms.push(CurrentSeason.currentCast[4]);
             Bottoms.push(CurrentSeason.currentCast[5]);
@@ -9418,7 +9429,6 @@ function RankQueens(){
           for(let i = 0; i<getRandomInt(2,4); i++)
           {
             Tops.push(CurrentSeason.currentCast[i]);
-            Critiqued.push(CurrentSeason.currentCast[i]);
           }
 
           for(let i = 0; i<getRandomInt(3,4); i++)
@@ -9431,11 +9441,14 @@ function RankQueens(){
 
       for(let i = 0; i<CurrentSeason.currentCast.length; i++)
       {
-        if(Tops.indexOf(CurrentSeason.currentCast[i]) == -1 && Bottoms.indexOf(CurrentSeason.currentCast[i]) == -1)
+        if((Tops.indexOf(CurrentSeason.currentCast[i]) == -1 && Bottoms.indexOf(CurrentSeason.currentCast[i]) == -1))
         {
-          CurrentSeason.currentCast[i].trackrecord.push("SAFE");
-          CurrentSeason.currentCast[i].ppe += 3;
-          Safes.push(CurrentSeason.currentCast[i]);
+          if(Safes.index(CurrentSeason.currentCast[i])==-1)
+          {
+            CurrentSeason.currentCast[i].trackrecord.push("SAFE");
+            CurrentSeason.currentCast[i].ppe += 3;
+            Safes.push(CurrentSeason.currentCast[i]);
+          }
         }
         else
         {
