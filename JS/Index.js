@@ -7993,10 +7993,13 @@ function UntuckedEvent(INDIC)
         case 1:
           if(getRandomInt(0,100)>=50)
           {
+            if(CurrentSeason.lipsyncformat != "AS7")
+            {
             Main.createImage(CurrentSeason.currentCast[randfs].image);
             Main.createImage(CurrentSeason.currentCast[randss].image);
             Main.createText(CurrentSeason.currentCast[randfs].GetName()+" ask "+CurrentSeason.currentCast[randss].GetName()+", who do they feel will be lipsyncing tonight.");
             Main.createText(CurrentSeason.currentCast[randss].GetName()+" answers, that they feel that "+Bottoms[getRandomInt(0,Bottoms.length-1)].GetName()+", will be lipsyncing tonight.");
+            }
           }
           else
           {
