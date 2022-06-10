@@ -8,7 +8,15 @@ let organized = 0;
 
 let CustomCast = [];
 
+let customqueens = [];
+if(localStorage.getItem("customqueens") == undefined)
+  localStorage.setItem("customqueens", JSON.stringify(customqueens));
+
 let done = false;
+
+let doublewin = false;
+let firstwinner = false;
+let threewayls = false;
 
 let SlayedChallenge = [];
 let GreatChallenge = [];
@@ -45,7 +53,7 @@ let originaltop = [];
 
 let starscount = [];
 
-let CustomQueens = [];
+
 
 let reads = [
   ", you\'re so old you\'re still on MySpace.com.",
@@ -78,6 +86,13 @@ class Season {
   {
     this.seasonname = Name;
     this.fullCast = Cast;
+
+    this.orgfullcast = [];
+    if(this.orgfullcast.length==0)
+      for(let i =0; i < this.fullCast.length; i++)
+      {
+        this.orgfullcast.push(this.fullCast[i]);
+      }
 
     this.currentCast = [];
     if(this.currentCast.length==0)
@@ -143,6 +158,7 @@ class Relation {
     this.status = "Neutral"
     this.fqueen = FirstQ;
     this.squeen = SecondQ;
+    this.color = "#F5EBF5";
   }
 
   SetRelation(points)
@@ -157,34 +173,41 @@ class Relation {
 
   UpdateStatus()
   {
-    if(this.points<=10 && this.points >= 10)
+    if(this.points <=10 && this.points >= -10)
     {
       this.status = "Neutral";
+      this.color = "#F5EBF5";
     }
     else if(this.points > 10 && this.points <= 30)
     {
       this.status = "Friendly";
+      this.color = "#9bcacc";
     }
     else if(this.points > 30 && this.points<=50)
     {
       this.status = "Friends";
+      this.color = "#7ccc9a";
     }
     else if(this.points > 50)
     {
       this.status = "Best Friends";
+      this.color = "#9fc985";
     }
 
     else if(this.points < -10 && this.points >= -30)
     {
       this.status = "Hostile";
+      this.color = "#d9a0a0";
     }
     else if(this.points < -30 && this.points >= -50)
     {
       this.status = "Ennemies";
+      this.color = "#d66d6d";
     }
-    else(this.points > 50)
+    else if(this.points < -50)
     {
       this.status = "Worst Ennemies";
+      this.color = "#d13838";
     }
   }
 
@@ -201,12 +224,14 @@ class Relation {
   }
 }
 
-class Event {
-  constructor(FirstQ, SecondQ, WhatHappenned)
+class Events {
+  constructor(FirstQ, SecondQ, WhatHappenned, PN, episode)
   {
     this.fqueen = FirstQ;
     this.squeen = SecondQ;
     this.event = WhatHappenned;
+    this.pn = PN;
+    this.ep = episode;
   }
 }
 
@@ -227,6 +252,8 @@ class Queen {
       this.kindness = Kindness;
       this.shadyness = Shadyness;
 
+      this.chocolate = false;
+
       this.stars = 0;
       this.blocked = [false, "NONE"];
       this.starsperepisode = [];
@@ -239,7 +266,7 @@ class Queen {
 
       this.premieregroup = "NONE";
 
-      this.relationsships
+      this.relationsships = [];
 
       this.miniwinner = false;
       this.miniwon = [];
@@ -308,6 +335,36 @@ class Queen {
     this.lipsyncscore = this.GetScore(0,this.lipsync,0);
   }
 
+  ChangeRelation(Queen,points)
+  {
+    for (let index = 0; index < this.relationsships.length; index++) {
+      if(this.relationsships[index].squeen === Queen)
+      {
+        this.relationsships[index].SetRelation((points-Queen.shadyness+Queen.kindness));
+      }
+    }
+  }
+
+  GetSabotage(Queen)
+  {
+    for (let index = 0; index < this.relationsships.length; index++) {
+      if(this.relationsships[index].squeen === Queen)
+      {
+        return(this.relationsships[index].Sabotage());
+      }
+    }
+  }
+
+  GetPoints(Queen)
+  {
+    for (let index = 0; index < this.relationsships.length; index++) {
+      if(this.relationsships[index].squeen === Queen)
+      {
+        return(this.relationsships[index].points);
+      }
+    }
+  }
+
   GetAS7Lipsync()
   {
     this.lipsyncscore = this.GetScore(0,this.lipsync,0)+this.stars;
@@ -360,7 +417,7 @@ class Queen {
 
   GetTalentShow()
   {
-    this.perfomancescore = this.GetScore(75,115,this.acting+this.improv+this.comedy+this.dance+this.lipsync+this.charisma+this.branding+this.design);
+    this.perfomancescore = this.GetScore(95,125,this.acting+this.improv+this.comedy+this.dance+this.lipsync+this.charisma+this.branding+this.design);
   }
 
   GetMusicV()
@@ -404,6 +461,16 @@ class Queen {
       this.finalscore = this.perfomancescore;
     }
   }
+}
+
+let loadqueens = [];
+loadqueens = JSON.parse(localStorage.getItem("customqueens" || [] ));
+
+if(loadqueens==null)
+  loadqueens = [];
+
+for (let index = 0; index < loadqueens.length; index++) {
+  customqueens.push(new Queen(loadqueens[index][0],loadqueens[index][1],loadqueens[index][2],loadqueens[index][3],loadqueens[index][4],loadqueens[index][5],loadqueens[index][6],loadqueens[index][7],loadqueens[index][8],loadqueens[index][9],loadqueens[index][10],loadqueens[index][11],loadqueens[index][12],loadqueens[index][13],loadqueens[index][14],true));
 }
 
 class Host{
@@ -461,19 +528,39 @@ class Screen {
 
   LoadCasts(){
     let select = document.getElementById("aq");
-    for (let index = 0; index < DragRaceQueens.length; index++) {
+    if(select!=null)
+    {
+      for (let index = 0; index < DragRaceQueens.length; index++) {
+        var opt = document.createElement("option");
+        opt.value = "D"+index;
+        opt.text = DragRaceQueens[index].GetName() + " ("+DragRaceQueens[index].ogseason+")";
+        select.add(opt)
+      }
+
       var opt = document.createElement("option");
-      opt.value = index;
-      opt.text = DragRaceQueens[index].GetName() + " ("+DragRaceQueens[index].ogseason+")";
-      select.add(opt)
+      opt.value = "none";
+      opt.text = "----------------------";
+      select.add(opt);
+
+      for (let index = 0; index < customqueens.length; index++) {
+        var opt = document.createElement("option");
+        opt.value = "C"+index;
+        opt.text = customqueens[index].GetName() + " ("+customqueens[index].ogseason+")";
+        select.add(opt)
+      }
     }
 
-    select = document.getElementById("cq");
-    for (let index = 0; index < CustomQueens.length; index++) {
-      var opt = document.createElement("option");
-      opt.value = index;
-      opt.text = CustomQueens[index].GetName() + " ("+CustomQueens[index].ogseason+")";
-      select.add(opt)
+    
+    let sselect = document.getElementById("ct");
+    if(sselect!=null)
+    {
+      console.log("Done");
+      for (let index = 0; index < customqueens.length; index++) {
+        var opt = document.createElement("option");
+        opt.value = index;
+        opt.text = customqueens[index].GetName() + " ("+customqueens[index].ogseason+")";
+        sselect.add(opt)
+      }
     }
   }
 
@@ -547,7 +634,7 @@ class Screen {
     let source = document.createElement("source")
     switch(Country)
     {
-      case "CA":
+      case "CANADA":
         source.setAttribute("src","Videos/CDR.mp4");
         source.setAttribute("type","video/mp4");
         break;
@@ -690,6 +777,82 @@ class Screen {
     this.MainScreen.append(putincenter);
     this.MainScreen.append(br);
   }
+  createBR()
+  {
+    let br = document.createElement("br");
+    this.MainScreen.append(br);
+  }
+  createRelations(){
+    let putincenter = document.createElement("center");
+    let table = document.createElement("table");
+    table.setAttribute("id","RE");
+    let thead = document.createElement("thead");
+
+    table.setAttribute("class","tr");
+  
+    let tbody = document.createElement("tbody");
+  
+    let treps = document.createElement("tr");
+  
+    let thq = document.createElement("th");
+    thq.innerHTML = "Queens";
+    
+    thq.setAttribute("class","tr");
+    thq.setAttribute("style","width: 100px;")
+
+    treps.append(thq);
+  
+    for(let i = 0; i < CurrentSeason.orgfullcast.length; i++)
+    {
+      let thep = document.createElement("th");
+      thep.innerHTML = "<p>"+CurrentSeason.orgfullcast[i].GetName()+"</p>";
+      thep.setAttribute("class","tr");
+      treps.append(thep);
+    }
+
+    for(let q = 0; q < CurrentSeason.orgfullcast.length; q++)
+    {
+      let track = document.createElement("tr");
+
+      let qname = document.createElement("td");
+
+      qname.innerHTML = CurrentSeason.orgfullcast[q].GetName();
+
+      qname.setAttribute("class","tr");
+
+      qname.setAttribute("style","height : 25px; font-weight: bold; background-color:#E9DFE9;");
+
+      track.append(qname);
+
+      for(let t = 0; t < CurrentSeason.orgfullcast.length; t++)
+      {
+        CurrentSeason.orgfullcast[q].relationsships[t].UpdateStatus();
+
+        let trtr = document.createElement("td");
+
+        trtr.innerHTML = CurrentSeason.orgfullcast[q].relationsships[t].points+"<br><small>("+CurrentSeason.orgfullcast[q].relationsships[t].status+")</small>";
+
+        trtr.setAttribute("class","tr");
+
+        trtr.setAttribute("style","background-color: "+CurrentSeason.orgfullcast[q].relationsships[t].color+";");
+
+        track.append(trtr);
+      }
+
+      tbody.append(track);
+    }
+
+    thead.append(treps);
+    table.append(thead);
+    table.append(tbody);
+
+    let br = document.createElement("br");
+    putincenter.append(table);
+
+    this.MainScreen.append(putincenter);
+    this.MainScreen.append(br);
+  }
+
 
   createTrackRecords(){
     let putincenter = document.createElement("center");
@@ -849,6 +1012,11 @@ class Screen {
             break;
         }
 
+        if(CurrentSeason.currentCast[q].miniwon.indexOf(t+1)!=-1)
+        {
+          trtr.innerHTML += "<br><small><i> Mini-Challenge Winner </i></small>";
+        }
+
         trtr.setAttribute("class","tr");
 
         track.append(trtr);
@@ -859,6 +1027,16 @@ class Screen {
         let star = document.createElement("td");
 
         star.innerHTML = CurrentSeason.currentCast[q].stars;
+
+        star.setAttribute("class","trq");
+
+        track.append(star);
+      }
+      else
+      {
+        let star = document.createElement("td");
+
+        star.innerHTML = parseFloat((CurrentSeason.currentCast[q].ppe/CurrentSeason.currentCast[q].episodeson)).toFixed(2);
 
         star.setAttribute("class","trq");
 
@@ -997,8 +1175,22 @@ class Screen {
 
         trtr.setAttribute("class","tr");
 
+        if(CurrentSeason.eliminatedCast[q].miniwon.indexOf(t+1)!=-1)
+        {
+          trtr.innerHTML += "<br><small><i> Mini-Challenge Winner </i></small>";
+        }
+        
         track.append(trtr);
+
+        
       }
+        let star = document.createElement("td");
+
+        star.innerHTML = parseFloat((CurrentSeason.eliminatedCast[q].ppe/CurrentSeason.eliminatedCast[q].episodeson)).toFixed(2);
+
+        star.setAttribute("class","trq");
+
+        track.append(star);
 
       tbody.append(track);
     }
@@ -1007,6 +1199,15 @@ class Screen {
     {
       let thq = document.createElement("th");
       thq.innerHTML = "Stars";
+      
+      thq.setAttribute("class","tr");
+      thq.setAttribute("style","width: 45px;")
+      treps.append(thq);
+    }
+    else
+    {
+      let thq = document.createElement("th");
+      thq.innerHTML = "PPE";
       
       thq.setAttribute("class","tr");
       thq.setAttribute("style","width: 45px;")
@@ -1024,6 +1225,17 @@ class Screen {
   }
 
   createPromoTable(){
+
+      if(CurrentSeason.episodes.length == 0)
+      {
+        for (let index = 0; index < CurrentSeason.fullCast.length; index++) {
+          
+          for (let q = 0; q < CurrentSeason.fullCast.length; q++) {
+            CurrentSeason.fullCast[index].relationsships.push(new Relation(CurrentSeason.fullCast[index], CurrentSeason.fullCast[q]));
+          }
+        }
+      }
+
       CurrentSeason.fullCast.sort((a, b) => a.placement - b.placement);
 
       let putincenter = document.createElement("center");
@@ -1665,10 +1877,14 @@ class Ball{
         CurrentSeason.currentCast[i].getBall();
       }
   }
+
   rankPerfomances()
   {
-      
+      CurrentSeason.currentCast.sort((a, b) => a.finalscore - b.finalscore);
+  }
 
+  RankBallThi()
+  {
       CurrentSeason.currentCast.sort((a, b) => a.perfomancescore - b.perfomancescore);
 
       for(let i = 0; i<CurrentSeason.currentCast.length; i++)
@@ -6034,6 +6250,60 @@ class DesignChallenge{
     }
 
     CurrentSeason.currentCast.sort((a, b) => a.perfomancescore - b.perfomancescore);
+    let line = false;
+    for (let index = 0; index < 5; index++) {
+      if(getRandomInt(0,100)>=85)
+      {
+
+        line = true;
+
+        let rdmqueen = getRandomInt(0,CurrentSeason.currentCast.length-1);
+        let srdmqueen = getRandomInt(0,CurrentSeason.currentCast.length-1);
+
+        while(rdmqueen == srdmqueen)
+        {
+          srdmqueen = getRandomInt(0,CurrentSeason.currentCast.length-1);
+        }
+        let psne = CurrentSeason.currentCast[rdmqueen].GetSabotage(CurrentSeason.currentCast[srdmqueen]);
+        let happ;
+        if(psne==true)
+        {
+          happ = "sabotaged";
+        }
+        else
+        {
+          happ = "helped";
+        }
+
+        let eventt = new Events(CurrentSeason.currentCast[rdmqueen],CurrentSeason.currentCast[srdmqueen],happ,psne,CurrentSeason.episodes.length);
+        CurrentSeason.PushEvent(eventt);
+        Main.createImage(CurrentSeason.currentCast[rdmqueen].image);
+        Main.createImage(CurrentSeason.currentCast[srdmqueen].image);
+        Main.createText(CurrentSeason.currentCast[rdmqueen].GetName()+" "+happ+" "+CurrentSeason.currentCast[srdmqueen].GetName()+" during the challenge.");
+        if(psne==true)
+        {
+          CurrentSeason.currentCast[rdmqueen].ChangeRelation(CurrentSeason.currentCast[srdmqueen],-20);
+          CurrentSeason.currentCast[srdmqueen].ChangeRelation(CurrentSeason.currentCast[rdmqueen],-20);
+        }
+        else
+        {
+
+          CurrentSeason.currentCast[rdmqueen].ChangeRelation(CurrentSeason.currentCast[srdmqueen],20);
+
+          CurrentSeason.currentCast[srdmqueen].ChangeRelation(CurrentSeason.currentCast[rdmqueen],20);
+          
+          CurrentSeason.currentCast[srdmqueen].perfomancescore -= getRandomInt(0,CurrentSeason.currentCast[rdmqueen].design);
+
+          CurrentSeason.currentCast[rdmqueen].perfomancescore += getRandomInt(0,(15-CurrentSeason.currentCast[srdmqueen].design));
+        }
+
+      }
+    }
+
+    if(line == true)
+    {
+      Main.createLine();
+    }
 
     for(let i = 0; i<CurrentSeason.currentCast.length; i++)
     {
@@ -6067,6 +6337,8 @@ class DesignChallenge{
 
   createPerformances()
   {
+    
+
     let slayedtext = "";
     let greattext = "";
     let goodtext = "";
@@ -7125,33 +7397,33 @@ let ES2 = shuffle([marina, estrella, venedita, juriji, sethlas, diamante, onyx, 
 
 let supremmehost = new Host("Supremme De Luxe","SupremmeIn","SupremmeOut");
 
-let amadiva = new Queen("Amadiva", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Amadiva", "Amadiva", "TH1",false);
-let année = new Queen("Année Maywong", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Année", "Année", "TH1",false);
-let bella = new Queen("B Ella", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "BElla", "BElla", "TH1",false);
-let bbf = new Queen("Bunny Be Fly", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "BBF", "BBF", "TH1",false);
-let dearis = new Queen("Dearis Doll", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Dearis", "Dearis", "TH1",false);
-let jaja = new Queen("JAJA", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "JAJA", "Jaja", "TH1",false);
-let meannie = new Queen("Meannie Minaj", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Meannie", "Meannie", "TH1",false);
-let morrigan = new Queen("Morrigan", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Morrigan", "Morrigan", "TH1",false);
-let natalia = new Queen("Natalia Pliacam", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Natalia", "Natalia", "TH1",false);
-let petchra = new Queen("Petchra", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Petchra", "Petchtra", "TH1",false);
+let amadiva = new Queen("Amadiva", 7,7,6,11,14,12,11,8,13,3,2, "Amadiva", "Amadiva", "TH1",false);
+let année = new Queen("Année Maywong", 10,10,10,13,15,15,14,7,12,4,3, "Année", "Année", "TH1",false);
+let bella = new Queen("B Ella", 9,9,9,10,9,8,10,10,6,2,5, "BElla", "BElla", "TH1",false);
+let bbf = new Queen("Bunny Be Fly", 6,6,6,7,15,14,7,6,10,4,4, "BBF", "BBF", "TH1",false);
+let dearis = new Queen("Dearis Doll", 8,8,13,10,10,11,13,12,13,5,3, "Dearis", "Dearis", "TH1",false);
+let jaja = new Queen("JAJA", 8,8,11,14,8,8,12,8,10,3,5, "JAJA", "Jaja", "TH1",false);
+let meannie = new Queen("Meannie Minaj", 7,6,8,8,8,8,7,9,12,4,3, "Meannie", "Meannie", "TH1",false);
+let morrigan = new Queen("Morrigan", 6,7,6,9,9,9,10,7,12,3,3, "Morrigan", "Morrigan", "TH1",false);
+let natalia = new Queen("Natalia Pliacam", 13,14,13,8,11,10,12,13,8,3,3, "Natalia", "Natalia", "TH1",false);
+let petchra = new Queen("Petchra", 7,6,8,11,8,8,11,7,10,3,5, "Petchra", "Petchtra", "TH1",false);
 
 let TH1 = shuffle([amadiva, année, bella, bbf, dearis, jaja, meannie, morrigan, natalia, petchra]);
 
-let angele = new Queen("Angele Anang", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Angele", "Angele", "TH2",false);
-let bandit = new Queen("Bandit", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Bandit", "Bandit", "TH2",false);
-let genie = new Queen("Genie", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Genie", "Genie", "TH2",false);
-let gimhuay = new Queen("Miss Gimhuay", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Gimhuay", "Gimhuay", "TH2",false);
-let kana = new Queen("Kana Warrior", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Kana", "Kana", "TH2",false);
-let kandyz = new Queen("Kandy Zyanide", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Kandy", "Kandy", "TH2",false);
-let katy = new Queen("Katy Killer", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Katy", "Katy", "TH2",false);
-let mstranger = new Queen("M Stranger Fox", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "M", "M", "TH2",false);
-let maya = new Queen("Maya B'Haro", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Maya", "Maya", "TH2",false);
-let mocha = new Queen("Mocha Diva", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Mocha", "Mocha", "TH2",false);
-let silvers = new Queen("Silver Sonic", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "SilverSonic", "SilverSonic", "TH2",false);
-let srimala = new Queen("Srimala", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Srimala", "Srimala", "TH2",false);
-let tormai = new Queen("Tormai", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Tormai", "Tormai", "TH2",false);
-let vanda = new Queen("Vanda Miss Joaquim", 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, "Vanda", "Vanda", "TH2",false);
+let angele = new Queen("Angele Anang", 11,11,11,10,13,15,15,8,13,5,3, "Angele", "Angele", "TH2",false);
+let bandit = new Queen("Bandit",12,8,10,13,8,13,12,9,7,2,4, "Bandit", "Bandit", "TH2",false);
+let genie = new Queen("Genie", 11,10,10,8,6,13,7,10,7,2,5, "Genie", "Genie", "TH2",false);
+let gimhuay = new Queen("Miss Gimhuay", 10,10,9,8,12,15,8,8,13,4,4, "Gimhuay", "Gimhuay", "TH2",false);
+let kana = new Queen("Kana Warrior", 6,7,7,10,9,12,15,10,8,3,4, "Kana", "Kana", "TH2",false);
+let kandyz = new Queen("Kandy Zyanide", 7,10,7,15,12,13,10,8,13,5,4, "Kandy", "Kandy", "TH2",false);
+let katy = new Queen("Katy Killer", 7,7,7,8,8,6,7,10,9,2,2, "Katy", "Katy", "TH2",false);
+let mstranger = new Queen("M Stranger Fox", 6,6,6,8,9,8,10,6,12,5,3, "M", "M", "TH2",false);
+let maya = new Queen("Maya B'Haro", 6,6,7,8,10,11,8,7,11,5,1, "Maya", "Maya", "TH2",false);
+let mocha = new Queen("Mocha Diva", 12,12,8,10,10,6,8,10,6,1,5, "Mocha", "Mocha", "TH2",false);
+let silvers = new Queen("Silver Sonic", 5,5,5,6,8,9,6,6,10,5,3, "SilverSonic", "SilverSonic", "TH2",false);
+let srimala = new Queen("Srimala",8,4,6,8,7,11,15,8,15,3,3, "Srimala", "Srimala", "TH2",false);
+let tormai = new Queen("Tormai",8,9,7,8,5,10,10,7,10,5,5, "Tormai", "Tormai", "TH2",false);
+let vanda = new Queen("Vanda Miss Joaquim", 12,7,7,13,7,11,15,7,12,5,2, "Vanda", "Vanda", "TH2",false);
 
 let TH2 = shuffle([angele, bandit, genie, gimhuay, kana, kandyz, katy, mstranger, maya, mocha, silvers, srimala, tormai, vanda]);
 
@@ -7490,15 +7762,320 @@ function WhoGetsCritiques()
   }
 }
 
+function UntuckedEvent(INDIC)
+{
+  Main.createLine();
+  let currentepisodeevent = [];
+  for (let index = 0; index < CurrentSeason.events.length; index++) {
+    if(CurrentSeason.events[index].ep == CurrentSeason.episodes.length)
+    {
+      currentepisodeevent.push(CurrentSeason.events[index]);
+    }
+  }
+
+  if(INDIC == true)
+  {
+
+    for (let index = 0; index < currentepisodeevent.length; index++) {
+
+      if(Safes.indexOf(currentepisodeevent[index].fqueen) != -1 && Safes.indexOf(currentepisodeevent[index].squeen) != -1)
+      {
+        Main.createImage(currentepisodeevent[index].fqueen.image);
+        Main.createImage(currentepisodeevent[index].squeen.image);
+        console.log(currentepisodeevent[index].pn);
+        if(currentepisodeevent[index].pn == false)
+        {
+          Main.createText(currentepisodeevent[index].fqueen.GetName()+" thanks "+currentepisodeevent[index].squeen.GetName()+", for helping them during the challenge.");
+        }
+        else
+        {
+          Main.createText(currentepisodeevent[index].fqueen.GetName()+" call out "+currentepisodeevent[index].squeen.GetName()+", for setting them up during the challenge.");
+        }
+      }
+  
+    }
+    
+    for (let index = 0; index < getRandomInt(1,10); index++) {
+
+      let randfs = getRandomInt(0,Safes.length-1);
+      let randss = getRandomInt(0,Safes.length-1);
+      while(randfs == randss)
+      {
+        randss = getRandomInt(0,Safes.length-1);
+      }
+      switch(getRandomInt(0,3))
+      {
+        case 0:
+          if(getRandomInt(0,100)<=50)
+          {
+            if(getRandomInt(0,100)<=90)
+            {
+              Main.createImage(Safes[randfs].image);
+              Main.createImage(Safes[randss].image);
+              Main.createText(Safes[randfs].GetName()+" has a laugh with "+Safes[randss].GetName());
+              Safes[randfs].ChangeRelation(Safes[randss],5);
+              Safes[randss].ChangeRelation(Safes[randfs],5);
+            }
+            else
+            {
+              Main.createImage(Safes[randfs].image);
+              Main.createImage(Safes[randss].image);
+              Main.createText(Safes[randfs].GetName()+" connect on a deep level with "+Safes[randss].GetName()+" due to similars experience.");
+              Safes[randfs].ChangeRelation(Safes[randss],15);
+              Safes[randss].ChangeRelation(Safes[randfs],15);
+            }
+          }
+          else
+          {
+            if(Safes[randfs].GetPoints(Safes[randss]) < -20 && Safes[randss].GetPoints(Safes[randfs]) < -20)
+            {
+              Main.createImage(Safes[randfs].image);
+              Main.createImage(Safes[randss].image);
+              Main.createText(Safes[randfs].GetName()+" is fighting with "+Safes[randss].GetName()+".");
+              Safes[randfs].ChangeRelation(Safes[randss],-15);
+              Safes[randss].ChangeRelation(Safes[randfs],-15);
+            }
+            else
+            {
+              if(getRandomInt(0,100)<=50)
+              {
+              Main.createImage(Safes[randfs].image);
+              Main.createImage(Safes[randss].image);
+              Main.createText(Safes[randfs].GetName()+" has a small talk with "+Safes[randss].GetName());
+              Safes[randfs].ChangeRelation(Safes[randss],5);
+              Safes[randss].ChangeRelation(Safes[randfs],5);
+              }
+              else
+              {
+              Main.createImage(Safes[randfs].image);
+              Main.createImage(Safes[randss].image);
+              Main.createText(Safes[randfs].GetName()+" is being shady towards "+Safes[randss].GetName());
+              Safes[randfs].ChangeRelation(Safes[randss],-5);
+              Safes[randss].ChangeRelation(Safes[randfs],-5);
+              }
+            }
+          }
+          break;
+
+        case 1:
+          if(getRandomInt(0,100)>=50)
+          {
+            Main.createImage(Safes[randfs].image);
+            Main.createImage(Safes[randss].image);
+            Main.createText(Safes[randfs].GetName()+" ask "+Safes[randss].GetName()+", who do they feel will be in the bottom.");
+            Main.createText(Safes[randss].GetName()+" answers, that they feel that "+Bottoms[getRandomInt(0,Bottoms.length-1)].GetName()+", will be lipsyncing tonight.");
+          }
+          else
+          {
+            Main.createImage(Safes[randfs].image);
+            Main.createImage(Safes[randss].image);
+            Main.createText(Safes[randfs].GetName()+" ask "+Safes[randss].GetName()+", who do they feel will win tonight.");
+            Main.createText(Safes[randss].GetName()+" answers, that they feel that "+Bottoms[getRandomInt(0,Bottoms.length-1)].GetName()+", has a great chance of winning tonight's challenge.");
+          }
+          break;
+        case 2:
+          Main.createImage(Safes[randfs].image);
+          if((SlayedChallenge.indexOf(Safes[randfs])!= -1 || GreatChallenge.indexOf(Safes[randfs])!= -1) ||(getRandomInt(0,100)>=95))
+            Main.createText(Safes[randfs].GetName()+", says that they were hoping to be in the top.");
+          else
+            Main.createText(Safes[randfs].GetName()+", says that they are happy that they are safe, because they could have been in the bottom.");
+          break;
+        case 3:
+          if(getRandomInt(0,100)<=90)
+            {
+              Main.createImage(Safes[randfs].image);
+              Main.createImage(Safes[randss].image);
+              Main.createText(Safes[randfs].GetName()+" feels like "+Safes[randss].GetName()+" has been arrogant today.");
+              if(getRandomInt(0,100)<=50)
+              {
+                Main.createText(Safes[randss].GetName()+" respond, that they don't care, because they're not here to make friends.");
+                Safes[randfs].ChangeRelation(Safes[randss],-10);
+                Safes[randss].ChangeRelation(Safes[randfs],-10);
+              }
+              else
+              {
+                Main.createText(Safes[randss].GetName()+" says that, it is a competition and they're just trying to win.");
+              }
+            }
+            else
+            {
+              Main.createImage(Safes[randfs].image);
+              Main.createImage(Safes[randss].image);
+              Main.createText(Safes[randfs].GetName()+" connect on a deep level with "+Safes[randss].GetName()+" due to similars experience.");
+              Safes[randfs].ChangeRelation(Safes[randss],15);
+              Safes[randss].ChangeRelation(Safes[randfs],15);
+            }
+            break;
+
+      }
+    }
+  }
+  else
+  {
+   
+    for (let index = 0; index < currentepisodeevent.length; index++) {
+      if(Safes.indexOf(currentepisodeevent[index].fqueen) == -1 || Safes.indexOf(currentepisodeevent[index].squeen) == -1)
+      {
+        Main.createImage(currentepisodeevent[index].fqueen.image);
+        Main.createImage(currentepisodeevent[index].squeen.image);
+        if(currentepisodeevent[index].pn == false)
+        {
+          Main.createText(currentepisodeevent[index].fqueen.GetName()+" thanks "+currentepisodeevent[index].squeen.GetName()+", for helping them during the challenge.");
+        }
+        else
+        {
+          Main.createText(currentepisodeevent[index].fqueen.GetName()+" call out "+currentepisodeevent[index].squeen.GetName()+", for setting them up during the challenge.");
+        }
+      }
+    }
+    for (let index = 0; index < getRandomInt(1,10); index++) {
+
+      let randfs = getRandomInt(0,CurrentSeason.currentCast.length-1);
+      let randss = getRandomInt(0,CurrentSeason.currentCast.length-1);
+      while(randfs == randss)
+      {
+        randss = getRandomInt(0,CurrentSeason.currentCast.length-1);
+      }
+      switch(getRandomInt(0,2))
+      {
+        case 0:
+          if(getRandomInt(0,100)<=50)
+          {
+            if(getRandomInt(0,100)<=90)
+            {
+              Main.createImage(CurrentSeason.currentCast[randfs].image);
+              Main.createImage(CurrentSeason.currentCast[randss].image);
+              Main.createText(CurrentSeason.currentCast[randfs].GetName()+" has a laugh with "+CurrentSeason.currentCast[randss].GetName());
+              CurrentSeason.currentCast[randfs].ChangeRelation(CurrentSeason.currentCast[randss],5);
+              CurrentSeason.currentCast[randss].ChangeRelation(CurrentSeason.currentCast[randfs],5);
+            }
+            else
+            {
+              Main.createImage(CurrentSeason.currentCast[randfs].image);
+              Main.createImage(CurrentSeason.currentCast[randss].image);
+              Main.createText(CurrentSeason.currentCast[randfs].GetName()+" connect on a deep level with "+CurrentSeason.currentCast[randss].GetName()+" due to similars experience.");
+              CurrentSeason.currentCast[randfs].ChangeRelation(CurrentSeason.currentCast[randss],15);
+              CurrentSeason.currentCast[randss].ChangeRelation(CurrentSeason.currentCast[randfs],15);
+            }
+          }
+          else
+          {
+            if(CurrentSeason.currentCast[randfs].GetPoints(Safes[randss]) < -20 && CurrentSeason.currentCast[randss].GetPoints(Safes[randfs]) < -20)
+            {
+              Main.createImage(CurrentSeason.currentCast[randfs].image);
+              Main.createImage(CurrentSeason.currentCast[randss].image);
+              Main.createText(CurrentSeason.currentCast[randfs].GetName()+" is fighting with "+CurrentSeason.currentCast[randss].GetName()+".");
+              CurrentSeason.currentCast[randfs].ChangeRelation(CurrentSeason.currentCast.currentCast[randss],-15);
+              CurrentSeason.currentCast[randss].ChangeRelation(Safes[randfs],-15);
+            }
+            else
+            {
+              if(getRandomInt(0,100)<=50)
+              {
+              Main.createImage(CurrentSeason.currentCast[randfs].image);
+              Main.createImage(CurrentSeason.currentCast[randss].image);
+              Main.createText(CurrentSeason.currentCast[randfs].GetName()+" has a small talk with "+CurrentSeason.currentCast[randss].GetName());
+              CurrentSeason.currentCast[randfs].ChangeRelation(CurrentSeason.currentCast[randss],5);
+              CurrentSeason.currentCast[randss].ChangeRelation(CurrentSeason.currentCast[randfs],5);
+              }
+              else
+              {
+              Main.createImage(CurrentSeason.currentCast[randfs].image);
+              Main.createImage(CurrentSeason.currentCast[randss].image);
+              Main.createText(CurrentSeason.currentCast[randfs].GetName()+" is being shady towards "+CurrentSeason.currentCast[randss].GetName());
+              CurrentSeason.currentCast[randfs].ChangeRelation(CurrentSeason.currentCast[randss],-5);
+              CurrentSeason.currentCast[randss].ChangeRelation(CurrentSeason.currentCast[randfs],-5);
+              }
+            }
+          }
+          break;
+
+        case 1:
+          if(getRandomInt(0,100)>=50)
+          {
+            Main.createImage(CurrentSeason.currentCast[randfs].image);
+            Main.createImage(CurrentSeason.currentCast[randss].image);
+            Main.createText(CurrentSeason.currentCast[randfs].GetName()+" ask "+CurrentSeason.currentCast[randss].GetName()+", who do they feel will be lipsyncing tonight.");
+            Main.createText(CurrentSeason.currentCast[randss].GetName()+" answers, that they feel that "+Bottoms[getRandomInt(0,Bottoms.length-1)].GetName()+", will be lipsyncing tonight.");
+          }
+          else
+          {
+            Main.createImage(CurrentSeason.currentCast[randfs].image);
+            Main.createImage(CurrentSeason.currentCast[randss].image);
+            Main.createText(CurrentSeason.currentCast[randfs].GetName()+" ask "+CurrentSeason.currentCast[randss].GetName()+", who do they feel will win tonight.");
+            Main.createText(CurrentSeason.currentCast[randss].GetName()+" answers, that they feel that "+Tops[getRandomInt(0,Tops.length-1)].GetName()+", has a great chance of winning tonight's challenge.");
+          }
+          break;
+        case 2:
+          if(getRandomInt(0,100)<=90)
+            {
+              Main.createImage(CurrentSeason.currentCast[randfs].image);
+              Main.createImage(CurrentSeason.currentCast[randss].image);
+              Main.createText(CurrentSeason.currentCast[randfs].GetName()+" feels like "+CurrentSeason.currentCast[randss].GetName()+" has been arrogant today.");
+              if(getRandomInt(0,100)<=50)
+              {
+                Main.createText(CurrentSeason.currentCast[randss].GetName()+" respond, that they don't care, because they're not here to make friends.");
+                CurrentSeason.currentCast[randfs].ChangeRelation(CurrentSeason.currentCast[randss],-10);
+                CurrentSeason.currentCast[randss].ChangeRelation(CurrentSeason.currentCast[randfs],-10);
+              }
+              else
+              {
+                Main.createText(CurrentSeason.currentCast[randss].GetName()+" says that, it is a competition and they're just trying to win.");
+              }
+            }
+            else
+            {
+              Main.createImage(CurrentSeason.currentCast[randfs].image);
+              Main.createImage(CurrentSeason.currentCast[randss].image);
+              Main.createText(CurrentSeason.currentCast[randfs].GetName()+" connect on a deep level with "+CurrentSeason.currentCast[randss].GetName()+" due to similars experience.");
+              CurrentSeason.currentCast[randfs].ChangeRelation(CurrentSeason.currentCast[randss],15);
+              CurrentSeason.currentCast[randss].ChangeRelation(CurrentSeason.currentCast[randfs],15);
+            }
+            break;
+
+        }
+    }
+  }
+}
+
+
+
 function UntuckedPart1() {
   Main = new Screen();
   Main.clean();
-  Main.createButton("Proceed", "Critiques()");
+  
 
   if(Safes.length == 1)
   {
-
+    Main.createImage(Safes[0].image);
+    Main.createText(Safes[0].GetName()+", sits down, and grab a drink while waiting for the other queens.", "Bold");
   }
+  else
+  {
+    let safestext = "";
+    for(let i = 0; i < Safes.length; i++)
+    {
+      Main.createImage(Safes[i].image);
+      if(i!=Safes.length-1)
+        {
+          safestext += Safes[i].GetName()+", ";
+        }
+        else
+        {
+          if(Safes.length!=1)
+          {
+            safestext += " and "+Safes[i].GetName();
+          }
+          else
+          {
+            safestext += Safes[i].GetName();
+          }
+        }
+    }
+    Main.createText(safestext+" all grab a drink, and sit down together, waiting for the other queens.","Bold");
+  }
+  UntuckedEvent(true);
+  Main.createButton("Proceed", "Critiques()");
 }
 
 function Critiques() {
@@ -7510,6 +8087,37 @@ function Critiques() {
 function UntuckedPart2() {
   Main = new Screen();
   Main.clean();
+
+  if(Critiqued.length == 1)
+  {
+    Main.createImage(Critiqued[0].image);
+    Main.createText(Safes[0].GetName()+", sits down, and grab a drink while waiting for the other queens.", "Bold");
+  }
+  else
+  {
+    let safestext = "";
+    for(let i = 0; i < Critiqued.length; i++)
+    {
+      Main.createImage(Critiqued[i].image);
+      if(i!=Critiqued.length-1)
+        {
+          safestext += Critiqued[i].GetName()+", ";
+        }
+        else
+        {
+          if(Safes.length!=1)
+          {
+            safestext += " and "+Critiqued[i].GetName();
+          }
+          else
+          {
+            safestext += Critiqued[i].GetName();
+          }
+        }
+    }
+    Main.createText(safestext+" all grab a drink, and sit down together.","Bold");
+  }
+  UntuckedEvent(false);
   if((CurrentSeason.currentCast.length == 3 && (CurrentSeason.finaleformat == "TOP3" || CurrentSeason.finaleformat == "TOP3NE")) || (CurrentSeason.currentCast.length==4 && (CurrentSeason.finaleformat=="LSFTC")))
   {
     CurrentSeason.currentCast[0].favoritism += 3;
@@ -8324,9 +8932,14 @@ function Finale()
 function Placements() {
   if(CurrentSeason.lipsyncformat == "LIFE")
   {
-
+    
     if(organized==0)
     {
+      let hightext = "";
+      doublewin = false;
+      firstwinner = false;
+      threewayls = false;
+
       for (let i = 0; i < Tops.length; i++) {
         if(Tops[i].trackrecord[Tops[i].trackrecord.length-1] == "WIN" || Tops[i].trackrecord[Tops[i].trackrecord.length-1] == "DOUBLEWIN")
         {
@@ -8341,20 +8954,7 @@ function Placements() {
       Tops.sort((a, b) => a.finalscore - b.finalscore);
       Bottoms.sort((a, b) => b.finalscore - a.finalscore);
 
-      organized = 1;
-    }
-    
-
-    
-
-    Main = new Screen();
-    Main.clean();
-    let hightext = "";
-
-    let doublewin = false;
-    let firstwinner = false;
-    let threewayls = false;
-    if( (Bottoms[0] != undefined && Bottoms[1] != undefined && Bottoms[2] != undefined ) && Bottoms[0].perfomancescore > 40 && Bottoms[1].perfomancescore > 40  && Bottoms[2].perfomancescore > 40 && CurrentSeason.currentCast.length >=6)
+      if( (Bottoms[0] != undefined && Bottoms[1] != undefined && Bottoms[2] != undefined ) && Bottoms[0].perfomancescore > 40 && Bottoms[1].perfomancescore > 40  && Bottoms[2].perfomancescore > 40 && CurrentSeason.currentCast.length >=6)
     {
       threewayls = true;
     }
@@ -8362,7 +8962,19 @@ function Placements() {
     if(TopsQueens.length==0)
     {
       TopsQueens.push(Tops[0]);
+      if(Tops.length!=1)
+      {
       TopsQueens.push(Tops[1]);
+
+        if(TopsQueens[0].perfomancescore < 5 && TopsQueens[1].perfomancescore < 5)
+          {
+            doublewin = true;
+          }
+          else
+          {
+            doublewin=false;
+          }
+        }
     }
 
     if(BottomQueens.length==0)
@@ -8380,20 +8992,21 @@ function Placements() {
       }
     }
 
+      organized = 1;
+    }
+    
+
+    
+
+    Main = new Screen();
+    Main.clean();
+
+    
+
     if(Tops.length!=0 || Bottoms.length!=0)
     {
       if(Tops.length!=0)
       {
-
-        if(TopsQueens[0].perfomancescore < 5 && TopsQueens[1].perfomancescore < 5)
-        {
-          doublewin = true;
-        }
-        else
-        {
-          doublewin=false;
-        }
-
         if(Steps == 0)
         {
           randomtop = getRandomInt(0,Tops.length-1);
@@ -8411,12 +9024,14 @@ function Placements() {
                   if(doublewin==false)
                   {
                     Tops[randomtop].trackrecord.push("WIN");
+                    Tops[randomtop].ppe += 5;
                     Tops[randomtop].favoritism += 3;
                     Tops[randomtop].wins++;
                   }
                   else
                   {
                     Tops[randomtop].trackrecord.push("DOUBLEWIN");
+                    Tops[randomtop].ppe += 5;
                     Tops[randomtop].favoritism += 3;
                     Tops[randomtop].wins++;
                   }
@@ -8429,6 +9044,7 @@ function Placements() {
                     Main.createImage(Tops[randomtop].image,"#17d4ff");
                     Main.createText(Tops[randomtop].GetName()+", great job this week. You are safe.","");
                     Tops[randomtop].trackrecord.push("HIGH");
+                    Tops[randomtop].ppe += 4;
                     Tops[randomtop].favoritism += 1;
                     Tops[randomtop].highs++;
                   }
@@ -8437,6 +9053,7 @@ function Placements() {
                     Main.createImage(Tops[randomtop].image,"#1741ff");
                     Main.createText(Tops[randomtop].GetName()+", CONDRAGULATIONS! You're the other winner of this week main challenge.","Bold");
                     Tops[randomtop].trackrecord.push("DOUBLEWIN");
+                    Tops[randomtop].ppe += 5;
                     Tops[randomtop].favoritism += 3;
                     Tops[randomtop].wins++;
                   }
@@ -8444,6 +9061,7 @@ function Placements() {
                   {
                     Main.createImage(Tops[randomtop].image,"#17d4ff");
                     Main.createText(Tops[randomtop].GetName()+", great job this week. You are safe.","");
+                    Tops[randomtop].ppe += 4;
                     Tops[randomtop].trackrecord.push("HIGH");
                     Tops[randomtop].favoritism += 1;
                     Tops[randomtop].highs++;
@@ -8456,6 +9074,7 @@ function Placements() {
               Main.createImage(Tops[randomtop].image,"#17d4ff");
               Main.createText(Tops[randomtop].GetName()+", great job this week. You are safe.","");
               Tops[randomtop].trackrecord.push("HIGH");
+              Tops[randomtop].ppe += 4;
               Tops[randomtop].favoritism += 1;
               Tops.splice(randomtop,1);
             }
@@ -8483,6 +9102,7 @@ function Placements() {
               Main.createImage(Bottoms[randombtm].image,"#ff8a8a");
               Main.createText(Bottoms[randombtm].GetName()+", you are safe.");
               Bottoms[randombtm].trackrecord.push("LOW");
+              Bottoms[randombtm].ppe += 2;
               Bottoms[randombtm].favoritism += -1;
               Bottoms[randombtm].lows++;
               Bottoms.splice(randombtm,1);
@@ -8736,6 +9356,7 @@ function Lipsync() {
         Main.createImage(BottomQueens[0].image, "#ff8a8a");
         Main.createText(BottomQueens[0].GetName()+", shantay you stay.", 'Bold');
         BottomQueens[0].trackrecord.push("BOTTOM");
+        BottomQueens[0].ppe += 1;
         }
         else
         {
@@ -8745,6 +9366,9 @@ function Lipsync() {
           Main.createText(BottomQueens[0].GetName()+" and "+BottomQueens[1].GetName()+", shantay you stay.", 'Bold');
           BottomQueens[0].trackrecord.push("BOTTOM");
           BottomQueens[1].trackrecord.push("BOTTOM");
+
+          BottomQueens[0].ppe += 1;
+          BottomQueens[1].ppe += 1;
         }
         break;
       case 7:
@@ -8757,6 +9381,7 @@ function Lipsync() {
             Main.createText(BottomQueens[1].GetName()+", my dear queen, you have made herstory.", 'Bold');
             Main.createText("Nobody is going home tonight!", 'Bold');
             BottomQueens[1].trackrecord.push("BOTTOM");
+            BottomQueens[1].ppe += 1;
             CurrentSeason.doubleShantay = true;
           }
           else
@@ -9025,8 +9650,9 @@ function GenerateChallenge()
         case 2:
           Main.createText("Third and last category is : "+CurrentChallenge.balls[CurrentChallenge.chosen][3],"Bold");
           Main.createLine();
-          CurrentChallenge.rankPerfomances();
+          CurrentChallenge.RankBallThi();
           CurrentChallenge.createPerformances();
+          CurrentChallenge.rankPerfomances();
           break;
       }
       Steps++;
@@ -9152,12 +9778,6 @@ function GetPromoTable()
     TopsQueens = [];
     BottomQueens = [];
 
-    for(let i = 0; i<CurrentSeason.currentCast.length; i++)
-    {
-      CurrentSeason.currentCast[i].miniwinner = false;
-      CurrentSeason.currentCast[i].episodeson++;
-    }
-
     document.body.style.backgroundImage = 'url("Images/Backgrounds/bg.png")';
     Main = new Screen();
     Main.createBigText("Placements");
@@ -9240,6 +9860,8 @@ function MiniResult()
     Main.createImage(CurrentSeason.currentCast[challengewinner].image,'blue');
     Main.createText(CurrentSeason.currentCast[challengewinner].GetName()+", you are the winner of this week mini-challenge!",'Bold');
     CurrentSeason.currentCast[challengewinner].miniwinner = true;
+    CurrentSeason.currentCast[challengewinner].miniwon.push(CurrentSeason.episodes.length);
+    CurrentSeason.currentCast[challengewinner].ppe += 1;
     CurrentSeason.currentCast[challengewinner].minichallengeswins += 1;
     Main.createButton("Proceed","GenerateChallenge()");
   }
@@ -9255,6 +9877,8 @@ function MiniResult()
     Main.createImage(CurrentSeason.currentCast[challengewinner].image,'blue');
     Main.createText(CurrentSeason.currentCast[challengewinner].GetName()+", you are the winner of this week mini-challenge!",'Bold');
     CurrentSeason.currentCast[challengewinner].miniwinner = true;
+    CurrentSeason.currentCast[challengewinner].miniwon.push(CurrentSeason.episodes.length);
+    CurrentSeason.currentCast[challengewinner].ppe += 1;
     CurrentSeason.currentCast[challengewinner].minichallengeswins += 1;
     Main.createButton("Proceed","GenerateChallenge()");
   } 
@@ -9266,7 +9890,9 @@ function MiniResult()
     let challengewinner = getRandomInt(0,CurrentSeason.currentCast.length-1);
     Main.createImage(CurrentSeason.currentCast[challengewinner].image,'blue');
     Main.createText(CurrentSeason.currentCast[challengewinner].GetName()+", you are the winner of this week mini-challenge!",'Bold');
+    CurrentSeason.currentCast[challengewinner].miniwon.push(CurrentSeason.episodes.length);
     CurrentSeason.currentCast[challengewinner].miniwinner = true;
+    CurrentSeason.currentCast[challengewinner].ppe += 1;
     CurrentSeason.currentCast[challengewinner].minichallengeswins += 1;
     Main.createButton("Proceed","GenerateChallenge()");
   }
@@ -9288,6 +9914,12 @@ function Intro()
 }
 
 function ChallengeAnnouncement(){
+  for(let i = 0; i<CurrentSeason.currentCast.length; i++)
+  {
+    CurrentSeason.currentCast[i].miniwinner = false;
+    
+    CurrentSeason.currentCast[i].episodeson++;
+  }
   Main.createBigText("She had already done had herses!");
   document.body.style.backgroundImage = "url('Images/Backgrounds/RChallenge.png')";
   Announcement = new Screen();
@@ -9555,7 +10187,6 @@ function ChallengeAnnouncement(){
 }
 
 function RankQueens(){
-  console.log("done");
     Tops = [];
     Bottoms = [];
     Critiqued = [];
@@ -9754,9 +10385,16 @@ function TrackRecords()
   Main.createBigText("Track Records");
   MainScreen = new Screen();
   MainScreen.clean();
-
   MainScreen.createTrackRecords();
-
+  MainScreen.createBR();
+  MainScreen.createLine();
+  MainScreen.createBR();
+  MainScreen.createButton("Show TrackRecords", "TrackRecords()");
+  MainScreen.createButton("Show Relationships", "SRelation()");
+  MainScreen.createBR();
+  MainScreen.createBR();
+  MainScreen.createLine();
+  MainScreen.createBR();
   if(done==false)
   {
     MainScreen.createButton("Proceed","ChallengeAnnouncement()");
@@ -9771,6 +10409,41 @@ function convertToImage() {
       onrendered: function(canvas) {
           var img = canvas.toDataURL("image/png");
           download("Trackrecord", img);
+          }
+  });
+}
+
+function SRelation()
+{
+  Main.createBigText("Track Records");
+  MainScreen = new Screen();
+  MainScreen.clean();
+  MainScreen.createRelations();
+
+ 
+  MainScreen.createBR();
+  MainScreen.createLine();
+  MainScreen.createBR();
+  MainScreen.createButton("Show TrackRecords", "TrackRecords()");
+  MainScreen.createButton("Show Relationships", "SRelation()");
+  MainScreen.createBR();
+  MainScreen.createBR();
+  MainScreen.createLine();
+  MainScreen.createBR();
+  if(done==false)
+  {
+    MainScreen.createButton("Proceed","ChallengeAnnouncement()");
+  }
+
+  MainScreen.createButton("Download", "CtI()");
+}
+
+function CtI() {
+  var resultDiv = document.getElementById("result");
+  html2canvas(document.getElementById("RE"), {
+      onrendered: function(canvas) {
+          var img = canvas.toDataURL("image/png");
+          download("Relation", img);
           }
   });
 }
@@ -9834,12 +10507,31 @@ function LoadPhoto()
   {
     if(getimg==undefined)
     {
-      CT.createText("");
-      CT.createCustomCastImage(DragRaceQueens[getnumber].promo,"black","DRQ");
+      let cord = getnumber.substring(0,1);
+      let code = getnumber.substring(1);
+      if(cord == "D")
+      {
+        CT.createText("");
+        CT.createCustomCastImage(DragRaceQueens[code].promo,"black","DRQ");
+      }
+      else
+      {
+        CT.createText("");
+        CT.createCustomCastImage(customqueens[code].promo,"black","DRQ");
+      }
     }
     else
     {
-      getimg.src = DragRaceQueens[getnumber].promo;
+      let cord = getnumber.substring(0,1);
+      let code = getnumber.substring(1);
+      if(cord == "D")
+      {
+        getimg.src = DragRaceQueens[code].promo;
+      }
+      else
+      {
+        getimg.src = customqueens[code].promo;
+      }
     }
   }
 }
@@ -9848,10 +10540,22 @@ function AddToCast(){
   let getnumber = document.getElementById("aq").value;
   if(getnumber!=undefined)
   {
-    if(CustomCast.indexOf(DragRaceQueens[getnumber])==-1)
-      CustomCast.push(DragRaceQueens[getnumber]);
+    let cord = getnumber.substring(0,1);
+    let code = getnumber.substring(1);
+    if(cord == "D")
+    {
+      if(CustomCast.indexOf(DragRaceQueens[getnumber])==-1)
+        CustomCast.push(DragRaceQueens[code]);
+      else
+        window.alert("This queen is already in the cast!");
+    }
     else
-      window.alert("This queen is already in the cast!");
+    {
+      if(CustomCast.indexOf(customqueens[getnumber])==-1)
+        CustomCast.push(customqueens[code]);
+      else
+        window.alert("This queen is already in the cast!");
+    }
   }
   UpdateCustomCast();
 }
@@ -9866,7 +10570,7 @@ function UpdateCustomCast(){
     CT.createCImage(CustomCast[index].promo);
   }
 
-  let ct = document.getElementById("ct");
+  let ct = document.getElementById("cq");
   ct.innerHTML = "";
   for (let index = 0; index < CustomCast.length; index++) {
       var opt = document.createElement("option");
@@ -9891,11 +10595,12 @@ function GetQueensStats()
   Stats = new Screen();
   Stats.createQueensStats();
 }
-function LoadCasts()
+function LoadCasts(cc = true)
 {
   let CT = new Screen();
   CT.LoadCasts();
-  CT.SpecialCreateLine();
+  if(cc == true)
+    CT.SpecialCreateLine();
 }
 function CreateSeason(Name, Cast, Host, Finale, LC, LS, Premiere, Country)
 {
@@ -9910,6 +10615,54 @@ function CheckAS7(){
     window.alert("Choosing this format will ignore theses others choices : Premiere Format, Finale Format & Last Challenge")
   }
 }
+
+function AddToCustomQueen(){
+  let name = document.getElementById("name").value;
+  let acting = document.getElementById("acting").value;
+  let improv = document.getElementById("improv").value;
+  let comedy = document.getElementById("comedy").value;
+  let dance = document.getElementById("dance").value;
+  let design = document.getElementById("design").value;
+
+  let runway = document.getElementById("runway").value;
+  let lipsync = document.getElementById("lipsync").value;
+  let branding = document.getElementById("branding").value;
+  let charisma = document.getElementById("charisma").value;
+  let kindness = document.getElementById("kindness").value;
+  let shadyness = document.getElementById("shadyness").value;
+
+  let image = document.getElementById("image").value;
+  let promo = document.getElementById("promo").value;
+  let ogseason = document.getElementById("ogseason").value;
+
+  let array = JSON.parse(localStorage.getItem("customqueens"));
+  let okay = true;
+
+  for (let index = 0; index < array.length; index++) {
+    if(array[index][0]==name && array[index][14]==ogseason)
+      okay=false;
+  }
+
+  if(okay == true)
+  {
+    array.push([name, acting, improv, comedy, dance, design, runway, lipsync, branding, charisma, kindness, shadyness, image, promo, ogseason]);
+
+    customqueens = [];
+    for (let index = 0; index < array.length; index++) {
+      customqueens.push(new Queen(array[index][0],array[index][1],array[index][2],array[index][3],array[index][4],array[index][5],array[index][6],array[index][7],array[index][8],array[index][9],array[index][10],array[index][11],array[index][12],array[index][13],array[index][14],true));
+    }
+
+    localStorage.setItem("customqueens",JSON.stringify(array));
+    LoadCasts();
+  }
+  else
+  {
+    window.alert("This queen is already made.");
+    LoadCasts();
+  }
+}
+
+
 
 function LaunchCustomCast(){
   let isgood = true;
@@ -10784,8 +11537,15 @@ function GetSong(){
     }
   }
 
-function CreateCustomQueen()
-{
-  //TO DO
+function RemoveFromCustomQueen(){
+  let remove = document.getElementById("ct").value;
+  let array = JSON.parse(localStorage.getItem("customqueens"));
+  array.splice(remove,1);
+  customqueens.splice(remove,1);
+  localStorage.setItem("customqueens", JSON.stringify(array));
+
+  var clean = document.getElementById("ct");
+  clean.innerHTML = "";
+  LoadCasts();
 }
 //#endregion
