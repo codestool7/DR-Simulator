@@ -9956,7 +9956,7 @@ function ChallengeAnnouncement(){
         CurrentChallenge.createMessage();
         Announcement.createButton("Proceed","LaunchMiniChallenge()");
         break;
-      case 11:
+      case 2:
         CurrentChallenge = new Ball();
         CurrentEpisode = new Episode(CurrentChallenge.balls[CurrentChallenge.chosen][0], "Ball");
         CurrentSeason.episodes.push(CurrentEpisode);
@@ -10029,7 +10029,7 @@ function ChallengeAnnouncement(){
         CurrentChallenge.createMessage();
         Announcement.createButton("Proceed","LaunchMiniChallenge()");
         break;
-      case 2:
+      case 11:
         CurrentEpisode = new Episode("The Grand Lipsync Smackdown", "Talent Show");
         CurrentSeason.episodes.push(CurrentEpisode);
         Announcement.clean();
