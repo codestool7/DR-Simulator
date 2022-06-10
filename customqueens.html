@@ -33,88 +33,68 @@
             <div id="first">
 
             </div>
-            <select id="aq" onchange="LoadPhoto()">
+            <br>
+            <input type ="text" id="name" placeholder="Name of the queen" style="height: 35px; width: 60%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="number" id="acting" max="15" min="0" placeholder="Acting Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="number" id="improv" max="15" min="0" placeholder="Improv Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="number" id="comedy" max="15" min="0" placeholder="Comedy Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="number" id="dance" max="15" min="0" placeholder="Dance Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="number" id="design" max="15" min="0" placeholder="Design Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="number" id="runway" max="15" min="0" placeholder="Runway Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="number" id="lipsync" max="15" min="0" placeholder="Lipsync Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="number" id="branding" max="15" min="0" placeholder="Branding Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="number" id="charisma" max="15" min="0" placeholder="Charisma Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="number" id="kindness" max="5" min="0" placeholder="Kindness Stat (0-5)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="number" id="shadyness" max="5" min="0" placeholder="Shadyness Stat (0-5)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="text" id="image" placeholder="Image of the queen" style="height: 35px; width: 60%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="text" id="promo" placeholder="Promo of the queen" style="height: 35px; width: 60%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <input type ="text" id="ogseason" placeholder="Original season of the queen" style="height: 35px; width: 60%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <br>
+            <br>
+            <button class="button MainButton" id="adbtn" onclick="AddToCustomQueen()">Add to custom queens</button>
+            <br>
+            <br>
+            <hr>
+            <br>
+            <select id="ct">
             </select>
             <span>
 
             </span>
             
-            <button class="button MainButton" onclick="AddToCast()">Add to cast</button>
-            <br>
-            <br>
-            <input type ="text" id="search" placeholder="Search..." style="height: 40px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
-            <button class="button MainButton" onclick="SearchQueen()">Search</button>
-            <div id="clean">
+            <button class="button MainButton" id="ctbtn" onclick="RemoveFromCustomQueen()">Remove from custom queens</button>
 
-            </div>
-            <br>
-            <select id="ct" onchange="LoadPhoto()">
-            </select>
-            <span>
-
-            </span>
-            
-            <button class="button MainButton" id="ctbtn" onclick="RemoveFromCast()">Remove from cast</button>
-
+           
             <br>
             <br>
-            <select id="format" style="width: 15%;">
-                <option value="0" selected disabled>-- Finale Format --</option>
-                <option value="TOP3">Top 3 into Top 2</option>
-                <option value="TOP3NE">Top 3 (NWY)</option>
-                <option value="TOP4">Top 4 into Top 3 (NWY)</option>
-                <option value="TOP4NE">Top 4 (NWY)</option>
-                <option value="LSFTC">Top 4 (LSFTC) (NWY)</option>
-                <option value="TOP5LSFTC">Top 5 into Top 4 (LSFTC) (NWY)</option>
-                <option value="TOP5">Top 5 into Top 4 (NWY)</option>
-                <option value="TOP5NE">Top 5 (NWY)</option>
-            </select>
-            <select id="premiere" style="width: 15%;">
-                <option value="0" selected disabled>-- Premiere Format --</option>
-                <option value="NORMAL">Normal</option>
-                <option value="S6">S6 (NWY)</option>
-                <option value="S2">S12 (NWY)</option>
-                <option value="NORMAL">Porkchop (NWY)</option>
-                <option value="S14">S14 (NWY)</option>
-            </select>
-            <select id="lipsync" style="width: 15%;" onchange="CheckAS7()">
-                <option value="0" selected disabled>-- Lipsync Format --</option>
-                <option value="LIFE">Regular</option>
-                <option value="LSFYL">Lipsync For Your Legacy (NWY) </option>
-                <option value="LSA">Lipsync Assassin (NWY) </option>
-                <option value="AS7">All Stars 7</option>
-            </select>
-            <select id="host" style="width: 15%;">
-                <option value="0" selected disabled>-- Host --</option>
-                <option value="BH">Brooke Lynn Hytes</option>
-                <option value="RP">Rupaul Charles</option>
-                <option value="SP">Supremme De Luxe</option>
-                <option value="FV">Fred Van Leer</option>
-                <option value="PR">Priscilla</option>
-            </select>
-            <select id="lc" style="width: 15%;">
-                <option value="0" selected disabled>-- Last Challenge --</option>
-                <option value="RUMIX">Rumix</option>
-                <option value="MUSICV">Music Video</option>
-            </select>
-            <select id="country" style="width: 15%;">
-                <option value="0" selected disabled>-- Country --</option>
-                <option value="UK">United Kingdom</option>
-                <option value="US">United States</option>
-                <option value="CANADA">Canada</option>
-                <option value="ESPANA">Spain</option>
-                <option value="ITALIA">Italia</option>
-                <option value="AUSTRALIA">Australia</option>
-                <option value="HOLLAND">Holland</option>
-                <option value="THAILAND">Thailand</option>
-                <option value="FRANCE">FRANCE</option>
-            </select>
-            <br>
-            <br>
-            <input type ="text" id="sname" placeholder="Name of the season" style="height: 40px; width: 91%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
-            <br>
-            <br>
-            <button class="button MainButton" id="ctbtn" onclick="LaunchCustomCast()">Start the season</button>
         </div>
         <br>
         <br>
@@ -124,5 +104,5 @@
     
 </html>
 <script>
-    LoadCasts();
+    LoadCasts(false);
 </script>
