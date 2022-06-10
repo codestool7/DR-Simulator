@@ -8076,8 +8076,8 @@ function UntuckedPart1() {
         }
     }
     Main.createText(safestext+" all grab a drink, and sit down together, waiting for the other queens.","Bold");
+    UntuckedEvent(true);
   }
-  UntuckedEvent(true);
   Main.createButton("Proceed", "Critiques()");
 }
 
