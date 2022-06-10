@@ -154,16 +154,16 @@ class Relation {
 
   constructor(FirstQ, SecondQ)
   {
-    this.points = 0
-    this.status = "Neutral"
+    this.points = 0;
+    this.status = "Neutral";
     this.fqueen = FirstQ;
-    this.squeen = SecondQ;
+    this.squeen = SecondQ;;
     this.color = "#F5EBF5";
   }
 
   SetRelation(points)
   {
-    this.points += points;
+    this.points = this.points + points;
   }
 
   GetRelation()
@@ -337,10 +337,12 @@ class Queen {
 
   ChangeRelation(Queen,points)
   {
+    let finalpoint = points;
+    finalpoint = finalpoint - (Queen.shadyness - Queen.kindness) ;
     for (let index = 0; index < this.relationsships.length; index++) {
       if(this.relationsships[index].squeen === Queen)
       {
-        this.relationsships[index].SetRelation((points-Queen.shadyness+Queen.kindness));
+        this.relationsships[index].SetRelation(finalpoint);
       }
     }
   }
@@ -7164,7 +7166,7 @@ let nina = new Queen("Nina Bo'nina Brown",6,12,8,7,10,12,12,6,10,1,3,"Nina","Nin
 let peppermint = new Queen("Peppermint",8,6,13,12,7,7,15,10,14,5,1,"Peppermint","Peppermint","US9",false);
 let sasha = new Queen("Sasha Velour",6,12,12,7,9,12,15,14,13,5,1, "Sasha", "Sasha","US9", false);
 let sheas9 = new Queen("Shea Coulée",11,12,12,13,12,12,7,14,13,4,3,"Shea","Shea","US9",false);
-let trinitys9 = new Queen("Trinity Taylor",14,8,10,8,10,12,10,13,10,2,4,"Trinity","Trinity","US9",false );
+let trinitys9 = new Queen("Trinity The Tuck",14,8,10,8,10,12,10,13,10,2,4,"Trinity","Trinity","US9",false );
 let valentina = new Queen("Valentina",11,8,11,12,11,13,1,7,14,1,1,"Valentina","Valentina","US9", false);
 
 let US9 = shuffle([aja, alexism, charlie, cynthialees9, eureka, farrah, jaymes, kimora, nina, peppermint, sasha, sheas9, trinitys9, valentina])
