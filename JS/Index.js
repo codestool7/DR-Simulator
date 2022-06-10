@@ -9956,7 +9956,7 @@ function ChallengeAnnouncement(){
         CurrentChallenge.createMessage();
         Announcement.createButton("Proceed","LaunchMiniChallenge()");
         break;
-      case 2:
+      case 11:
         CurrentChallenge = new Ball();
         CurrentEpisode = new Episode(CurrentChallenge.balls[CurrentChallenge.chosen][0], "Ball");
         CurrentSeason.episodes.push(CurrentEpisode);
@@ -10029,7 +10029,7 @@ function ChallengeAnnouncement(){
         CurrentChallenge.createMessage();
         Announcement.createButton("Proceed","LaunchMiniChallenge()");
         break;
-      case 11:
+      case 2:
         CurrentEpisode = new Episode("The Grand Lipsync Smackdown", "Talent Show");
         CurrentSeason.episodes.push(CurrentEpisode);
         Announcement.clean();
@@ -10552,14 +10552,14 @@ function AddToCast(){
     let code = getnumber.substring(1);
     if(cord == "D")
     {
-      if(CustomCast.indexOf(DragRaceQueens[getnumber])==-1)
+      if(CustomCast.indexOf(DragRaceQueens[code])==-1)
         CustomCast.push(DragRaceQueens[code]);
       else
         window.alert("This queen is already in the cast!");
     }
     else
     {
-      if(CustomCast.indexOf(customqueens[getnumber])==-1)
+      if(CustomCast.indexOf(customqueens[code])==-1)
         CustomCast.push(customqueens[code]);
       else
         window.alert("This queen is already in the cast!");
@@ -10589,7 +10589,7 @@ function UpdateCustomCast(){
 }
 
 function RemoveFromCast(){
-  let getnumber = document.getElementById("ct").value;
+  let getnumber = document.getElementById("cq").value;
   if(getnumber!=undefined)
   {
     CustomCast.splice(getnumber,1);
