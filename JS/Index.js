@@ -9416,12 +9416,12 @@ function Lipsync() {
           }
           else
           {
-          Main.createBigText("Shantay you stay...");
-          BottomQueens.sort((a, b) => b.lipsyncscore - a.lipsyncscore);
-          Main.createImage(BottomQueens[0].image, "#ff8a8a");
-          Main.createText(BottomQueens[0].GetName()+", shantay you stay.", 'Bold');
-          BottomQueens[0].trackrecord.push("BOTTOM");
-          BottomQueens[0].ppe += 1;
+            Main.createBigText("Shantay you stay...");
+            BottomQueens.sort((a, b) => b.lipsyncscore - a.lipsyncscore);
+            Main.createImage(BottomQueens[0].image, "#ff8a8a");
+            Main.createText(BottomQueens[0].GetName()+", shantay you stay.", 'Bold');
+            BottomQueens[0].trackrecord.push("BOTTOM");
+            BottomQueens[0].ppe += 1;
           }
         }
         else
@@ -9469,7 +9469,7 @@ function Lipsync() {
             BottomQueens[1].ppe += 1;
             CurrentSeason.doubleShantay = true;
           }
-          else if((BottomQueens[0].oglipsyncscore <= 3) && (BottomQueens[1].oglipsyncscore <=3)  && CurrentSeason.currentCast.length>6)
+          else if((BottomQueens[0].oglipsyncscore <= 3) && (BottomQueens[1].oglipsyncscore <=3)  && CurrentSeason.currentCast.length>6 && doubleSashay == false)
           {
             Main.createImageBW(BottomQueens[0].image, "#fa2525");
             Main.createImageBW(BottomQueens[1].image, "#fa2525");
@@ -9525,7 +9525,7 @@ function Lipsync() {
             Main.createImageBW(BottomQueens[0].image, "#fa2525");
             Main.createImageBW(BottomQueens[1].image, "#fa2525");
             Main.createImageBW(BottomQueens[2].image, "#fa2525");
-            Main.createText(BottomQueens[0].GetName()+", "+BottomQueens[1].GetName()+" and "+BottomQueens[2]+", my dear queens.", 'Bold');
+            Main.createText(BottomQueens[0].GetName()+", "+BottomQueens[1].GetName()+" and "+BottomQueens[2].GetName()+", my dear queens.", 'Bold');
             Main.createText("I must ask you both to sashay away...", 'Bold');
             
             BottomQueens[0].trackrecord.push("ELIMINATED");
