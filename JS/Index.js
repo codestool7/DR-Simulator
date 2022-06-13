@@ -9018,7 +9018,7 @@ function Placements() {
       Tops.sort((a, b) => a.finalscore - b.finalscore);
       Bottoms.sort((a, b) => b.finalscore - a.finalscore);
 
-    if( (Bottoms[0] != undefined && Bottoms[1] != undefined && Bottoms[2] != undefined ) && Bottoms[0].perfomancescore > 35 && Bottoms[1].perfomancescore > 35  && Bottoms[2].perfomancescore > 35 && CurrentSeason.currentCast.length >=6)
+    if( (Bottoms[0] != undefined && Bottoms[1] != undefined && Bottoms[2] != undefined ) && Bottoms[0].perfomancescore > 40 && Bottoms[1].perfomancescore > 40  && Bottoms[2].perfomancescore > 40 && CurrentSeason.currentCast.length >=6)
     {
       threewayls = true;
     }
@@ -9435,7 +9435,7 @@ function Lipsync() {
             Main.createText(BottomQueens[0].GetName()+", "+BottomQueens[1].GetName()+" and "+BottomQueens[2].GetName()+".", 'Bold');
             Main.createText("You three failed to impress me.", 'Bold');
           }
-          else if((BottomQueens[1].lipsyncscore <= 7))
+          else if((BottomQueens[1].lipsyncscore <= 7) && CurrentSeason.currentCast.length>6)
           {
             console.log("2")
             Main.createImage(BottomQueens[0].image, "#ff8a8a");
