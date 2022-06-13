@@ -8564,7 +8564,7 @@ function Finale()
           let tie=false;
           let removestar = 0;
           let softlock = 0;
-          while(top4.length<4 && tie==false && softlock<CurrentSeason.currentCast.length)
+          while(top4.length<4 && tie==false && softlock<CurrentSeason.currentCast.length+10)
           {
             temp = [];
 
@@ -9187,7 +9187,7 @@ function Placements() {
     for (let i = 0; i < Tops.length; i++) {
       if(Tops[i].trackrecord[Tops[i].trackrecord.length-1] == "WIN" || Tops[i].trackrecord[Tops[i].trackrecord.length-1] == "TOP2")
       {
-        Tops[i].finalscore += 7;
+        Tops[i].finalscore += 10;
       }
     }
 
@@ -9414,6 +9414,8 @@ function Lipsync() {
             Main.createImage(BottomQueens[1].image, "#fa2525");
             Main.createText(BottomQueens[0].GetName()+" and "+BottomQueens[1].GetName()+".", 'Bold');
             Main.createBigText("None of you impressed me tonight.");
+            BottomQueens[0].trackrecord.push("ELIMINATED");
+            BottomQueens[1].trackrecord.push("ELIMINATED");
           }
           else
           {
@@ -9475,7 +9477,8 @@ function Lipsync() {
             Main.createImageBW(BottomQueens[1].image, "#fa2525");
             Main.createText(BottomQueens[0].GetName()+" and "+BottomQueens[1].GetName()+", my dear queens.", 'Bold');
             Main.createText("I must ask you both to sashay away...", 'Bold');
-            BottomQueens[0].trackrecord.push("ELIMINATED");
+
+            
             if(CurrentSeason.eliminatedCast.length==0)
             {
               BottomQueens[0].placement= CurrentSeason.fullCast.length-CurrentSeason.eliminatedCast.length;
@@ -9484,7 +9487,7 @@ function Lipsync() {
             {
               BottomQueens[0].placement= CurrentSeason.fullCast.length-CurrentSeason.eliminatedCast.length;
             }
-            BottomQueens[1].trackrecord.push("ELIMINATED");
+
             if(CurrentSeason.eliminatedCast.length==0)
             {
               BottomQueens[1].placement= CurrentSeason.fullCast.length-CurrentSeason.eliminatedCast.length;
@@ -9493,14 +9496,17 @@ function Lipsync() {
             {
               BottomQueens[1].placement= CurrentSeason.fullCast.length-CurrentSeason.eliminatedCast.length;
             }
+
             CurrentSeason.currentCast.splice(CurrentSeason.currentCast.indexOf(BottomQueens[0]),1);
             CurrentSeason.eliminatedCast.unshift(BottomQueens[0]);
             CurrentSeason.currentCast.splice(CurrentSeason.currentCast.indexOf(BottomQueens[1]),1);
             CurrentSeason.eliminatedCast.unshift(BottomQueens[1]);
+
             CurrentSeason.doubleSashay = true;
           }
           else
           {
+
             Main.createBigText("Sashay away...");
             Main.createImageBW(BottomQueens[1].image, "#fa2525");
             Main.createText(BottomQueens[1].GetName()+", my dear queen.", 'Bold');
@@ -9516,6 +9522,7 @@ function Lipsync() {
             }
             CurrentSeason.currentCast.splice(CurrentSeason.currentCast.indexOf(BottomQueens[1]),1);
             CurrentSeason.eliminatedCast.unshift(BottomQueens[1]);
+
           }
         }
         else
@@ -10140,7 +10147,7 @@ function ChallengeAnnouncement(){
         CurrentChallenge.createMessage();
         Announcement.createButton("Proceed","LaunchMiniChallenge()");
         break;
-      case 2:
+      case 11:
         CurrentChallenge = new Ball();
         CurrentEpisode = new Episode(CurrentChallenge.balls[CurrentChallenge.chosen][0], "Ball");
         CurrentSeason.episodes.push(CurrentEpisode);
@@ -10213,7 +10220,7 @@ function ChallengeAnnouncement(){
         CurrentChallenge.createMessage();
         Announcement.createButton("Proceed","LaunchMiniChallenge()");
         break;
-      case 11:
+      case 2:
         CurrentEpisode = new Episode("The Grand Lipsync Smackdown", "Talent Show");
         CurrentSeason.episodes.push(CurrentEpisode);
         Announcement.clean();
