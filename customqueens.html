@@ -3,7 +3,7 @@
 <head>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<script type="text/javascript" src="https://github.com/niklasvh/html2canvas/releases/download/0.5.0-alpha1/html2canvas.js"></script>
+<script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,6 +22,7 @@
     <a href="queensstats.html">Queens Stats</a>
     <a class="right" href="license.html">Licenses</a>
     <a class="right" href="settings.html">Settings</a>
+    
   </div>
 <body>
     <br>
@@ -37,38 +38,61 @@
             <input type ="text" id="name" placeholder="Name of the queen" style="height: 35px; width: 60%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
             <br>
             <br>
-            <input type ="number" id="acting" max="15" min="0" placeholder="Acting Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <button class="button MainButton" id="ctbtn" onclick="RandomizeStats()">Randomize Stats</button>
+            <div class="slidecontainer">
+                <h3 id="cAting"> Acting Stat <small>(Current : 1 ) </small></h3>
+                <input style="height: 15px; width: 50%;" type="range" oninput="ChangeActingValue()" class="slider" value="0" id="acting" max="15" min="1" placeholder="Acting Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            </div>
             <br>
+            <div class="slidecontainer">
+                <h3 id="cImprov"> Improv Stat <small>(Current : 1 ) </small></h3>
+                <input style="height: 15px; width: 50%;" type="range" oninput="ChangeImprovValue()" class="slider" value="0" id="improv" max="15" min="1" placeholder="Acting Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            </div>
             <br>
-            <input type ="number" id="improv" max="15" min="0" placeholder="Improv Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <div class="slidecontainer">
+                <h3 id="cComedy"> Comedy Stat <small>(Current : 1 ) </small></h3>
+                <input style="height: 15px; width: 50%;" type="range" oninput="ChangeComedyValue()" class="slider" value="0" id="comedy" max="15" min="1" placeholder="Acting Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            </div>
             <br>
+            <div class="slidecontainer">
+                <h3 id="cDance"> Dance Stat <small>(Current : 1 ) </small></h3>
+                <input style="height: 15px; width: 50%;" type="range" oninput="ChangeDanceValue()" class="slider" value="0" id="dance" max="15" min="1" placeholder="Acting Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            </div>
             <br>
-            <input type ="number" id="comedy" max="15" min="0" placeholder="Comedy Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <div class="slidecontainer">
+                <h3 id="cDesign"> Design Stat <small>(Current : 1 ) </small></h3>
+                <input style="height: 15px; width: 50%;" type="range" oninput="ChangeDesignValue()" class="slider" value="0" id="design" max="15" min="1" placeholder="Acting Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            </div>
             <br>
+            <div class="slidecontainer">
+                <h3 id="cRunway"> Runway Stat <small>(Current : 1 ) </small></h3>
+                <input style="height: 15px; width: 50%;" type="range" oninput="ChangeRunwayValue()" class="slider" value="0" id="runway" max="15" min="1" placeholder="Acting Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            </div>
             <br>
-            <input type ="number" id="dance" max="15" min="0" placeholder="Dance Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <div class="slidecontainer">
+                <h3 id="cLipsync"> Lipsync Stat <small>(Current : 1 ) </small></h3>
+                <input style="height: 15px; width: 50%;" type="range" oninput="ChangeLipsyncValue()" class="slider" value="0" id="lipsync" max="15" min="1" placeholder="Acting Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            </div>
             <br>
+            <div class="slidecontainer">
+                <h3 id="cBranding"> Branding Stat <small>(Current : 1 ) </small></h3>
+                <input style="height: 15px; width: 50%;" type="range" oninput="ChangeBrandingValue()" class="slider" value="0" id="branding" max="15" min="1" placeholder="Acting Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            </div>
             <br>
-            <input type ="number" id="design" max="15" min="0" placeholder="Design Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            <div class="slidecontainer">
+                <h3 id="cCharisma"> Charisma Stat <small>(Current : 1 ) </small></h3>
+                <input style="height: 15px; width: 50%;" type="range" oninput="ChangeCharismaValue()" class="slider" value="0" id="charisma" max="15" min="1" placeholder="Acting Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            </div>
             <br>
+            <div class="slidecontainer">
+                <h3 id="cKindness"> Kindness Stat <small>(Current : 0 ) </small></h3>
+                <input style="height: 15px; width: 50%;" type="range" oninput="ChangeKindnessValue()" class="slider" value="0" id="kindness" max="5" min="0" placeholder="Acting Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            </div>
             <br>
-            <input type ="number" id="runway" max="15" min="0" placeholder="Runway Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
-            <br>
-            <br>
-            <input type ="number" id="lipsync" max="15" min="0" placeholder="Lipsync Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
-            <br>
-            <br>
-            <input type ="number" id="branding" max="15" min="0" placeholder="Branding Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
-            <br>
-            <br>
-            <input type ="number" id="charisma" max="15" min="0" placeholder="Charisma Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
-            <br>
-            <br>
-            <input type ="number" id="kindness" max="5" min="0" placeholder="Kindness Stat (0-5)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
-            <br>
-            <br>
-            <input type ="number" id="shadyness" max="5" min="0" placeholder="Shadyness Stat (0-5)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
-            <br>
+            <div class="slidecontainer">
+                <h3 id="cShadyness"> Shadyness Stat <small>(Current : 0 ) </small></h3>
+                <input style="height: 15px; width: 50%;" type="range" oninput="ChangeShadynessValue()" class="slider" value="0" id="shadyness" max="5" min="0" placeholder="Acting Stat (0-15)" style="height: 30px; width: 50%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
+            </div>
             <br>
             <input type ="text" id="image" placeholder="Image of the queen" style="height: 35px; width: 60%; color: linear-gradient(180deg, rgba(194,40,255,1) 0%, rgba(255,155,215,1) 100%);">
             <br>
@@ -101,7 +125,11 @@
         <br>
         <br>
     </body>
-    
+    <footer>
+        <div style="background-color: white; text-align: center; vertical-align: baseline; padding: 10px;">
+            <h3><a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"></a>  This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/">Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License</a>.</h3><br><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png" />
+        </div>
+    </footer>
 </html>
 <script>
     LoadCasts(false);
