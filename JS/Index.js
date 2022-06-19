@@ -10103,6 +10103,114 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min +1)) + min;
 }
 
+function ChangeActingValue(){
+  let ac = document.getElementById("acting").value;
+  let ch = document.getElementById("cAting");
+  ch.innerHTML = "Acting Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeImprovValue(){
+  let ac = document.getElementById("improv").value;
+  let ch = document.getElementById("cImprov");
+  ch.innerHTML = "Improv Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeComedyValue(){
+  let ac = document.getElementById("comedy").value;
+  let ch = document.getElementById("cComedy");
+  ch.innerHTML = "Comedy Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeDanceValue(){
+  let ac = document.getElementById("dance").value;
+  let ch = document.getElementById("cDance");
+  ch.innerHTML = "Dance Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeDesignValue(){
+  let ac = document.getElementById("design").value;
+  let ch = document.getElementById("cDesign");
+  ch.innerHTML = "Design Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeRunwayValue(){
+  let ac = document.getElementById("runway").value;
+  let ch = document.getElementById("cRunway");
+  ch.innerHTML = "Runway Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeLipsyncValue(){
+  let ac = document.getElementById("lipsync").value;
+  let ch = document.getElementById("cLipsync");
+  ch.innerHTML = "Lipsync Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeBrandingValue(){
+  let ac = document.getElementById("branding").value;
+  let ch = document.getElementById("cBranding");
+  ch.innerHTML = "Branding Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeCharismaValue(){
+  let ac = document.getElementById("charisma").value;
+  let ch = document.getElementById("cCharisma");
+  ch.innerHTML = "Charisma Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeKindnessValue(){
+  let ac = document.getElementById("kindness").value;
+  let ch = document.getElementById("cKindness");
+  ch.innerHTML = "Kindness Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeShadynessValue(){
+  let ac = document.getElementById("shadyness").value;
+  let ch = document.getElementById("cShadyness");
+  ch.innerHTML = "Shadyness Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function RandomizeStats(){
+  let acting = document.getElementById("acting");
+  let improv = document.getElementById("improv");
+  let comedy = document.getElementById("comedy");
+  let dance = document.getElementById("dance");
+  let design = document.getElementById("design");
+
+  let runway = document.getElementById("runway");
+  let lipsync = document.getElementById("lipsync");
+  let branding = document.getElementById("branding");
+  let charisma = document.getElementById("charisma");
+  let kindness = document.getElementById("kindness");
+  let shadyness = document.getElementById("shadyness");
+
+  
+
+  acting.value = getRandomInt(1,15);
+  improv.value = getRandomInt(1,15);
+  comedy.value = getRandomInt(1,15);
+  dance.value = getRandomInt(1,15);
+  design.value = getRandomInt(1,15);
+  runway.value = getRandomInt(1,15);
+  lipsync.value = getRandomInt(1,15);
+  branding.value = getRandomInt(1,15);
+  charisma.value = getRandomInt(1,15);
+  kindness.value = getRandomInt(0,5);
+  shadyness.value = getRandomInt(0,5);
+
+  ChangeActingValue();
+  ChangeImprovValue();
+  ChangeComedyValue();
+  ChangeDanceValue();
+  ChangeDesignValue();
+
+  ChangeRunwayValue();
+  ChangeLipsyncValue();
+  ChangeBrandingValue();
+  ChangeCharismaValue();
+  ChangeKindnessValue();
+  ChangeShadynessValue();
+}
+
 function Intro()
 {
   Video = new Screen();
