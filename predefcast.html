@@ -38,7 +38,7 @@
             <button class="button MainButton" onclick="CreateSeason('Drag Race Season 3',US3,rupaulhost, 'TOP3', 'MUSICVIDEO', 'LIFE', 'NORMAL', 'US')">US Season 3</button>
             <button class="button MainButton" onclick="CreateSeason('Drag Race Season 4',US4,rupaulhost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'US')">US Season 4</button>
             <button class="button MainButton" onclick="CreateSeason('Drag Race Season 5',US5,rupaulhost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'US')">US Season 5</button>
-            <button class="button MainButton" onclick="CreateSeason('Drag Race Season 6',US6,rupaulhost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'US')">US Season 6</button>
+            <button class="button MainButton" onclick="CreateSeason('Drag Race Season 6',US6,rupaulhost, 'TOP3', 'RUMIX', 'LIFE', 'S6', 'US')">US Season 6</button>
             <button class="button MainButton" onclick="CreateSeason('Drag Race Season 7',US7,rupaulhost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'US')">US Season 7</button>
             <button class="button MainButton" onclick="CreateSeason('Drag Race Season 8',US8,rupaulhost, 'TOP3', 'RUMIX', 'LIFE', 'NORMAL', 'US')">US Season 8</button>
             <button class="button MainButton" onclick="CreateSeason('Drag Race Season 9',US9,rupaulhost, 'LSFTC', 'RUMIX', 'LIFE', 'NORMAL', 'US')">US Season 9</button>
@@ -53,7 +53,7 @@
             <br>
             <h1> Drag Race All Stars US</h1>
             <button class="button MainButton" onclick="CreateSeason()">All Stars Season 1 (Not Working)</button>
-            <button class="button MainButton" onclick="CreateSeason()">All Stars Season 2 (Not Working)</button>
+            <button class="button MainButton" onclick="CreateSeason(/*'Drag Race All Stars 2',AS2,rupaulhost, 'TOP3', 'RUMIX', 'LSFYL', 'NORMAL', 'US'*/)">All Stars Season 2 (Not Working)</button>
             <button class="button MainButton" onclick="CreateSeason()">All Stars Season 3 (Not Working)</button>
             <button class="button MainButton" onclick="CreateSeason()">All Stars Season 4 (Not Working)</button>
             <button class="button MainButton" onclick="CreateSeason()">All Stars Season 5 (Not Working)</button>
@@ -112,10 +112,12 @@
         <br>
         <br>
     </body>
-    <footer>
+    <footer id="footer">
         <div style="background-color: white; text-align: center; vertical-align: baseline; padding: 10px;">
             <h3><a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"></a>  This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/">Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License</a>.</h3><br><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png" />
         </div>
     </footer>
-    
+    <script>
+        CheckTheme();
+    </script>
 </html>
