@@ -3,8 +3,19 @@ let CurrentSeason;
 let CurrentChallenge;
 let CurrentEpisode;
 
+let premstep = 0;
+
+let songcharts = [];
+
+let shouldactivateepisode = false;
+
+let groupmaking = false;
+
 let entrancepos = 0;
 let organized = 0;
+
+let firstpex = false;
+let secondpex = false;
 
 let CustomCast = [];
 
@@ -44,6 +55,9 @@ let randombtm;
 let lsc1 = [];
 let lsc2 = [];
 
+let firstprem = [];
+let secondprem = [];
+
 let as7cast = [];
 
 let top4 = [];
@@ -63,7 +77,7 @@ let reads = [
 let rusicalcastsizes = 
 [
 11,
-13,
+/*13,
 11,
 11,
 14,
@@ -74,7 +88,7 @@ let rusicalcastsizes =
 9,
 7,
 11,
-9
+9*/
 ];
 
 let lipsyncssongs = [];
@@ -130,6 +144,13 @@ class Season {
     this.rusicals = 0;
     this.standupchallenges = 0;
     this.snatchgame = 0;
+
+    this.immunity = false;
+  }
+
+  checkTwists(Twists){
+    if(Twists.indexOf("Immunities")!= -1)
+      this.immunity = true;
   }
 
   getFullCast()
@@ -271,7 +292,12 @@ class Queen {
       this.miniwinner = false;
       this.miniwon = [];
 
+      this.immune = [];
+
       this.trackrecord = [];
+
+      this.snatchgamecharacter;
+      this.rusicalrole;
 
       this.ppe = 0;
       this.episodeson = 0;
@@ -595,7 +621,7 @@ class Screen {
   {
     image.setAttribute("id",ID)
   }
-  image.setAttribute("style", 'margin: 7px; width: 105px; height: 105px; border-radius: 20px; border: 3px solid; border-color: '+Color+';');
+  image.setAttribute("style", 'margin: 7px; width: 105px; height: 105px; border-radius: 20px; border: 4px solid; border-color: '+Color+';');
   this.MainScreen.appendChild(image); 
   }
 
@@ -1022,6 +1048,11 @@ class Screen {
           trtr.innerHTML += "<br><small><i> Mini-Challenge Winner </i></small>";
         }
 
+        if(CurrentSeason.currentCast[q].immune.indexOf(t+1)!=-1)
+        {
+          trtr.setAttribute("style","background: magenta");
+        }
+
         trtr.setAttribute("class","tr");
 
         track.append(trtr);
@@ -1188,6 +1219,11 @@ class Screen {
         {
           trtr.innerHTML += "<br><small><i> Mini-Challenge Winner </i></small>";
         }
+
+        if(CurrentSeason.eliminatedCast[q].immune.indexOf(t+1)!=-1)
+        {
+          trtr.setAttribute("style","background: magenta");
+        }
         
         track.append(trtr);
 
@@ -1257,134 +1293,581 @@ class Screen {
         }
       }
 
-      CurrentSeason.fullCast.sort((a, b) => a.placement - b.placement);
-
-      let putincenter = document.createElement("center");
-      let table = document.createElement("table");
-      table.setAttribute("style", "border-spacing: 15px 12px");
-      let thead = document.createElement("thead");
-
-      let tbody = document.createElement("tbody");
-
-      let rows = ~~(CurrentSeason.fullCast.length/4);
-      let rest = CurrentSeason.fullCast.length%4;
-
-      if(rest!=0)
+      if(CurrentSeason.premiereformat=="NORMAL")
       {
-        rows++;
-      }
-      for(let i = 0; i < rows; i++)
-      {
-        let tr = document.createElement("tr");
-        if(i!=rows-1 || rest==0)
+        CurrentSeason.fullCast.sort((a, b) => a.placement - b.placement);
+        let putincenter = document.createElement("center");
+        let table = document.createElement("table");
+        table.setAttribute("style", "border-spacing: 15px 12px");
+        let thead = document.createElement("thead");
+
+        let tbody = document.createElement("tbody");
+
+        let rows = ~~(CurrentSeason.fullCast.length/4);
+        let rest = CurrentSeason.fullCast.length%4;
+
+        if(rest!=0)
         {
-          for(let q = 0; q<4;q++)
+          rows++;
+        }
+        for(let i = 0; i < rows; i++)
+        {
+          let tr = document.createElement("tr");
+          if(i!=rows-1 || rest==0)
           {
-            let td = document.createElement("td");
-            if(CurrentSeason.eliminatedCast.indexOf(CurrentSeason.fullCast[q+(i*4)])!=-1)
+            for(let q = 0; q<4;q++)
             {
-              td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+              let td = document.createElement("td");
+              if(CurrentSeason.eliminatedCast.indexOf(CurrentSeason.fullCast[q+(i*4)])!=-1)
+              {
+                td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+              }
+              else
+              {
+              td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px;");
+              }
+              td.setAttribute("class","promos");
+              tr.append(td);
+            }
+            tbody.append(tr);
+            let tr2 = document.createElement("tr");
+            for(let q = 0; q<4;q++)
+            {
+              let td = document.createElement("td");
+              let name = document.createElement("p");
+              name.setAttribute("style","font-weight: bold; font-size: 15px;");
+              let placement = document.createElement("p");
+              switch(CurrentSeason.fullCast[q+(i*4)].GetPlacement())
+              {
+                case 0:
+                  placement.innerHTML = "TBA";
+                  break;
+                case 1:
+                  placement.innerHTML = "1st";
+                  break;
+                case 2:
+                  placement.innerHTML = "2nd";
+                  break;
+                case 3:
+                  placement.innerHTML = "3rd";
+                  break;
+                default:
+                  placement.innerHTML = CurrentSeason.fullCast[q+(i*4)].GetPlacement()+"th";
+                  break;
+              }
+              name.innerHTML = CurrentSeason.fullCast[q+(i*4)].GetName();
+              td.append(name);
+              td.append(placement);
+              td.setAttribute("class","promos");
+              tr2.append(td);
+            }
+            tbody.append(tr2);
+          }
+          else
+          {
+            for(let q = 0; q<rest; q++)
+            {
+              let td = document.createElement("td");
+              if(CurrentSeason.eliminatedCast.indexOf(CurrentSeason.fullCast[q+(i*4)])!=-1)
+              {
+                td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+              }
+              else
+              {
+              td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px;");
+              }
+              td.setAttribute("class","promos");
+              tr.append(td);
+            }
+            let tr2 = document.createElement("tr");
+            tbody.append(tr);
+            for(let q = 0; q<rest;q++)
+            {
+              let td = document.createElement("td");
+              let name = document.createElement("p");
+              name.setAttribute("style","font-weight: bold; font-size: 15px;");
+              let placement = document.createElement("p");
+              switch(CurrentSeason.fullCast[q+(i*4)].GetPlacement())
+              {
+                case 0:
+                  placement.innerHTML = "TBA";
+                  break;
+                case 1:
+                  placement.innerHTML = "1st";
+                  break;
+                case 2:
+                  placement.innerHTML = "2nd";
+                  break;
+                case 3:
+                  placement.innerHTML = "3rd";
+                  break;
+                default:
+                  placement.innerHTML = CurrentSeason.fullCast[q+(i*4)].GetPlacement()+"th";
+                  break;
+              }
+              name.innerHTML = CurrentSeason.fullCast[q+(i*4)].GetName();
+              td.append(name);
+              td.append(placement);
+              td.setAttribute("class","promos");
+              tr2.append(td);
+            }
+            tbody.append(tr2);
+          }
+        }
+        table.append(thead);
+        table.append(tbody);
+        let br = document.createElement("br");
+        putincenter.append(table);
+        this.MainScreen.append(putincenter);
+        this.MainScreen.append(br);
+    }
+    else
+    {
+      if(CurrentSeason.premiereformat == "S6" || CurrentSeason.premiereformat == "S12")
+      {
+        if(CurrentSeason.episodes.length < 2 && premstep < 2)
+        {
+          firstprem.sort((a, b) => a.placement - b.placement);
+          let putincenter = document.createElement("center");
+          let table = document.createElement("table");
+          table.setAttribute("style", "border-spacing: 15px 12px");
+          let thead = document.createElement("thead");
+
+          let tbody = document.createElement("tbody");
+
+          let rows = ~~(firstprem.length/4);
+          let rest = firstprem.length%4;
+
+          if(rest!=0)
+          {
+            rows++;
+          }
+          for(let i = 0; i < rows; i++)
+          {
+            let tr = document.createElement("tr");
+            if(i!=rows-1 || rest==0)
+            {
+              for(let q = 0; q<4;q++)
+              {
+                let td = document.createElement("td");
+                if(CurrentSeason.eliminatedCast.indexOf(firstprem[q+(i*4)])!=-1)
+                {
+                  td.setAttribute("style", "background: url("+ firstprem[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+                }
+                else
+                {
+                td.setAttribute("style", "background: url("+ firstprem[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px;");
+                }
+                td.setAttribute("class","promos");
+                tr.append(td);
+              }
+              tbody.append(tr);
+              let tr2 = document.createElement("tr");
+              for(let q = 0; q<4;q++)
+              {
+                let td = document.createElement("td");
+                let name = document.createElement("p");
+                name.setAttribute("style","font-weight: bold; font-size: 15px;");
+                let placement = document.createElement("p");
+                switch(firstprem[q+(i*4)].GetPlacement())
+                {
+                  case 0:
+                    placement.innerHTML = "TBA";
+                    break;
+                  case 1:
+                    placement.innerHTML = "1st";
+                    break;
+                  case 2:
+                    placement.innerHTML = "2nd";
+                    break;
+                  case 3:
+                    placement.innerHTML = "3rd";
+                    break;
+                  default:
+                    placement.innerHTML = firstprem[q+(i*4)].GetPlacement()+"th";
+                    break;
+                }
+                name.innerHTML = firstprem[q+(i*4)].GetName();
+                td.append(name);
+                td.append(placement);
+                td.setAttribute("class","promos");
+                tr2.append(td);
+              }
+              tbody.append(tr2);
             }
             else
             {
-            td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px;");
+              for(let q = 0; q<rest; q++)
+              {
+                let td = document.createElement("td");
+                if(CurrentSeason.eliminatedCast.indexOf(firstprem[q+(i*4)])!=-1)
+                {
+                  td.setAttribute("style", "background: url("+ firstprem[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+                }
+                else
+                {
+                td.setAttribute("style", "background: url("+ firstprem[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px;");
+                }
+                td.setAttribute("class","promos");
+                tr.append(td);
+              }
+              let tr2 = document.createElement("tr");
+              tbody.append(tr);
+              for(let q = 0; q<rest;q++)
+              {
+                let td = document.createElement("td");
+                let name = document.createElement("p");
+                name.setAttribute("style","font-weight: bold; font-size: 15px;");
+                let placement = document.createElement("p");
+                switch(firstprem[q+(i*4)].GetPlacement())
+                {
+                  case 0:
+                    placement.innerHTML = "TBA";
+                    break;
+                  case 1:
+                    placement.innerHTML = "1st";
+                    break;
+                  case 2:
+                    placement.innerHTML = "2nd";
+                    break;
+                  case 3:
+                    placement.innerHTML = "3rd";
+                    break;
+                  default:
+                    placement.innerHTML = firstprem[q+(i*4)].GetPlacement()+"th";
+                    break;
+                }
+                name.innerHTML = firstprem[q+(i*4)].GetName();
+                td.append(name);
+                td.append(placement);
+                td.setAttribute("class","promos");
+                tr2.append(td);
+              }
+              tbody.append(tr2);
             }
-            td.setAttribute("class","promos");
-            tr.append(td);
           }
-          tbody.append(tr);
-          let tr2 = document.createElement("tr");
-          for(let q = 0; q<4;q++)
-          {
-            let td = document.createElement("td");
-            let name = document.createElement("p");
-            name.setAttribute("style","font-weight: bold; font-size: 15px;");
-            let placement = document.createElement("p");
-            switch(CurrentSeason.fullCast[q+(i*4)].GetPlacement())
+          table.append(thead);
+          table.append(tbody);
+          let br = document.createElement("br");
+          putincenter.append(table);
+          this.MainScreen.append(putincenter);
+          this.MainScreen.append(br);
+          
+          for (let index = 0; index < firstprem.length; index++) {
+            if(CurrentSeason.eliminatedCast.indexOf(firstprem[index])!=-1)
             {
-              case 0:
-                placement.innerHTML = "TBA";
-                break;
-              case 1:
-                placement.innerHTML = "1st";
-                break;
-              case 2:
-                placement.innerHTML = "2nd";
-                break;
-              case 3:
-                placement.innerHTML = "3rd";
-                break;
-              default:
-                placement.innerHTML = CurrentSeason.fullCast[q+(i*4)].GetPlacement()+"th";
-                break;
+              firstprem.splice(index);
             }
-            name.innerHTML = CurrentSeason.fullCast[q+(i*4)].GetName();
-            td.append(name);
-            td.append(placement);
-            td.setAttribute("class","promos");
-            tr2.append(td);
           }
-          tbody.append(tr2);
+
+          if(firstpex == false)
+          {
+            CurrentSeason.currentCast = [];
+            for (let index = 0; index < firstprem.length; index++) {
+              CurrentSeason.currentCast.push(firstprem[index]);
+            }
+
+            for (let index = 0; index < secondprem.length; index++) {
+              secondprem[index].trackrecord.push('');
+            }
+            firstpex = true;
+          }
+        }
+        else if(CurrentSeason.episodes.length <3  && premstep < 4)
+        {
+          secondprem.sort((a, b) => a.placement - b.placement);
+          let putincenter = document.createElement("center");
+          let table = document.createElement("table");
+          table.setAttribute("style", "border-spacing: 15px 12px");
+          let thead = document.createElement("thead");
+
+          let tbody = document.createElement("tbody");
+
+          let rows = ~~(secondprem.length/4);
+          let rest = secondprem.length%4;
+
+          if(rest!=0)
+          {
+            rows++;
+          }
+          for(let i = 0; i < rows; i++)
+          {
+            let tr = document.createElement("tr");
+            if(i!=rows-1 || rest==0)
+            {
+              for(let q = 0; q<4;q++)
+              {
+                let td = document.createElement("td");
+                if(CurrentSeason.eliminatedCast.indexOf(secondprem[q+(i*4)])!=-1)
+                {
+                  td.setAttribute("style", "background: url("+ secondprem[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+                }
+                else
+                {
+                td.setAttribute("style", "background: url("+ secondprem[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px;");
+                }
+                td.setAttribute("class","promos");
+                tr.append(td);
+              }
+              tbody.append(tr);
+              let tr2 = document.createElement("tr");
+              for(let q = 0; q<4;q++)
+              {
+                let td = document.createElement("td");
+                let name = document.createElement("p");
+                name.setAttribute("style","font-weight: bold; font-size: 15px;");
+                let placement = document.createElement("p");
+                switch(secondprem[q+(i*4)].GetPlacement())
+                {
+                  case 0:
+                    placement.innerHTML = "TBA";
+                    break;
+                  case 1:
+                    placement.innerHTML = "1st";
+                    break;
+                  case 2:
+                    placement.innerHTML = "2nd";
+                    break;
+                  case 3:
+                    placement.innerHTML = "3rd";
+                    break;
+                  default:
+                    placement.innerHTML = secondprem[q+(i*4)].GetPlacement()+"th";
+                    break;
+                }
+                name.innerHTML = secondprem[q+(i*4)].GetName();
+                td.append(name);
+                td.append(placement);
+                td.setAttribute("class","promos");
+                tr2.append(td);
+              }
+              tbody.append(tr2);
+            }
+            else
+            {
+              for(let q = 0; q<rest; q++)
+              {
+                let td = document.createElement("td");
+                if(CurrentSeason.eliminatedCast.indexOf(secondprem[q+(i*4)])!=-1)
+                {
+                  td.setAttribute("style", "background: url("+ secondprem[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+                }
+                else
+                {
+                td.setAttribute("style", "background: url("+secondprem[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px;");
+                }
+                td.setAttribute("class","promos");
+                tr.append(td);
+              }
+              let tr2 = document.createElement("tr");
+              tbody.append(tr);
+              for(let q = 0; q<rest;q++)
+              {
+                let td = document.createElement("td");
+                let name = document.createElement("p");
+                name.setAttribute("style","font-weight: bold; font-size: 15px;");
+                let placement = document.createElement("p");
+                switch(secondprem[q+(i*4)].GetPlacement())
+                {
+                  case 0:
+                    placement.innerHTML = "TBA";
+                    break;
+                  case 1:
+                    placement.innerHTML = "1st";
+                    break;
+                  case 2:
+                    placement.innerHTML = "2nd";
+                    break;
+                  case 3:
+                    placement.innerHTML = "3rd";
+                    break;
+                  default:
+                    placement.innerHTML = secondprem[q+(i*4)].GetPlacement()+"th";
+                    break;
+                }
+                name.innerHTML = secondprem[q+(i*4)].GetName();
+                td.append(name);
+                td.append(placement);
+                td.setAttribute("class","promos");
+                tr2.append(td);
+              }
+              tbody.append(tr2);
+            }
+          }
+          table.append(thead);
+          table.append(tbody);
+          let br = document.createElement("br");
+          putincenter.append(table);
+          this.MainScreen.append(putincenter);
+          this.MainScreen.append(br);
+
+          for (let index = 0; index < secondprem.length; index++) {
+            if(CurrentSeason.eliminatedCast.indexOf(secondprem[index])!=-1)
+            {
+              secondprem.splice(index);
+            }
+          }
+          if(secondpex == false)
+          {
+            CurrentSeason.currentCast = [];
+            for (let index = 0; index < secondprem.length; index++) {
+              CurrentSeason.currentCast.push(secondprem[index]);
+            }
+
+            for (let index = 0; index < firstprem.length; index++) {
+              firstprem[index].trackrecord.push('');
+            }
+            secondpex = true;
+          }
         }
         else
         {
-          for(let q = 0; q<rest; q++)
+          if(CurrentSeason.episodes.length == 2)
           {
-            let td = document.createElement("td");
-            if(CurrentSeason.eliminatedCast.indexOf(CurrentSeason.fullCast[q+(i*4)])!=-1)
-            {
-              td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+            for (let index = 0; index < firstprem.length; index++) {
+              if(CurrentSeason.eliminatedCast.indexOf(firstprem[index]) == -1)
+              {
+                CurrentSeason.currentCast.push(firstprem[index]);
+              }
             }
-            else
-            {
-            td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px;");
+
+            for (let index = 0; index < secondprem.length; index++) {
+              if(CurrentSeason.eliminatedCast.indexOf(secondprem[index]) == -1)
+              {
+                CurrentSeason.currentCast.push(secondprem[index]);
+              }
             }
-            td.setAttribute("class","promos");
-            tr.append(td);
           }
-          let tr2 = document.createElement("tr");
-          tbody.append(tr);
-          for(let q = 0; q<rest;q++)
-          {
-            let td = document.createElement("td");
-            let name = document.createElement("p");
-            name.setAttribute("style","font-weight: bold; font-size: 15px;");
-            let placement = document.createElement("p");
-            switch(CurrentSeason.fullCast[q+(i*4)].GetPlacement())
-            {
-              case 0:
-                placement.innerHTML = "TBA";
-                break;
-              case 1:
-                placement.innerHTML = "1st";
-                break;
-              case 2:
-                placement.innerHTML = "2nd";
-                break;
-              case 3:
-                placement.innerHTML = "3rd";
-                break;
-              default:
-                placement.innerHTML = CurrentSeason.fullCast[q+(i*4)].GetPlacement()+"th";
-                break;
-            }
-            name.innerHTML = CurrentSeason.fullCast[q+(i*4)].GetName();
-            td.append(name);
-            td.append(placement);
-            td.setAttribute("class","promos");
-            tr2.append(td);
-          }
-          tbody.append(tr2);
-          
+
+        CurrentSeason.fullCast.sort((a, b) => a.placement - b.placement);
+        let putincenter = document.createElement("center");
+        let table = document.createElement("table");
+        table.setAttribute("style", "border-spacing: 15px 12px");
+        let thead = document.createElement("thead");
+
+        let tbody = document.createElement("tbody");
+
+        let rows = ~~(CurrentSeason.fullCast.length/4);
+        let rest = CurrentSeason.fullCast.length%4;
+
+        if(rest!=0)
+        {
+          rows++;
         }
-        
+        for(let i = 0; i < rows; i++)
+        {
+          let tr = document.createElement("tr");
+          if(i!=rows-1 || rest==0)
+          {
+            for(let q = 0; q<4;q++)
+            {
+              let td = document.createElement("td");
+              if(CurrentSeason.eliminatedCast.indexOf(CurrentSeason.fullCast[q+(i*4)])!=-1)
+              {
+                td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+              }
+              else
+              {
+              td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px;");
+              }
+              td.setAttribute("class","promos");
+              tr.append(td);
+            }
+            tbody.append(tr);
+            let tr2 = document.createElement("tr");
+            for(let q = 0; q<4;q++)
+            {
+              let td = document.createElement("td");
+              let name = document.createElement("p");
+              name.setAttribute("style","font-weight: bold; font-size: 15px;");
+              let placement = document.createElement("p");
+              switch(CurrentSeason.fullCast[q+(i*4)].GetPlacement())
+              {
+                case 0:
+                  placement.innerHTML = "TBA";
+                  break;
+                case 1:
+                  placement.innerHTML = "1st";
+                  break;
+                case 2:
+                  placement.innerHTML = "2nd";
+                  break;
+                case 3:
+                  placement.innerHTML = "3rd";
+                  break;
+                default:
+                  placement.innerHTML = CurrentSeason.fullCast[q+(i*4)].GetPlacement()+"th";
+                  break;
+              }
+              name.innerHTML = CurrentSeason.fullCast[q+(i*4)].GetName();
+              td.append(name);
+              td.append(placement);
+              td.setAttribute("class","promos");
+              tr2.append(td);
+            }
+            tbody.append(tr2);
+          }
+          else
+          {
+            for(let q = 0; q<rest; q++)
+            {
+              let td = document.createElement("td");
+              if(CurrentSeason.eliminatedCast.indexOf(CurrentSeason.fullCast[q+(i*4)])!=-1)
+              {
+                td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px; -webkit-filter: grayscale(100%);filter: grayscale(100%);")
+              }
+              else
+              {
+              td.setAttribute("style", "background: url("+ CurrentSeason.fullCast[q+(i*4)].promo +"); background-size: 200px 200px; background-position: center; height: 190px; width: 190px;");
+              }
+              td.setAttribute("class","promos");
+              tr.append(td);
+            }
+            let tr2 = document.createElement("tr");
+            tbody.append(tr);
+            for(let q = 0; q<rest;q++)
+            {
+              let td = document.createElement("td");
+              let name = document.createElement("p");
+              name.setAttribute("style","font-weight: bold; font-size: 15px;");
+              let placement = document.createElement("p");
+              switch(CurrentSeason.fullCast[q+(i*4)].GetPlacement())
+              {
+                case 0:
+                  placement.innerHTML = "TBA";
+                  break;
+                case 1:
+                  placement.innerHTML = "1st";
+                  break;
+                case 2:
+                  placement.innerHTML = "2nd";
+                  break;
+                case 3:
+                  placement.innerHTML = "3rd";
+                  break;
+                default:
+                  placement.innerHTML = CurrentSeason.fullCast[q+(i*4)].GetPlacement()+"th";
+                  break;
+              }
+              name.innerHTML = CurrentSeason.fullCast[q+(i*4)].GetName();
+              td.append(name);
+              td.append(placement);
+              td.setAttribute("class","promos");
+              tr2.append(td);
+            }
+            tbody.append(tr2);
+          }
+        }
+        table.append(thead);
+        table.append(tbody);
+        let br = document.createElement("br");
+        putincenter.append(table);
+        this.MainScreen.append(putincenter);
+        this.MainScreen.append(br);
+        }
+        premstep++;
       }
-      table.append(thead);
-      table.append(tbody);
-      let br = document.createElement("br");
-      putincenter.append(table);
-      this.MainScreen.append(putincenter);
-      this.MainScreen.append(br);
+    }
   }
 }
 
@@ -1519,6 +2002,12 @@ class SnatchGame{
       let goodtext = "";
       let badtext = "";
       let floptext = "";
+
+      shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
       
   
       if(SlayedChallenge.length!=0)
@@ -1682,6 +2171,12 @@ class SnatchGame{
       let goodtext = "";
       let badtext = "";
       let floptext = "";
+
+      shuffle(SlayedRunway);
+      shuffle(GreatRunway);
+      shuffle(GoodRunway);
+      shuffle(BadRunway);
+      shuffle(FloppedRunway);
       
   
       if(SlayedRunway.length!=0)
@@ -1941,6 +2436,12 @@ class Ball{
       let goodtext = "";
       let badtext = "";
       let floptext = "";
+
+      shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
       
   
       if(SlayedChallenge.length!=0)
@@ -2131,6 +2632,12 @@ class Ball{
       let goodtext = "";
       let badtext = "";
       let floptext = "";
+
+      shuffle(SlayedRunway);
+      shuffle(GreatRunway);
+      shuffle(GoodRunway);
+      shuffle(BadRunway);
+      shuffle(FloppedRunway);
       
   
       if(SlayedRunway.length!=0)
@@ -2255,6 +2762,14 @@ class Ball{
     }
   }
 
+  class Role{
+    constructor(Type,Name,Difficulty){
+      this.type = Type;
+      this.name = Name;
+      this.difficulty = Difficulty;
+    }
+  }
+
   class Rusical{
     constructor(){
       this.type = "RUSICAL";
@@ -2262,7 +2777,7 @@ class Ball{
       this.winner = false;
       this.regrusical = [
         "Shade: The Rusical",
-        "Glamazonian Airways",
+        /*"Glamazonian Airways",
         "Bitch Perfect",
         "Kardashian: The Musical",
         "PharmaRusical",
@@ -2275,12 +2790,12 @@ class Ball{
         "Rats: The Rusical",
         "Under the Big Top",
         "Dance Drags : The Dancing Rusical",
-        "Rainbow's Simulator : The Angry Rusical"
+        "Rainbow's Simulator : The Angry Rusical"*/
       ];
   
       this.castsizes = [
         11,
-        13,
+        /*13,
         11,
         11,
         14,
@@ -2293,12 +2808,12 @@ class Ball{
         11,
         11,
         10,
-        14
+        14*/
       ];
   
       this.roles =
       [
-        ["Good Penny","Bad Penny","Shady Lady","Pageant Queen 1", "Pageant Queen 2", "Comedy Queen 1", "Comedy Queen 2" , "Amanda", "Showgirl", "Les Mizabella", "Bertha"],
+        [new Role("Main","Good Penny","Hard"),new Role("Main","Bad Penny","Hard"),new Role("Main","Shady Lady","Medium"),new Role("Forgettable","Pageant Queen 1","Easy"), new Role("Forgettable","Pageant Queen 2","Easy"), new Role("Forgettable","Comedy Queen 1","Medium"), new Role("Forgettable","Comedy Queen 2","Medium"), new Role("Mid","Amanda","Easy"), new Role("Mid","Showgirl","Easy"), new Role("Side","Les Mizabella","Medium"), new Role("Mid","Bertha","Medium")]/*,
         [],
         [],
         ["Blac Chyna", "Britney Spears", "Kris Jenner", "Lindsay Lohan", "Paris Hilton", "Kourtney Kardashian", "Kendall Jenner", "Khloe Kardashian", "Kylie Jenner", "Kim Kardashian", "North West"],
@@ -2312,7 +2827,7 @@ class Ball{
         ["Evita Von Fleas", "Scabies", "Specimen One", "Jane", "Miss Disentry", "Depravity", "Dame Doody Stench", "Rap Pack #1", "Rat Pack #2", "Rat Pack #3", "Scat Rat"],
         ["Henny Wise", "Himbo", "Ring Mistress", "Bang", "Bianca", "Leather", "Corsette", "Reveliana", "Bing", "Lace", "Bong"],
         ["Abby Lee Drager", "Kelly Hyland", "Holly \"God\" Fraisier", "My Little Jill", "Brooke Hyland", "My Little Kendall", "The Old Cathy", "Nia Sioux", "Paige Hyland", "Maddie Ziegler"],
-        ["Edssb", "Rainbow", "Oliver", "Valestal", "Brianna", "Tati", "Jordyn", "Izzy", "Tommy", "Rusha", "Ericcfraga", "Dyslereina", "Flop Squad #1", "Flop Squand #2"]
+        ["Edssb", "Rainbow", "Oliver", "Valestal", "Brianna", "Tati", "Jordyn", "Izzy", "Tommy", "Rusha", "Ericcfraga", "Dyslereina", "Flop Squad #1", "Flop Squand #2"]*/
       ];
   
       this.chosen = getRandomInt(0,this.regrusical.length-1);
@@ -2423,6 +2938,12 @@ class Ball{
         let goodtext = "";
         let badtext = "";
         let floptext = "";
+
+      shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
         
     
         if(SlayedChallenge.length!=0)
@@ -2586,6 +3107,12 @@ class Ball{
         let goodtext = "";
         let badtext = "";
         let floptext = "";
+
+        shuffle(SlayedRunway);
+      shuffle(GreatRunway);
+      shuffle(GoodRunway);
+      shuffle(BadRunway);
+      shuffle(FloppedRunway);
         
     
         if(SlayedRunway.length!=0)
@@ -2849,6 +3376,11 @@ class ActingChallenge{
       let badtext = "";
       let floptext = "";
       
+      shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
   
       if(SlayedChallenge.length!=0)
       {
@@ -3012,7 +3544,12 @@ class ActingChallenge{
       let badtext = "";
       let floptext = "";
       
-  
+      shuffle(SlayedRunway);
+      shuffle(GreatRunway);
+      shuffle(GoodRunway);
+      shuffle(BadRunway);
+      shuffle(FloppedRunway);
+
       if(SlayedRunway.length!=0)
       {
         for(let i = 0; i < SlayedRunway.length; i++)
@@ -3346,6 +3883,11 @@ class ImprovChallenge{
       let badtext = "";
       let floptext = "";
       
+      shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
   
       if(SlayedChallenge.length!=0)
       {
@@ -3509,7 +4051,12 @@ class ImprovChallenge{
       let badtext = "";
       let floptext = "";
       
-  
+      shuffle(SlayedRunway);
+      shuffle(GreatRunway);
+      shuffle(GoodRunway);
+      shuffle(BadRunway);
+      shuffle(FloppedRunway);
+
       if(SlayedRunway.length!=0)
       {
         for(let i = 0; i < SlayedRunway.length; i++)
@@ -3771,7 +4318,12 @@ class ImprovChallenge{
       let badtext = "";
       let floptext = "";
       
-  
+      shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
+
       if(SlayedChallenge.length!=0)
       {
         for(let i = 0; i < SlayedChallenge.length; i++)
@@ -3934,7 +4486,12 @@ class ImprovChallenge{
       let badtext = "";
       let floptext = "";
       
-  
+      shuffle(SlayedRunway);
+      shuffle(GreatRunway);
+      shuffle(GoodRunway);
+      shuffle(BadRunway);
+      shuffle(FloppedRunway);
+
       if(SlayedRunway.length!=0)
       {
         for(let i = 0; i < SlayedRunway.length; i++)
@@ -4198,6 +4755,12 @@ class ImprovChallenge{
         let goodtext = "";
         let badtext = "";
         let floptext = "";
+
+      shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
         
     
         if(SlayedChallenge.length!=0)
@@ -4362,7 +4925,12 @@ class ImprovChallenge{
         let badtext = "";
         let floptext = "";
         
-    
+        shuffle(SlayedRunway);
+      shuffle(GreatRunway);
+      shuffle(GoodRunway);
+      shuffle(BadRunway);
+      shuffle(FloppedRunway);
+
         if(SlayedRunway.length!=0)
         {
           for(let i = 0; i < SlayedRunway.length; i++)
@@ -4629,6 +5197,12 @@ class ImprovChallenge{
         let goodtext = "";
         let badtext = "";
         let floptext = "";
+
+      shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
         
     
         if(SlayedChallenge.length!=0)
@@ -4793,6 +5367,11 @@ class ImprovChallenge{
         let badtext = "";
         let floptext = "";
         
+        shuffle(SlayedRunway);
+      shuffle(GreatRunway);
+      shuffle(GoodRunway);
+      shuffle(BadRunway);
+      shuffle(FloppedRunway);
     
         if(SlayedRunway.length!=0)
         {
@@ -5067,6 +5646,12 @@ class ImprovChallenge{
       let goodtext = "";
       let badtext = "";
       let floptext = "";
+
+      shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
       
   
       if(SlayedChallenge.length!=0)
@@ -5231,6 +5816,12 @@ class ImprovChallenge{
       let badtext = "";
       let floptext = "";
       
+      shuffle(SlayedRunway);
+      shuffle(GreatRunway);
+      shuffle(GoodRunway);
+      shuffle(BadRunway);
+      shuffle(FloppedRunway);
+
   
       if(SlayedRunway.length!=0)
       {
@@ -5443,6 +6034,12 @@ class ImprovChallenge{
         let goodtext = "";
         let badtext = "";
         let floptext = "";
+
+        shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
         
     
         if(SlayedChallenge.length!=0)
@@ -5607,7 +6204,12 @@ class ImprovChallenge{
         let badtext = "";
         let floptext = "";
         
-    
+        shuffle(SlayedRunway);
+      shuffle(GreatRunway);
+      shuffle(GoodRunway);
+      shuffle(BadRunway);
+      shuffle(FloppedRunway);
+
         if(SlayedRunway.length!=0)
         {
           for(let i = 0; i < SlayedRunway.length; i++)
@@ -5888,6 +6490,12 @@ class FinalChallenge{
       let goodtext = "";
       let badtext = "";
       let floptext = "";
+
+      shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
       
   
       if(SlayedChallenge.length!=0)
@@ -6052,7 +6660,12 @@ class FinalChallenge{
       let badtext = "";
       let floptext = "";
       
-  
+      shuffle(SlayedRunway);
+      shuffle(GreatRunway);
+      shuffle(GoodRunway);
+      shuffle(BadRunway);
+      shuffle(FloppedRunway);
+
       if(SlayedRunway.length!=0)
       {
         for(let i = 0; i < SlayedRunway.length; i++)
@@ -6365,6 +6978,12 @@ class DesignChallenge{
     let goodtext = "";
     let badtext = "";
     let floptext = "";
+
+    shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
     
 
     if(SlayedChallenge.length!=0)
@@ -6629,6 +7248,12 @@ class Makeover{
     let goodtext = "";
     let badtext = "";
     let floptext = "";
+
+    shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
     
 
     if(SlayedChallenge.length!=0)
@@ -6913,6 +7538,12 @@ class TalentShow{
     let goodtext = "";
     let badtext = "";
     let floptext = "";
+
+    shuffle(SlayedChallenge);
+      shuffle(GreatChallenge);
+      shuffle(GoodChallenge);
+      shuffle(BadChallenge);
+      shuffle(FloppedChallenge);
     
 
     if(SlayedChallenge.length!=0)
@@ -7175,7 +7806,7 @@ let US8 = shuffle([acid, btdq, chichis8, cynthialees8, dax, derricks8, kimchi, l
 
 let aja = new Queen("Aja LaBeija",6,8,5,10,4,8,13,10,7,1,5,"Aja", "Aja", "US9", false);
 let alexism = new Queen("Alexis Michelle",11,12,10,10,6,6,11,8,12,3,1, "Alexis", "Alexis", "US9", false);
-let charlie = new Queen("Charlie Hides",5,4,6,4,12,13,0,7,8,5,1,"Charlie","Charlie", "US9", false);
+let charlie = new Queen("Charlie Hides",5,4,6,4,12,13,1,7,8,5,1,"Charlie","Charlie", "US9", false);
 let cynthialees9 = new Queen("Cynthia Lee Fontaine",6,4,6,5,6,5,6,7,11,5,1,"Cynthia", "Cynthia", "US9", false);
 let eureka = new Queen("Eureka",7,8,8,8,10,11,11,8,10,3,4,"Eureka", "Eureka", "US9", false);
 let farrah = new Queen("Farrah Moan",8,7,5,6,4,10,7,9,12,5,1,"Farrah","Farrah","US9",false);
@@ -7475,6 +8106,19 @@ let IT1 = shuffle([ava ,divinity ,elecktra, enorma, farida, ivana, leriche, luqu
 
 let priscilla = new Host("Priscilla", "PriscillaIn", "PriscillaOut");
 
+let adoreas2 = new Queen("Adore Delano", 9, 10, 11, 7, 6, 11, 9, 10, 15, 4, 1, "Adore", "Adore", "AS2", false)
+let alaskaas2 = new Queen("Alaska Thunderfuck", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Alaska", "Alaska", "AS2", false);
+let alyssaeas2 = new Queen("Alyssa Edwards", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Alyssa", "Alyssa", "AS2", false);
+let cocoas2 = new Queen("Coco Montrese", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Coco", "Coco", "AS2", false);
+let detoxas2 = new Queen("Detox", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Detox", "Detox", "AS2", false);
+let gingeras2 = new Queen("Ginger Minj", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Ginger", "Ginger", "AS2", false);
+let katyaas2 = new Queen("Katya", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2,"Katya", "Katya", "AS2", false);
+let jaremyas2 = new Queen("Jaremy Carey", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Jaremy", "Jaremy", "AS2", false);
+let roxxxyas2 = new Queen("Roxxxy Andrews", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Roxxxy", "Roxxxy", "AS2", false);
+let tatias2 = new Queen("Tatianna", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Tatianna", "Tatianna", "AS2", false);
+
+let AS2 = [adoreas2, alaskaas2, alyssaeas2, cocoas2, detoxas2, gingeras2, katyaas2, jaremyas2, roxxxyas2, tatias2];
+
 let yassified = new Queen("Yassified Tiger", 8, 9, 10, 7, 8, 11, 8, 10, 12, 4, 1, "Tiger", "Tiger","ME1",false);
 let yassifiedjan = new Queen("Standing Jan", 8, 9, 6, 8, 10, 11, 2, 13, 11, 4, 2, "Jan","Jan","ME1",false);
 let keep = new Queen("Keep Up Radio", 12, 10, 11, 10, 6, 8, 8, 12, 10, 5, 1, 'Keep', "Keep", "ME1", false);
@@ -7500,6 +8144,23 @@ let yunjin = new Queen("Yun-Jin Lee", 12, 11, 7, 8, 14, 12, 13, 15, 11, 1, 5, "Y
 let zelmus = new Queen("Zelmus", 10, 12, 10, 7, 12, 10, 12, 13, 11, 5, 2, "Zelmus", "Zelmus", "ME2", false);
 
 let FL2 = shuffle([amberh,azealia,queencheryl,frankie, harry, jiafei, mbb, nancy, smurfette, tiffany, yunjin, zelmus]);
+
+let valestal = new Queen("Valestal", 14, 12, 7, 6, 11, 10, 13, 9, 14, 2, 4, "1", "1","ME3", false);
+let brianna = new Queen("Brianna", 11, 7, 13, 10, 11, 12, 9, 10, 15, 4, 3, "2", "2", "ME3", false);
+let tommy;
+let jordyn;
+let beyos3;
+let izzys3;
+let dyslelareina;
+let aaliyah;
+let virgo
+let ericc;
+let rusha;
+let mishu;
+let linx;
+let tati;
+
+let FL3 = shuffle([valestal,brianna,tommy,jordyn, beyos3, izzys3, dyslelareina, aaliyah, virgo, ericc, rusha, mishu, linx, tati]);
 
 let elips = new Queen("Elips",7 ,7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Elips","Elips","FR1",false);
 let kam = new Queen("Kam Hugh", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Kam","Kam", "FR1",false);
@@ -8996,7 +9657,6 @@ function Finale()
 function Placements() {
   if(CurrentSeason.lipsyncformat == "LIFE")
   {
-    
     if(organized==0)
     {
       let hightext = "";
@@ -9098,6 +9758,19 @@ function Placements() {
                     Tops[randomtop].favoritism += 3;
                     Tops[randomtop].wins++;
                   }
+
+                  if(CurrentSeason.immunity == true)
+                  {
+                    if(CurrentSeason.currentCast.length>8)
+                    {
+                      if((CurrentSeason.episodes.length > 2 && CurrentSeason.premiereformat != "NORMAL") && (CurrentSeason.premiereformat != "NORMAL" && CurrentSeason.episodes.length <= 7) || (CurrentSeason.premiereformat == "NORMAL" && CurrentSeason.episodes.length <= 5))
+                      {
+                          Tops[randomtop].immune.push(CurrentSeason.episodes.length+1);
+                          Main.createText(Tops[randomtop].GetName()+", you have won immunity for next week.","Bold");
+                      }
+                    }
+                  }
+
                   CurrentChallenge.winner = true;
                 }
                 else
@@ -9110,6 +9783,17 @@ function Placements() {
                     Tops[randomtop].ppe += 5;
                     Tops[randomtop].favoritism += 3;
                     Tops[randomtop].wins++;
+                    if(CurrentSeason.immunity == true)
+                    {
+                      if(CurrentSeason.currentCast.length>8)
+                      {
+                        if((CurrentSeason.episodes.length > 2 && CurrentSeason.premiereformat != "NORMAL") && (CurrentSeason.premiereformat != "NORMAL" && episodes.length <= 7) || (CurrentSeason.premiereformat == "NORMAL" && episodes.length <= 5))
+                        {
+                            Tops[randomtop].immune.push(CurrentSeason.episodes.length+1);
+                            Main.createText(Tops[randomtop].GetName()+", you also have won immunity for next week.","Bold");
+                        }
+                      }
+                    }
                   }
                   else
                   {
@@ -9328,6 +10012,79 @@ function Placements() {
       Main.createButton("Proceed", "Placements()");
     }
   }
+  else if(CurrentSeason.lipsyncformat == "LSFYL")
+  {
+    for (let i = 0; i < Tops.length; i++) {
+      if(Tops[i].trackrecord[Tops[i].trackrecord.length-1] == "WIN" || Tops[i].trackrecord[Tops[i].trackrecord.length-1] == "TOP2")
+      {
+        Tops[i].finalscore += 10;
+      }
+    }
+
+    Tops.sort((a, b) => a.finalscore - b.finalscore);
+    Main = new Screen();
+    Main.clean();
+    let hightext = "";
+
+    if(TopsQueens.length==0)
+    {
+      TopsQueens.push(Tops[0]);
+      TopsQueens.push(Tops[1]);
+    }
+
+    switch(Steps){
+      case 0:
+        Main.createText("The top two all stars of the week are...", "Bold");
+        Main.createImage("Images/Queens/Hidden.webp","depepskyblue");
+        Main.createImage("Images/Queens/Hidden.webp","depepskyblue");
+        Main.createText("");
+        Steps++;
+        break;
+      case 1:
+        Main.createText("The top two all stars of the week are...", "Bold");
+        Main.createImage(TopsQueens[0].image,"deepskyblue");
+        Main.createImage("Images/Queens/Hidden.webp","deepskyblue");
+        Main.createText(TopsQueens[0].GetName()+" and ...", "Bold");
+        Steps++;
+        break;
+       case 2:
+        Main.createText("The top two all stars of the week are...", "Bold");
+        Main.createImage(TopsQueens[0].image,"deepskyblue");
+        Main.createImage(TopsQueens[1].image,"deepskyblue");
+        Main.createText(TopsQueens[0].GetName()+" and "+TopsQueens[1].GetName()+" ! ", "Bold");
+        Steps++;
+        break;
+      case 3:
+        Main.createText("The top two all stars of the week are...", "Bold");
+        Main.createImage(TopsQueens[0].image,"deepskyblue");
+        Main.createImage(TopsQueens[1].image,"deepskyblue");
+        Main.createText(TopsQueens[0].GetName()+" and "+TopsQueens[1].GetName()+" ! ", "Bold");
+        Main.createText("Congratulations, you are both the top two of this week challenge.", "Bold");
+        Steps++;
+        break;
+      case 4:
+        if(Tops.length!=2)
+        {
+          Main.createText("The top two all stars of the week are...", "Bold");
+          Main.createImage(TopsQueens[0].image,"deepskyblue");
+          Main.createImage(TopsQueens[1].image,"deepskyblue");
+          Main.createText(TopsQueens[0].GetName()+" and "+TopsQueens[1].GetName()+" ! ", "Bold");
+          Main.createText("Congratulations, you are both the top two of this week challenge.", "Bold");
+        }
+        Steps++;
+        break;
+        
+      }
+      if(Steps==4)
+        {
+          Main.createButton("Proceed", "Lipsync()");
+          Steps = 0;
+        }
+        else
+        {
+          Main.createButton("Proceed", "Placements()");
+        }
+    }
 }
   
 
@@ -9407,7 +10164,7 @@ function Lipsync() {
         if(BottomQueens.length == 2)
         {
           BottomQueens.sort((a, b) => b.lipsyncscore - a.lipsyncscore);
-          if((BottomQueens[0].oglipsyncscore <= 2) && (BottomQueens[1].oglipsyncscore <= 2) && CurrentSeason.currentCast.length>6  && CurrentSeason.doubleSashay == false)
+          if((BottomQueens[0].oglipsyncscore <= 1) && (BottomQueens[1].oglipsyncscore <= 1) && CurrentSeason.currentCast.length>6  && CurrentSeason.doubleSashay == false)
           {
             Main.createBigText("Sashay away...");
             Main.createImage(BottomQueens[0].image, "#fa2525");
@@ -9429,7 +10186,7 @@ function Lipsync() {
         else
         {
           BottomQueens.sort((a, b) => b.lipsyncscore - a.lipsyncscore);
-          if((BottomQueens[0].oglipsyncscore <= 2) && (BottomQueens[1].oglipsyncscore <= 2) && (BottomQueens[2].oglipsyncscore <= 2) && CurrentSeason.currentCast.length>6 && CurrentSeason.doubleSashay == false)
+          if((BottomQueens[0].oglipsyncscore <= 1) && (BottomQueens[1].oglipsyncscore <= 1) && (BottomQueens[2].oglipsyncscore <= 1) && CurrentSeason.currentCast.length>6 && CurrentSeason.doubleSashay == false)
           {
             Main.createImage(BottomQueens[0].image, "#ff8a8a");
             Main.createImage(BottomQueens[1].image, "#ff8a8a");
@@ -9471,7 +10228,7 @@ function Lipsync() {
             BottomQueens[1].ppe += 1;
             CurrentSeason.doubleShantay = true;
           }
-          else if((BottomQueens[0].oglipsyncscore <= 2) && (BottomQueens[1].oglipsyncscore <= 2) && CurrentSeason.currentCast.length>6  && CurrentSeason.doubleSashay == false)
+          else if((BottomQueens[0].oglipsyncscore <= 1) && (BottomQueens[1].oglipsyncscore <= 1) && CurrentSeason.currentCast.length>6  && CurrentSeason.doubleSashay == false)
           {
             Main.createImageBW(BottomQueens[0].image, "#fa2525");
             Main.createImageBW(BottomQueens[1].image, "#fa2525");
@@ -9527,7 +10284,7 @@ function Lipsync() {
         }
         else
         {
-          if((BottomQueens[0].oglipsyncscore <= 2) && (BottomQueens[1].oglipsyncscore <= 2) && (BottomQueens[2].oglipsyncscore <= 2) && CurrentSeason.currentCast.length>6 && CurrentSeason.doubleSashay == false)
+          if((BottomQueens[0].oglipsyncscore <= 1) && (BottomQueens[1].oglipsyncscore <= 1) && (BottomQueens[2].oglipsyncscore <= 1) && CurrentSeason.currentCast.length>6 && CurrentSeason.doubleSashay == false)
           {
             Main.createImageBW(BottomQueens[0].image, "#fa2525");
             Main.createImageBW(BottomQueens[1].image, "#fa2525");
@@ -9798,8 +10555,6 @@ function Lipsync() {
       Main.createButton("Proceed", "GetPromoTable()");
       Steps = 0;
     }
-  
-
   }
 }
 
@@ -9823,7 +10578,16 @@ function shuffle(array) {
 
 function GenerateChallenge()
 {
-  document.body.style.backgroundImage = 'url("Images/Backgrounds/MS.png")';
+  switch(localStorage.getItem("theme"))
+  {
+    case "Simple.css":
+      document.body.style.backgroundColor = '#1a1a1a';
+      break;
+
+    default:
+      document.body.style.backgroundImage = 'url("Images/Backgrounds/MS.png")';
+      break;
+  }
   Main = new Screen();
   Main.clean();
     if( (CurrentChallenge.type=="BALL" && Steps==0) || (CurrentChallenge.type!="BALL"))
@@ -9890,36 +10654,6 @@ function GenerateChallenge()
         }
         Main.createLine();
       }
-      if(CurrentChallenge.type=="RUSICAL")
-      {
-        for(let i = 0; i < CurrentSeason.currentCast.length; i++)
-        {
-          if(CurrentSeason.currentCast[i].miniwinner == true && CurrentChallenge.roles[CurrentChallenge.chosen].length!=0)
-          {
-            
-            Main.createImage(CurrentSeason.currentCast[i].image,'blue');
-            Main.createText(CurrentSeason.currentCast[i].GetName()+" as the winner of this week mini-challenge! You get to assign the roles of the rusical to the other queens.")
-            Main.createLine();
-          }
-        }
-        shuffle(CurrentSeason.currentCast);
-        for(let i = 0; i < CurrentSeason.currentCast.length; i++)
-        {
-          if(CurrentChallenge.roles[CurrentChallenge.chosen].length!=0)
-          {
-            let randomrole = getRandomInt(0,CurrentChallenge.roles[CurrentChallenge.chosen].length-1);
-            Main.createImage(CurrentSeason.currentCast[i].image,'black');
-            Main.createText(CurrentSeason.currentCast[i].GetName()+" as been assigned to the role of : \""+CurrentChallenge.roles[CurrentChallenge.chosen][randomrole]+"\".");
-            CurrentSeason.currentCast.rusicalrole = CurrentChallenge.roles[CurrentChallenge.chosen][randomrole];
-            CurrentChallenge.roles[CurrentChallenge.chosen].splice(randomrole,1);
-            if(CurrentChallenge.roles[CurrentChallenge.chosen].length==0)
-            {
-              Main.createLine();
-            }
-          }
-        }
-        
-      }
       CurrentChallenge.rankPerfomances();
       CurrentChallenge.createPerformances();
 
@@ -9977,7 +10711,15 @@ function GetPromoTable()
     TopsQueens = [];
     BottomQueens = [];
 
-    document.body.style.backgroundImage = 'url("Images/Backgrounds/bg.png")';
+    switch(localStorage.getItem("theme"))
+    {
+    case "Simple.css":
+      document.body.style.backgroundColor = '#1a1a1a';
+      break;
+    default:
+      document.body.style.backgroundImage = 'url("Images/Backgrounds/MS.png")';
+      break;
+    }
     Main = new Screen();
     Main.createBigText("Placements");
     Main.clean();
@@ -9989,7 +10731,31 @@ function GetPromoTable()
     }
     else
     {
-      Main.createButton("Proceed","TrackRecords()");
+      if(CurrentSeason.premiereformat!="NORMAL")
+      {
+        if(CurrentSeason.episodes.length==2 && premstep == 4)
+        {
+          CurrentSeason.currentCast = [];
+          for (let index = 0; index < firstprem.length; index++) {
+            CurrentSeason.currentCast.push(firstprem[index]);
+          }
+
+          for (let index = 0; index < secondprem.length; index++) {
+            CurrentSeason.currentCast.push(secondprem[index]);
+          }
+
+          
+        }
+      }
+      if(shouldactivateepisode == true)
+      {
+        Main.createButton("Proceed","Intro()");
+        shouldactivateepisode = false;
+      }
+      else
+      {
+        Main.createButton("Proceed","TrackRecords()");
+      }
     }
   }
 
@@ -9997,7 +10763,16 @@ function LaunchMiniChallenge()
 { 
   Main = new Screen();
   Main.createBigText("In the workroom...");
-  document.body.style.backgroundImage = 'url("Images/Backgrounds/Workroom.png")';
+  switch(localStorage.getItem("theme"))
+  {
+    case "Simple.css":
+      document.body.style.backgroundColor = '#1a1a1a';
+      break;
+
+    default:
+      document.body.style.backgroundImage = 'url("Images/Backgrounds/Workroom.png")';
+      break;
+  }
   if(CurrentSeason.episodes.length == 1 && (CurrentSeason.lipsyncformat == "AS7"))
   {
     Main.clean();
@@ -10062,7 +10837,21 @@ function MiniResult()
     CurrentSeason.currentCast[challengewinner].miniwon.push(CurrentSeason.episodes.length);
     CurrentSeason.currentCast[challengewinner].ppe += 1;
     CurrentSeason.currentCast[challengewinner].minichallengeswins += 1;
-    Main.createButton("Proceed","GenerateChallenge()");
+    if(CurrentChallenge.type=="RUSICAL")
+    {
+      if(CurrentChallenge.roles[CurrentChallenge.chosen].length!=0)
+      {
+        Main.createButton("Proceed","GenerateRusicalRoles()");
+      }
+      else
+      {
+        Main.createButton("Proceed","GenerateChallenge()");
+      }
+    }
+    else
+    {
+      Main.createButton("Proceed","GenerateChallenge()");
+    }
   }
   else if(CurrentSeason.episodes.length == 1 && CurrentSeason.lipsyncformat == "LIFE")
   {
@@ -10079,7 +10868,21 @@ function MiniResult()
     CurrentSeason.currentCast[challengewinner].miniwon.push(CurrentSeason.episodes.length);
     CurrentSeason.currentCast[challengewinner].ppe += 1;
     CurrentSeason.currentCast[challengewinner].minichallengeswins += 1;
-    Main.createButton("Proceed","GenerateChallenge()");
+    if(CurrentChallenge.type=="RUSICAL")
+    {
+      if(CurrentChallenge.roles[CurrentChallenge.chosen].length!=0)
+      {
+        Main.createButton("Proceed","GenerateRusicalRoles()");
+      }
+      else
+      {
+        Main.createButton("Proceed","GenerateChallenge()");
+      }
+    }
+    else
+    {
+      Main.createButton("Proceed","GenerateChallenge()");
+    }
   } 
   else 
   {
@@ -10093,7 +10896,22 @@ function MiniResult()
     CurrentSeason.currentCast[challengewinner].miniwinner = true;
     CurrentSeason.currentCast[challengewinner].ppe += 1;
     CurrentSeason.currentCast[challengewinner].minichallengeswins += 1;
-    Main.createButton("Proceed","GenerateChallenge()");
+    if(CurrentChallenge.type=="RUSICAL")
+    {
+      if(CurrentChallenge.roles[CurrentChallenge.chosen].length!=0)
+      {
+        Main.createText(CurrentSeason.currentCast[challengewinner].GetName()+", as the winner of this week mini-challenge, you will be able to choose roles, for you and your competitors as you will all star in "+CurrentChallenge.regrusical[CurrentChallenge.chosen],'Bold');
+        Main.createButton("Proceed","GenerateRusicalRoles()");
+      }
+      else
+      {
+        Main.createButton("Proceed","GenerateChallenge()");
+      }
+    }
+    else
+    {
+      Main.createButton("Proceed","GenerateChallenge()");
+    }
   }
 }
 
@@ -10101,114 +10919,6 @@ function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min +1)) + min;
-}
-
-function ChangeActingValue(){
-  let ac = document.getElementById("acting").value;
-  let ch = document.getElementById("cAting");
-  ch.innerHTML = "Acting Stat<small> (Current : "+ac+" ) </small>";
-}
-
-function ChangeImprovValue(){
-  let ac = document.getElementById("improv").value;
-  let ch = document.getElementById("cImprov");
-  ch.innerHTML = "Improv Stat<small> (Current : "+ac+" ) </small>";
-}
-
-function ChangeComedyValue(){
-  let ac = document.getElementById("comedy").value;
-  let ch = document.getElementById("cComedy");
-  ch.innerHTML = "Comedy Stat<small> (Current : "+ac+" ) </small>";
-}
-
-function ChangeDanceValue(){
-  let ac = document.getElementById("dance").value;
-  let ch = document.getElementById("cDance");
-  ch.innerHTML = "Dance Stat<small> (Current : "+ac+" ) </small>";
-}
-
-function ChangeDesignValue(){
-  let ac = document.getElementById("design").value;
-  let ch = document.getElementById("cDesign");
-  ch.innerHTML = "Design Stat<small> (Current : "+ac+" ) </small>";
-}
-
-function ChangeRunwayValue(){
-  let ac = document.getElementById("runway").value;
-  let ch = document.getElementById("cRunway");
-  ch.innerHTML = "Runway Stat<small> (Current : "+ac+" ) </small>";
-}
-
-function ChangeLipsyncValue(){
-  let ac = document.getElementById("lipsync").value;
-  let ch = document.getElementById("cLipsync");
-  ch.innerHTML = "Lipsync Stat<small> (Current : "+ac+" ) </small>";
-}
-
-function ChangeBrandingValue(){
-  let ac = document.getElementById("branding").value;
-  let ch = document.getElementById("cBranding");
-  ch.innerHTML = "Branding Stat<small> (Current : "+ac+" ) </small>";
-}
-
-function ChangeCharismaValue(){
-  let ac = document.getElementById("charisma").value;
-  let ch = document.getElementById("cCharisma");
-  ch.innerHTML = "Charisma Stat<small> (Current : "+ac+" ) </small>";
-}
-
-function ChangeKindnessValue(){
-  let ac = document.getElementById("kindness").value;
-  let ch = document.getElementById("cKindness");
-  ch.innerHTML = "Kindness Stat<small> (Current : "+ac+" ) </small>";
-}
-
-function ChangeShadynessValue(){
-  let ac = document.getElementById("shadyness").value;
-  let ch = document.getElementById("cShadyness");
-  ch.innerHTML = "Shadyness Stat<small> (Current : "+ac+" ) </small>";
-}
-
-function RandomizeStats(){
-  let acting = document.getElementById("acting");
-  let improv = document.getElementById("improv");
-  let comedy = document.getElementById("comedy");
-  let dance = document.getElementById("dance");
-  let design = document.getElementById("design");
-
-  let runway = document.getElementById("runway");
-  let lipsync = document.getElementById("lipsync");
-  let branding = document.getElementById("branding");
-  let charisma = document.getElementById("charisma");
-  let kindness = document.getElementById("kindness");
-  let shadyness = document.getElementById("shadyness");
-
-  
-
-  acting.value = getRandomInt(1,15);
-  improv.value = getRandomInt(1,15);
-  comedy.value = getRandomInt(1,15);
-  dance.value = getRandomInt(1,15);
-  design.value = getRandomInt(1,15);
-  runway.value = getRandomInt(1,15);
-  lipsync.value = getRandomInt(1,15);
-  branding.value = getRandomInt(1,15);
-  charisma.value = getRandomInt(1,15);
-  kindness.value = getRandomInt(0,5);
-  shadyness.value = getRandomInt(0,5);
-
-  ChangeActingValue();
-  ChangeImprovValue();
-  ChangeComedyValue();
-  ChangeDanceValue();
-  ChangeDesignValue();
-
-  ChangeRunwayValue();
-  ChangeLipsyncValue();
-  ChangeBrandingValue();
-  ChangeCharismaValue();
-  ChangeKindnessValue();
-  ChangeShadynessValue();
 }
 
 function Intro()
@@ -10220,6 +10930,39 @@ function Intro()
   Video.createButton("Proceed","ChallengeAnnouncement()");
 }
 
+function GenerateRusicalRoles(){
+
+      Main = new Screen();
+      Main.clean();
+      for(let i = 0; i < CurrentSeason.currentCast.length; i++)
+      {
+          if(CurrentSeason.currentCast[i].miniwinner == true && CurrentChallenge.roles[CurrentChallenge.chosen].length!=0)
+          { 
+            Main.createImage(CurrentSeason.currentCast[i].image,'blue');
+            Main.createText(CurrentSeason.currentCast[i].GetName()+" as the winner of this week mini-challenge! You get to assign the roles of the rusical to the other queens.")
+            Main.createLine();
+          }
+      }
+      shuffle(CurrentSeason.currentCast);
+      for(let i = 0; i < CurrentSeason.currentCast.length; i++)
+      {
+        if(CurrentChallenge.roles[CurrentChallenge.chosen].length!=0)
+        {
+          let randomrole = getRandomInt(0,CurrentChallenge.roles[CurrentChallenge.chosen].length-1);
+          Main.createImage(CurrentSeason.currentCast[i].image,'black');
+          Main.createText(CurrentSeason.currentCast[i].GetName()+" as been assigned to the role of : \""+CurrentChallenge.roles[CurrentChallenge.chosen][randomrole]+"\".");
+          CurrentSeason.currentCast.rusicalrole = CurrentChallenge.roles[CurrentChallenge.chosen][randomrole];
+          CurrentChallenge.roles[CurrentChallenge.chosen].splice(randomrole,1);
+          if(CurrentChallenge.roles[CurrentChallenge.chosen].length==0)
+          {
+            Main.createLine();
+          }
+        }
+      }
+      Main.createButton("Proceed","GenerateChallenge()");
+
+}
+
 function ChallengeAnnouncement(){
   for(let i = 0; i<CurrentSeason.currentCast.length; i++)
   {
@@ -10228,7 +10971,16 @@ function ChallengeAnnouncement(){
     CurrentSeason.currentCast[i].episodeson++;
   }
   Main.createBigText("She had already done had herses!");
-  document.body.style.backgroundImage = "url('Images/Backgrounds/RChallenge.png')";
+  switch(localStorage.getItem("theme"))
+  {
+    case "Simple.css":
+      document.body.style.backgroundColor = '#1a1a1a';
+      break;
+
+    default:
+      document.body.style.backgroundImage = 'url("Images/Backgrounds/RChallenge.png")';
+      break;
+  }
   Announcement = new Screen();
   Announcement.clean();
   if(CurrentSeason.lipsyncformat=="AS7")
@@ -10246,7 +10998,6 @@ function ChallengeAnnouncement(){
         Announcement.createRupaulAnnouncement("Good luck, my crowned queens!");
         Announcement.createButton("Proceed","LaunchMiniChallenge()");
         break;
-
       case 1:
         CurrentChallenge = new SnatchGame();
         CurrentEpisode = new Episode(CurrentChallenge.episodename, "Snatch Game");
@@ -10357,6 +11108,22 @@ function ChallengeAnnouncement(){
     Announcement.createRupaulAnnouncement("Now, let the olympics begin !");
     Announcement.createButton("Proceed","LaunchMiniChallenge()");
   }
+  else if(CurrentSeason.episodes.length<=1 && CurrentSeason.premiereformat == "S6")
+  {
+    CurrentChallenge = new DesignChallenge();
+    CurrentEpisode = new Episode(CurrentChallenge.episodename[CurrentChallenge.chosen], "Design");
+    CurrentSeason.episodes.push(CurrentEpisode);
+    CurrentSeason.designchallenges++;
+
+    Announcement = new Screen();
+    Announcement.clean();
+    
+    Announcement.createRupaulAnnouncement("Welcome queens!");
+    Announcement.createRupaulAnnouncement("First of all let me give you all a warm welcome.");
+    Announcement.createRupaulAnnouncement("You all made it here. You are all the very best.");
+    Announcement.createRupaulAnnouncement("Now, let the olympics begin !");
+    Announcement.createButton("Proceed","LaunchMiniChallenge()");
+  }
   else
   {
     if( ((CurrentSeason.finaleformat == "TOP3" || CurrentSeason.finaleformat == "TOP3NE")  && CurrentSeason.currentCast.length==3) || (CurrentSeason.currentCast.length == 4 && CurrentSeason.finaleformat == "LSFTC"))
@@ -10406,7 +11173,7 @@ function ChallengeAnnouncement(){
     }
     else
     {
-      if( (rusicalcastsizes.indexOf(CurrentSeason.currentCast.length)!=-1 && getRandomInt(0,100)>60 ) && CurrentSeason.rusicals == 0)
+      if( (rusicalcastsizes.indexOf(CurrentSeason.currentCast.length)!=-1 /*&& getRandomInt(0,100)>60 */) && CurrentSeason.rusicals == 0)
       {
         CurrentChallenge = new Rusical();
         while(CurrentChallenge.castsizes[CurrentChallenge.chosen] != CurrentSeason.currentCast.length)
@@ -10417,7 +11184,7 @@ function ChallengeAnnouncement(){
         CurrentSeason.episodes.push(CurrentEpisode);
         CurrentSeason.rusicals++;
       }
-      else if( (getRandomInt(0,100)>=70 && CurrentSeason.currentCast.length == 9) || (getRandomInt(0,100)>=40 && CurrentSeason.currentCast.length == 9) ||(CurrentSeason.currentCast.length == 7)  && CurrentSeason.snatchgame == 0)
+      else if(((getRandomInt(0,100)>=70 && CurrentSeason.currentCast.length == 9) || (getRandomInt(0,100)>=40 && CurrentSeason.currentCast.length == 9) || (CurrentSeason.currentCast.length == 7))  && CurrentSeason.snatchgame == 0)
       {
         CurrentChallenge = new SnatchGame();
         CurrentEpisode = new Episode(CurrentChallenge.episodename, "Snatch Game");
@@ -10493,6 +11260,31 @@ function ChallengeAnnouncement(){
   }
 }
 
+function CheckTheme(){
+  let theme = localStorage.getItem("theme");
+  if(theme!=null)
+  {
+    let getstyle = document.getElementById("style");
+    getstyle.setAttribute("href","CSS/"+theme);
+
+    let gett = document.getElementById("theme");
+    var option;
+
+    for (var i=0; i<gett.options.length; i++) {
+      option = gett.options[i];
+      if (option.value == theme) {
+        option.setAttribute('selected', true);
+      } 
+    }
+  }
+}
+
+function ChangeTheme(){
+  let gett = document.getElementById("theme").value;
+  localStorage.setItem("theme",gett);
+  CheckTheme();
+}
+
 function RankQueens(){
     Tops = [];
     Bottoms = [];
@@ -10512,6 +11304,20 @@ function RankQueens(){
           {
             Bottoms.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
           }
+
+          if(CurrentSeason.immunity == true)
+          {
+            for(let i = 0; i<Bottoms.length; i++)
+            {
+              let getsafe = 1;
+              if(Bottoms[i].immune.indexOf(CurrentSeason.episodes.length)!=-1)
+              {
+                Bottoms.splice(i,1);
+                Bottoms.push(CurrentSeason.currentCast[ (CurrentSeason.currentCast.length-Bottoms.length-1)-getsafe ]);
+                getsafe++;
+              }
+            }
+          }
       }
       else
       {
@@ -10521,20 +11327,29 @@ function RankQueens(){
             Tops.push(CurrentSeason.currentCast[1]);
             Tops.push(CurrentSeason.currentCast[2]);
 
-              if(CurrentSeason.currentCast[3].finalscore <= 10)
-              {
-                Tops.push(CurrentSeason.currentCast[3]);
-              }
-              else
-              {
                 Safes.push(CurrentSeason.currentCast[3]);
                 CurrentSeason.currentCast[3].trackrecord.push("SAFE");
                 CurrentSeason.currentCast[3].ppe += 3;
-              }
 
             Bottoms.push(CurrentSeason.currentCast[4]);
             Bottoms.push(CurrentSeason.currentCast[5]);
             Bottoms.push(CurrentSeason.currentCast[6]);
+
+            if(CurrentSeason.immunity == true)
+            {
+              for(let i = 0; i<Bottoms.length; i++)
+              {
+                let getsafe = 1;
+                if(Bottoms[i].immune.indexOf(CurrentSeason.episodes.length)!=-1)
+                {
+                  Safes.push(Bottoms[i]);
+                  Bottoms.splice(i,1);
+                  Bottoms.push(CurrentSeason.currentCast[ (CurrentSeason.currentCast.length-Bottoms.length-1)-getsafe ]);
+                  getsafe++;
+                  Bottoms.push(CurrentSeason.currentCast[3]);
+                }
+              }
+            }
         }
         else if(CurrentSeason.currentCast.length==6)
         {
@@ -10583,19 +11398,31 @@ function RankQueens(){
         }
         else
         {
-          for(let i = 0; i<getRandomInt(2,4); i++)
+          for(let i = 0; i<getRandomInt(3,4); i++)
           {
             Tops.push(CurrentSeason.currentCast[i]);
           }
 
           for(let i = 0; i<getRandomInt(3,4); i++)
           {
-            Bottoms.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
+              Bottoms.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
+          }
+
+          if(CurrentSeason.immunity == true)
+          {
+            for(let i = 0; i<Bottoms.length; i++)
+            {
+              let getsafe = 1;
+              if(Bottoms[i].immune.indexOf(CurrentSeason.episodes.length)!=-1)
+              {
+                Bottoms.splice(i,1);
+                Bottoms.push(CurrentSeason.currentCast[ (CurrentSeason.currentCast.length-Bottoms.length-1)-getsafe ]);
+                getsafe++;
+              }
+            }
           }
         }
       }
-
-
       for(let i = 0; i<CurrentSeason.currentCast.length; i++)
       {
         if((Tops.indexOf(CurrentSeason.currentCast[i]) == -1 && Bottoms.indexOf(CurrentSeason.currentCast[i]) == -1))
@@ -10612,12 +11439,6 @@ function RankQueens(){
           Critiqued.push(CurrentSeason.currentCast[i]);
         }
       }
-
-      shuffle(SlayedChallenge);
-      shuffle(GreatChallenge);
-      shuffle(GoodChallenge);
-      shuffle(BadChallenge);
-      shuffle(FloppedChallenge);
       break;
 
       case "AS7":
@@ -10639,12 +11460,156 @@ function RankQueens(){
         for (let index = 0; index < CurrentSeason.currentCast.length; index++) {
           Critiqued.push(CurrentSeason.currentCast[index]);
         }
-        shuffle(SlayedChallenge);
-        shuffle(GreatChallenge);
-        shuffle(GoodChallenge);
-        shuffle(BadChallenge);
-        shuffle(FloppedChallenge);
         break;
+
+      case "LSFYL":
+      if(CurrentSeason.currentCast.length>=14)
+      {
+        for(let i = 0; i<getRandomInt(3,5); i++)
+          {
+            Tops.push(CurrentSeason.currentCast[i]);
+          }
+
+          for(let i = 0; i<getRandomInt(3,5); i++)
+          {
+            Bottoms.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
+          }
+
+          if(CurrentSeason.immunity == true)
+          {
+            for(let i = 0; i<Bottoms.length; i++)
+            {
+              let getsafe = 1;
+              if(Bottoms[i].immune.indexOf(CurrentSeason.episodes.length)!=-1)
+              {
+                Bottoms.splice(i,1);
+                Bottoms.push(CurrentSeason.currentCast[ (CurrentSeason.currentCast.length-Bottoms.length-1)-getsafe ]);
+                getsafe++;
+              }
+            }
+          }
+      }
+      else
+      {
+        if(CurrentSeason.currentCast.length==7)
+        {
+            Tops.push(CurrentSeason.currentCast[0]);
+            Tops.push(CurrentSeason.currentCast[1]);
+            Tops.push(CurrentSeason.currentCast[2]);
+
+                Safes.push(CurrentSeason.currentCast[3]);
+                CurrentSeason.currentCast[3].trackrecord.push("SAFE");
+                CurrentSeason.currentCast[3].ppe += 3;
+
+            Bottoms.push(CurrentSeason.currentCast[4]);
+            Bottoms.push(CurrentSeason.currentCast[5]);
+            Bottoms.push(CurrentSeason.currentCast[6]);
+
+            if(CurrentSeason.immunity == true)
+            {
+              for(let i = 0; i<Bottoms.length; i++)
+              {
+                let getsafe = 1;
+                if(Bottoms[i].immune.indexOf(CurrentSeason.episodes.length)!=-1)
+                {
+                  Safes.push(Bottoms[i]);
+                  Bottoms.splice(i,1);
+                  Bottoms.push(CurrentSeason.currentCast[ (CurrentSeason.currentCast.length-Bottoms.length-1)-getsafe ]);
+                  getsafe++;
+                  Bottoms.push(CurrentSeason.currentCast[3]);
+                }
+              }
+            }
+        }
+        else if(CurrentSeason.currentCast.length==6)
+        {
+            Tops.push(CurrentSeason.currentCast[0]);
+            Tops.push(CurrentSeason.currentCast[1]);
+            Tops.push(CurrentSeason.currentCast[2]);
+            Bottoms.push(CurrentSeason.currentCast[3]);
+            Bottoms.push(CurrentSeason.currentCast[4]);
+            Bottoms.push(CurrentSeason.currentCast[5]);
+
+        }
+        else if(CurrentSeason.currentCast.length==5)
+        {
+            Tops.push(CurrentSeason.currentCast[0]);
+            Tops.push(CurrentSeason.currentCast[1]);
+              if(CurrentSeason.currentCast[2].finalscore <= 10)
+              {
+                Tops.push(CurrentSeason.currentCast[2]);
+              }
+              else
+              {
+                Bottoms.push(CurrentSeason.currentCast[2]);
+              }
+            Bottoms.push(CurrentSeason.currentCast[3]);
+            Bottoms.push(CurrentSeason.currentCast[4]);
+        }
+        else if(CurrentSeason.currentCast.length==4)
+        {
+          Tops.push(CurrentSeason.currentCast[0]);
+            if(CurrentSeason.currentCast[1].finalscore <= 10)
+            {
+              Tops.push(CurrentSeason.currentCast[1]);
+            }
+            else
+            {
+              Bottoms.push(CurrentSeason.currentCast[1]);
+            }
+          Bottoms.push(CurrentSeason.currentCast[2]);
+          Bottoms.push(CurrentSeason.currentCast[3]);
+        }
+        else if(CurrentSeason.currentCast.length==3)
+        {
+          Tops.push(CurrentSeason.currentCast[0]);
+          Tops.push(CurrentSeason.currentCast[1]);
+          Tops.push(CurrentSeason.currentCast[2]);
+        }
+        else
+        {
+          for(let i = 0; i<getRandomInt(3,4); i++)
+          {
+            Tops.push(CurrentSeason.currentCast[i]);
+          }
+
+          for(let i = 0; i<getRandomInt(3,4); i++)
+          {
+              Bottoms.push(CurrentSeason.currentCast[CurrentSeason.currentCast.length-1-i]);
+          }
+
+          if(CurrentSeason.immunity == true)
+          {
+            for(let i = 0; i<Bottoms.length; i++)
+            {
+              let getsafe = 1;
+              if(Bottoms[i].immune.indexOf(CurrentSeason.episodes.length)!=-1)
+              {
+                Bottoms.splice(i,1);
+                Bottoms.push(CurrentSeason.currentCast[ (CurrentSeason.currentCast.length-Bottoms.length-1)-getsafe ]);
+                getsafe++;
+              }
+            }
+          }
+        }
+      }
+      for(let i = 0; i<CurrentSeason.currentCast.length; i++)
+      {
+        if((Tops.indexOf(CurrentSeason.currentCast[i]) == -1 && Bottoms.indexOf(CurrentSeason.currentCast[i]) == -1))
+        {
+          if(Safes.indexOf(CurrentSeason.currentCast[i])==-1)
+          {
+            CurrentSeason.currentCast[i].trackrecord.push("SAFE");
+            CurrentSeason.currentCast[i].ppe += 3;
+            Safes.push(CurrentSeason.currentCast[i]);
+          }
+        }
+        else
+        {
+          Critiqued.push(CurrentSeason.currentCast[i]);
+        }
+      }
+      break;
 
     }
 }
@@ -10664,7 +11629,13 @@ function TrackRecords()
   MainScreen.createBR();
   MainScreen.createLine();
   MainScreen.createBR();
-  if(done==false)
+
+  if(CurrentSeason.episodes.length==1 && CurrentSeason.premiereformat!="NORMAL")
+  {
+    MainScreen.createButton("Proceed","CreateEntrances()");
+  }
+
+  else if(done==false)
   {
     MainScreen.createButton("Proceed","ChallengeAnnouncement()");
   }
@@ -10673,13 +11644,10 @@ function TrackRecords()
 }
 
 function convertToImage() {
-  var resultDiv = document.getElementById("result");
-  html2canvas(document.getElementById("TR"), {
-      onrendered: function(canvas) {
-          var img = canvas.toDataURL("image/png");
-          download("Trackrecord", img);
-          }
-  });
+  html2canvas(document.getElementById("TR")).then(function(canvas) {
+      var img = canvas.toDataURL("image/png");
+      download("Trackrecord", img);
+   });
 }
 
 function SRelation()
@@ -10708,13 +11676,10 @@ function SRelation()
 }
 
 function CtI() {
-  var resultDiv = document.getElementById("result");
-  html2canvas(document.getElementById("RE"), {
-      onrendered: function(canvas) {
-          var img = canvas.toDataURL("image/png");
-          download("Relation", img);
-          }
-  });
+  html2canvas(document.getElementById("RE")).then(function(canvas) {
+    var img = canvas.toDataURL("image/png");
+    download("Relations", img);
+ });
 }
 
 function download(filename, image) {
@@ -10730,41 +11695,243 @@ function download(filename, image) {
   document.body.removeChild(element);
 }
 
-function CreateEntrances()
-{
-  let Main = new Screen();
-  Main.clean();
+function ChangeActingValue(){
+  let ac = document.getElementById("acting").value;
+  let ch = document.getElementById("cAting");
+  ch.innerHTML = "Acting Stat<small> (Current : "+ac+" ) </small>";
+}
 
-  if(entrancepos < CurrentSeason.fullCast.length)
-  {
-    if(Steps == 0)
-    {
-      Main.createImage("Images/Queens/Hidden.webp");
-      Main.createText(GetEntrance(CurrentSeason.fullCast[entrancepos]),'Bold');
-      Main.createText('Entering the work-room : It is ...','Bold');
-      Steps++;
-    }
-    else
-    {
-      Main.createImage(CurrentSeason.fullCast[entrancepos].image);
-      Main.createText('Entering the work-room : It is '+CurrentSeason.fullCast[entrancepos].GetName()+' !','Bold');
-      Steps = 0;
-      entrancepos++;
-    }
-  }
+function ChangeImprovValue(){
+  let ac = document.getElementById("improv").value;
+  let ch = document.getElementById("cImprov");
+  ch.innerHTML = "Improv Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeComedyValue(){
+  let ac = document.getElementById("comedy").value;
+  let ch = document.getElementById("cComedy");
+  ch.innerHTML = "Comedy Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeDanceValue(){
+  let ac = document.getElementById("dance").value;
+  let ch = document.getElementById("cDance");
+  ch.innerHTML = "Dance Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeDesignValue(){
+  let ac = document.getElementById("design").value;
+  let ch = document.getElementById("cDesign");
+  ch.innerHTML = "Design Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeRunwayValue(){
+  let ac = document.getElementById("runway").value;
+  let ch = document.getElementById("cRunway");
+  ch.innerHTML = "Runway Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeLipsyncValue(){
+  let ac = document.getElementById("lipsync").value;
+  let ch = document.getElementById("cLipsync");
+  ch.innerHTML = "Lipsync Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeBrandingValue(){
+  let ac = document.getElementById("branding").value;
+  let ch = document.getElementById("cBranding");
+  ch.innerHTML = "Branding Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeCharismaValue(){
+  let ac = document.getElementById("charisma").value;
+  let ch = document.getElementById("cCharisma");
+  ch.innerHTML = "Charisma Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeKindnessValue(){
+  let ac = document.getElementById("kindness").value;
+  let ch = document.getElementById("cKindness");
+  ch.innerHTML = "Kindness Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function ChangeShadynessValue(){
+  let ac = document.getElementById("shadyness").value;
+  let ch = document.getElementById("cShadyness");
+  ch.innerHTML = "Shadyness Stat<small> (Current : "+ac+" ) </small>";
+}
+
+function RandomizeStats(){
+  let acting = document.getElementById("acting");
+  let improv = document.getElementById("improv");
+  let comedy = document.getElementById("comedy");
+  let dance = document.getElementById("dance");
+  let design = document.getElementById("design");
+
+  let runway = document.getElementById("runway");
+  let lipsync = document.getElementById("lipsync");
+  let branding = document.getElementById("branding");
+  let charisma = document.getElementById("charisma");
+  let kindness = document.getElementById("kindness");
+  let shadyness = document.getElementById("shadyness");
 
   
 
-  if(entrancepos == CurrentSeason.fullCast.length)
+  acting.value = getRandomInt(1,15);
+  improv.value = getRandomInt(1,15);
+  comedy.value = getRandomInt(1,15);
+  dance.value = getRandomInt(1,15);
+  design.value = getRandomInt(1,15);
+  runway.value = getRandomInt(1,15);
+  lipsync.value = getRandomInt(1,15);
+  branding.value = getRandomInt(1,15);
+  charisma.value = getRandomInt(1,15);
+  kindness.value = getRandomInt(0,5);
+  shadyness.value = getRandomInt(0,5);
+
+  ChangeActingValue();
+  ChangeImprovValue();
+  ChangeComedyValue();
+  ChangeDanceValue();
+  ChangeDesignValue();
+
+  ChangeRunwayValue();
+  ChangeLipsyncValue();
+  ChangeBrandingValue();
+  ChangeCharismaValue();
+  ChangeKindnessValue();
+  ChangeShadynessValue();
+}
+
+
+function CreateEntrances()
+{
+  if(CurrentSeason.episodes.length==0)
   {
-    Main.createButton("Proceed","GetPromoTable()");
+    let twists = [];
+    let getcheckimmu = document.getElementById("immu");
+
+    if(getcheckimmu != undefined && getcheckimmu.checked == true)
+    {
+      twists.push("Immunities");
+    }
+      
+
+    CurrentSeason.checkTwists(twists);
+
+    let Main = new Screen();
+    Main.clean();
+    
+    if(CurrentSeason.premiereformat!="NORMAL" && groupmaking == false)
+    {
+
+        for (let index = 0; index < CurrentSeason.fullCast.length; index++) {
+          if(index%2 == 0)
+          {
+            CurrentSeason.fullCast[index].premieregroup = 0;
+            firstprem.push(CurrentSeason.fullCast[index]);
+          }
+          else
+          {
+            CurrentSeason.fullCast[index].premieregroup = 1;
+            secondprem.push(CurrentSeason.fullCast[index]);
+          }
+        }
+        groupmaking = true;
+    }
+
+      if(CurrentSeason.premiereformat!="NORMAL")
+      {
+        if(entrancepos < firstprem.length)
+        {
+          if(Steps == 0)
+          {
+            Main.createImage("Images/Queens/Hidden.webp");
+            Main.createText(GetEntrance(firstprem[entrancepos]),'Bold');
+            Main.createText('Entering the work-room : It is ...','Bold');
+            Steps++;
+          }
+          else
+          {
+            Main.createImage(firstprem[entrancepos].image);
+            Main.createText('Entering the work-room : It is '+firstprem[entrancepos].GetName()+' !','Bold');
+            Steps = 0;
+            entrancepos++;
+          }
+        }
+      }
+      else
+      {
+        if(entrancepos < CurrentSeason.fullCast.length)
+        {
+          if(Steps == 0)
+          {
+            Main.createImage("Images/Queens/Hidden.webp");
+            Main.createText(GetEntrance(CurrentSeason.fullCast[entrancepos]),'Bold');
+            Main.createText('Entering the work-room : It is ...','Bold');
+            Steps++;
+          }
+          else
+          {
+            Main.createImage(CurrentSeason.fullCast[entrancepos].image);
+            Main.createText('Entering the work-room : It is '+CurrentSeason.fullCast[entrancepos].GetName()+' !','Bold');
+            Steps = 0;
+            entrancepos++;
+          }
+        }
+    }
+
+    
+
+    if(entrancepos == CurrentSeason.fullCast.length || (CurrentSeason.premiereformat!="NORMAL" && (entrancepos==firstprem.length || entrancepos==secondprem.length)))
+    {
+      Main.createButton("Proceed","GetPromoTable()");
+      groupmaking = false;
+    }
+    else
+    {
+      Main.createButton("Proceed","CreateEntrances()");
+      
+    }
+
+    Main.createButton("Skip","GetPromoTable()");
   }
   else
   {
-    Main.createButton("Proceed","CreateEntrances()");
-  }
+    let Main = new Screen();
+    Main.clean();
+    if(entrancepos < secondprem.length)
+    shouldactivateepisode = true;
+        {
+          if(Steps == 0)
+          {
+            Main.createImage("Images/Queens/Hidden.webp");
+            Main.createText(GetEntrance(secondprem[entrancepos]),'Bold');
+            Main.createText('Entering the work-room : It is ...','Bold');
+            Steps++;
+          }
+          else
+          {
+            Main.createImage(secondprem[entrancepos].image);
+            Main.createText('Entering the work-room : It is '+secondprem[entrancepos].GetName()+' !','Bold');
+            Steps = 0;
+            entrancepos++;
+          }
+        }
+    if(entrancepos==secondprem.length)
+    {
+      
+      Main.createButton("Proceed","GetPromoTable()");
 
-  Main.createButton("Skip","GetPromoTable()");
+    }
+    else
+    {
+      Main.createButton("Proceed","CreateEntrances()");
+      
+    }
+
+    Main.createButton("Skip","GetPromoTable()");
+  }
 }
 
 function LoadPhoto()
@@ -10873,6 +12040,8 @@ function LoadCasts(cc = true)
 }
 function CreateSeason(Name, Cast, Host, Finale, LC, LS, Premiere, Country)
 {
+  let foot = document.getElementById("footer");
+  foot.innerHTML = '<div style="background-color: white; text-align: center; vertical-align: baseline; padding: 10px;"><a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png"/></a></div>';
   CurrentSeason = new Season(Name, Cast, Host, Finale, LC, LS, Premiere, Country);
   let screen = new Screen();
   screen.createBigText("Drag Up My Season!");
@@ -10887,7 +12056,7 @@ function CheckAS7(){
   let select = document.getElementById("lipsync").value;
   if(select=="AS7")
   {
-    window.alert("Choosing this format will ignore theses others choices : Premiere Format, Finale Format & Last Challenge")
+    window.alert("Choosing this format will ignore theses others choices : Premiere Format, Finale Format & Last Challenge");
   }
 }
 
@@ -10987,12 +12156,17 @@ function LaunchCustomCast(){
   {
     isgood = false;
   }
-  
-  CurrentSeason = new Season(Name, CustomCast, host, Finale, LC, LS, Premiere, Country);
 
   if(isgood==true)
   {
-    CreateEntrances();
+    CurrentSeason = new Season(Name, CustomCast, host, Finale, LC, LS, Premiere, Country);
+    let screen = new Screen();
+    screen.createBigText("Drag Up My Season!");
+    screen.clean();
+    screen.CreateOptions();
+    screen.createBR();
+    screen.createBR();
+    screen.createButton("Begin the simulation","CreateEntrances()");
   }
   else
   {
@@ -11204,396 +12378,479 @@ function GetRandowRunway() {
     return(ret);
   }
 
+  let songsus = [
+    '"Supermodel" by RuPaul',
+    '"We Break The Dawn" by Michelle Williams',
+    '"Would I Lie to You?" by Eurythmics',
+    '"Stronger" by Britney Spears',
+    '"Shackles (Praise You)" by Mary Mary',
+    '"Cover Girl (Put The Bass In Your Walk)" by RuPaul',
+    '"My Lovin\' (You\'re Never Gonna Get It)" by En Vogue',
+    '"I Hear You Knocking" by Wynonna Judd',
+    '"Two of Hearts" by Stacey Q',
+    '"Carry On" by Martha Wash',
+    '"Black Velvet" by Alannah Myles',
+    '"He\'s the Greatest Dancer" by Sister Sledge',
+    '"Shake Your Love" by Debbie Gibson',
+    '"Something He Can Feel" by Aretha Franklin',
+    '"Jealous of My Boogie" by RuPaul',
+    '"The Right Stuff" by Vanessa Williams',
+    '"Bad Romance" by Lady Gaga',
+    '"Don\'t Leave Me This Way" by Thelma Houston',
+    '"Meeting in the Ladies Room" by Klymaxx',
+    '"Lookin For A New Love" by Jody Watley',
+    '"Knock On Wood" by Amii Stewart',
+    '"MacArthur Park" by Donna Summer',
+    '"Hey Mickey (Spanish Version)" by Toni Basil',
+    '"Believe" By Cher',
+    '"Even Angels" by Fantasia',
+    '"Straight Up" by Paula Abdul',
+    '"I Think About You" by Patti LaBelle',
+    '"Champion" by RuPaul',
+    '"Toxic" by Britney Spears',
+    '"Bad Girls" by Donna Summer',
+    '"This Will Be (An Everlasting Love)" by Natalie Cole',
+    '"Trouble" by Pink',
+    '"Vogue" by Madonna',
+    '"Born This Way" by Lady Gaga',
+    '"Mi Vida Loca" by Pam Tillis',
+    '"It\'s Raining Men (The Sequel)" by Martha Wash and RuPaul',
+    '"I\'ve Got To Use My Imagination" by Gladys Knight',
+    '"(You Make Me Feel Like) A Natural Woman" by Aretha Franklin',
+    '"No One Else On Earth" by Wynonna Judd',
+    '"Glamazon" by RuPaul',
+    '"Party in the U.S.A" by Miley Cyrus',
+    '"Only Girl (In The World)" by Rihanna',
+    '"Oops!...I Did It Again" by Britney Spears',
+    '"Take Me Home" by Cher',
+    '"I\'m So Excited" by The Pointer Sisters',
+    '"Whip My Hair" by Willow Smith',
+    '"Ain\'t Nothin\' Going on but the Rent" by Gwen Guthrie',
+    '"Cold Hearted" by Paula Abdul',
+    '"(It Takes) Two To Make It Right" by Seduction',
+    '"Malambo No. 1" by Yma Sumac',
+    '"The Beginning" by RuPaul',
+    '"Express Yourself" by Madonna',
+    '"Turn The Beat Around" by Vicky Sue Robinson',
+    '"Shake it Up" by Selena Gomez',
+    '"I\'m Every Woman" by Chaka Khan',
+    '"Head to Toe" by Lisa Lisa & Cult Jam',
+    '"Whatta Man" by Salt-n-Pepa feat. En Vogue',
+    '"Point of No Return" by Exposé',
+    '"Stupid Girls" by P!nk',
+    '"Vibeology" by Paula Abdul',
+    '"Think" by Aretha Franklin',
+    '"Stronger (What Doesn\'t Kill You)" by Kelly Clarkson',
+    '"Sissy That Walk" by RuPaul',
+    '"Geronimo" by RuPaul feat. Lucian Piane',
+    '"Twist of Fate" by Olivia Newton-John',
+    '"I Was Gonna Cancel" by Kylie Minogue',
+    '"Dreaming" by Blondie',
+    '"Lovergirl" by Teena Marie',
+    '"Break Free" by Ariana Grande',
+    '"No More Lies" by Michel\'le',
+    '"I Think We\'re Alone Now" By Tiffany',
+    '"Really Don\'t Care" by Demi Lovato feat. Cher Lloyd',
+    '"Show Me Love" by Robin S.',
+    '"Roar" by Katy Perry',
+    '"Born Naked" by RuPaul feat. Clairy Brown',
+    '"Applause" by Lady Gaga',
+    '"I Will Survive" by Gloria Gaynor',
+    '"Mesmerized" by Faith Evans',
+    '"Call Me" by Blondie',
+    '"Causing A Commotion" by Madonna',
+    '"I Love It" by Icona Pop',
+    '"And I Am Telling You I\'m Not Going" by Jennifer Holliday',
+    '"You Make Me Feel (Mighty Real)" by Sylvester',
+    '"The Realness" by RuPaul',
+    '"Love Shack" by The B-52\'s',
+    '"Holding Out For A Hero" by Bonnie Tyler',
+    '"I Wanna Go" by Britney Spears',
+    '"Woman Up" by Meghan Trainor',
+    '"Music" by Madonna',
+    '"Finally" by Cece Peniston',
+    '"Baby I\'m Burnin\'" by Dolly Parton',
+    '"Greedy" by Ariana Grande',
+    '"Macho Man" by The Village People',
+    '"U Wear It Well" by RuPaul',
+    '"Stronger" by Britney Spears',
+    '"So Emotional" by Whitney Houston',
+    '"It\'s Not Right but It\'s Okay (Thunderpuss Mix)" by Whitney Houston',
+    '"Ain\'t No Other Man" by Christina Aguilera',
+    '"Best Of My Love" by The Emotions',
+    '"Celebrity Skin" by Hole',
+    '"Pound The Alarm" by Nicki Minaj',
+    '"Man! I Feel Like A Woman" by Shania Twain',
+    '"Cut To The Feeling" by Carly Rae Jepsen',
+    '"I\'m Coming Out" by Diana Ross',
+    '"Groove Is In The Heart" by Deee-Lite',
+    '"New Attitude" by Patti LaBelle',
+    '"Good As Hell" by Lizzo',
+    '"Nasty Girl" by Vanity 6',
+    '"Call Me Mother" by RuPaul',
+    '"Nasty" by Janet Jackson',
+    '"If" by Janet Jackson', 
+    '"Bang Bang" by Jessie J, Ariana Grande and Nicki Minaj',
+    '"Best of Both Worlds" by Miley Cyrus',
+    '"Work Bitch" by Britney Spears',
+    '"Waiting For Tonight (Hex Hector Remix)" by Jennifer Lopez',
+    '"Living in America" by James Brown',
+    '"I\'m Your Baby Tonight" by Whitney Houston',
+    '"Last Dance" by Donna Summer',
+    '"Strut" by Sheena Easton',
+    '"Sorry Not Sorry" by Demi Lovato',
+    '"Hood Boy" by Fantasia',
+    '"No More Drama" by Mary J. Blige',
+    '"No Scrubs" by TLC',
+    '"Pride: A Deeper Love" by Aretha Franklin',
+    '"Bootylicious" by Destiny\'s Child',
+    '"SOS" by Rihanna',
+    '"The Edge of Glory" by Lady Gaga',
+    '"Starships" by Nicki Minaj',
+    '"Call Your Girlfriend" by Robyn',
+    '"Problem" by Ariana Grande feat. Iggy Azalea',
+    '"S&M" by Rihanna',
+    '"Heart to Break" by Kim Petras',
+    '"Let It Go" by Caissie Levy',
+    '"Burning Up" by Madonna',
+    '"This Is My Night" by Chaka Khan',
+    '"Firework" by Katy Perry',
+    '"Kill The Lights" by Alex Newell',
+    '"1999" by Prince',
+    '"On The Floor" by Jennifer Lopez feat. Pitbull',
+    '"Bring Back My Girls" by RuPaul',
+    '"I\'m Like a Bird" by Nelly Furtado',
+    '"Take On Me" by a-ha',
+    '"Get Up" by Ciara',
+    '"Survivor" by Destiny\'s Child',
+    '"Call Me Maybe" by Carly Rae Jepsen',
+    '"When I Grow Up" by The Pussycat Dolls',
+    '"The Pleasure Principle" by Janet Jackson',
+    '"Rumors" by Lindsay Lohan',
+    '"Ex\'s & Oh\'s" by Elle King',
+    '"Lady Marmalade" by Christina Aguilera, Lil\' Kim, Mýa & Pink',
+    '"Break My Heart" by Dua Lipa',
+    '"If U Seek Amy" by Britney Spears',
+    '"100% Pure Love" by Crystal Waters',
+    '"Fancy" by Iggy Azalea feat. Charli XCX',
+    '"Hit \'Em Up Style (Oops!)" by Blu Cantrell',
+    '"Whole Lotta Woman" by Kelly Clarkson',
+    '"BO$$" by Fifth Harmony',
+    '"Fascinated" by Company B',
+    '"My Humps" by Black Eyed Peas',
+    '"No Tears Left To Cry" by Ariana Grande',
+    '"Strong Enough" by Cher',
+    '"Be My Lover" by La Bouche',
+    '"I Learned from the Best (HQ2 Radio Mix)" by Whitney Houston',
+    '"Gimme More" by Britney Spears',
+    '"Till the World Ends" by Britney Spears',
+    '"One Way or Another" by Blondie',
+    '"Water Me" by Lizzo',
+    '"Fallin\'" by Alicia Keys',
+    '"I Love It" by Kylie Minogue',
+    '"Play" by Jennifer Lopez',
+    '"My Head & My Heart" by Ava Max',
+    '"Suga Mama" by Beyoncé',
+    '"Un-Break My Heart (Hex Hector Remix)" by Toni Braxton',
+    '"Something\'s Got A Hold On Me" by Etta James',
+    '"Heartbreak Hotel (Hex Hector Remix)" by Whitney Houston',
+    '"good 4 u" by Olivia Rodrigo',
+    '"Telephone" by Lady Gaga ft. Beyoncé',
+    '"Respect" by Aretha Franklin',
+    '"Never Too Much" by Luther Vandross',
+    '"Radio" by Beyoncé',
+    '"Don\'t Let Go (Love)" by En Vogue',
+    '"Love Don\'t Cost a Thing" by Jennifer Lopez',
+    '"Swept Away" by Diana Ross',
+    '"Gimme! Gimme! Gimme! (A Man After Midnight)" by Cher',
+    '"Opposites Attract" by Paula Abdul',
+    '"There\'s No Business Like Show Business" by Ethel Merman',
+    '"Don\'t Cha" by The Pussycat Dolls',
+    '"Dancing On My Own" by Robyn',
+    '"Shake It Off" by Taylor Swift',
+    '"Le Freak (Freak Out)" by Chic',
+    '"Tell It To My Heart" by Taylor Dayne',
+    '"Got To Be Real" by Cheryl Lynn',
+    '"Shut Up & Drive" by Rihanna',
+    '"Cherry Bomb" by Joan Jett and the Blackhearts',
+    '"Step It Up" by RuPaul feat. Dave Audé',
+    '"If I Were Your Woman" by Gladys Knight & The Pips',
+    '"Anaconda" by Nicki Minaj',
+    '"Jump (For My Love)" by The Pointer Sisters',
+    '"Green Light" by Lorde',
+    '"I Kissed a Girl" by Katy Perry',
+    '"The Boss" by Diana Ross',
+    '"Nobody\'s Supposed to be Here (Hex Hector Dance Mix)" by Deborah Cox',
+    '"Freaky Money" by RuPaul feat. Big Freedia',
+    '"Wrecking Ball" by Miley Cyrus',
+    '"Emotions" by Mariah Carey',
+    '"Into You" by Ariana Grande',
+    '"How Will I Know" by Whitney Houston',
+    '"The B!tch is Back" by Tina Turner',
+    '"Jump To It" by Aretha Franklin',
+    '"You Spin Me Round (Like a Record)" by Dead or Alive',
+    '"Come Rain or Come Shine" by Judy Garland',
+    '"When I Think of You" by Janet Jackson',
+    '"Peanut Butter" by RuPaul feat. Big Freedia',
+    '"Kitty Girl" by RuPaul',
+    '"Adrenaline" by RuPaul',
+    '"Sissy That Walk"by RuPaul',
+    '"Fighter" by Christina Aguilera',
+    '"Livin\' La Vida Loca" by Ricky Martin',
+    '"Neutron Dance" by The Pointer Sisters',
+    '"Juice" by Lizzo',
+    '"Where Have You Been" by Rihanna',
+    '"Open Your Heart" by Madonna',
+    '"One Last Time" by Ariana Grande',
+    '"Fancy" by Reba McEntire',
+    '"Make Me Feel" by Janelle Monáe',
+    '"Uptown Funk" by Mark Ronson feat. Bruno Mars',
+    '"Miss You Much" by Janet Jackson',
+    '"Physical" by Dua Lipa',
+    '"Womanizer" by Britney Spears',
+    '"Phone" by Lizzo',
+    '"Dirrty" by Christina Aguilera',
+    '"Dance Again" by Jennifer Lopez feat. Pitbull',
+    '"Sugar Walls" by Sheena Easton',
+    '"Boom Clap" by Charli XCX',
+    '"Good Golly Miss Molly" by Little Richard',
+    '"Free Your Mind" by En Vogue',
+    '"Girls Just Wanna Have Fun" by Cyndi Lauper',
+    '"Song for the Lonely" by Cher',
+    '"Barbie Girl" by Aqua',
+    '"Heartbreaker" by Pat Benatar',
+    '"Focus" by Ariana Grande',
+    '"Since U Been Gone" by Kelly Clarkson',
+    '"Stupid Love" by Lady Gaga',
+    '"Old MacDonald" by Ella Fitzgerald',
+    '"Rumor Has It" by Adele',
+    '"Greenlight" by Beyoncé'
+  ];
+
+  let songsuk = [
+    '"New Rules" by Dua Lipa',
+    '"Venus" by Bananarama',
+    '"Would I Lie To You?" by Eurythmics',
+    '"Spice Up Your Life" by Spice Girls',
+    '"Power" by Little Mix',
+    '"Call My Name (Wideboys Remix)" by Cheryl Cole',
+    '"Tears Dry On Their Own" by Amy Winehouse',
+    '"I\'m Your Man" by Wham!',
+    '"Relax" by Frankie Goes to Hollywood',
+    '"Memory" by Elaine Paige',
+    '"Don\'t Start Now" by Dua Lipa',
+    '"You Keep Me Hangin\' On" by Kim Wilde',
+    '"Don\'t Leave Me This Way" by The Communards',
+    '"Touch Me" by Cathy Dennis',
+    '"Don\'t Be So Hard On Yourself" by Jess Glynne',
+    '"You Don\'t Have To Say You Love Me" by Dusty Springfield',
+    '"Last Thing On My Mind" by Steps',
+    '"I\'m Still Standing" by Elton John',
+    '"Total Eclipse of the Heart" by Bonnie Tyler',
+    '"Something New" by Girls Aloud',
+    '"Sweet Melody" by Little Mix',
+    '"Moving On Up" by M People',
+    '"I\'ve Got The Music In Me" by The Kiki Dee Band',
+    '"Who Do You Think You Are" by Spice Girls',
+    '"Big Spender" by Shirley Bassey',
+    '"Shout" by Lulu',
+    '"Scandalous" by Mis-Teeq',
+    '"Hallucinate" by Dua Lipa',
+    '"You Don\'t Own Me" by Dusty Springfield',
+    '"Say You\'ll Be There" by Spice Girls',
+    '"Supermodel (El Lay Toya Jam)" by RuPaul',
+    '"We Like To Party! (The Vengabus)" by Vengaboys',
+    '"Let It Go" by Alexandra Burke',
+    '"Toy" by Netta',
+    '"Domino" by Jessie J',
+    '"The Reflex" by Duran Duran',
+    '"Supernova" by Kylie Minogue'
+  ];
+
+  let songscan = [
+    '"I Really Like You" by Carly Rae Jepsen',
+    '"If You Could Read My Mind" by Ultra Naté, Amber, and Jocelyn Enriquez',
+    '"Absolutely Not (Chanel Club Mix)" by Deborah Cox',
+    '"Girlfriend" by Avril Lavigne',
+    '"I Drove All Night" by Céline Dion',
+    '"Scars To Your Beautiful" by Alessia Cara',
+    '"Hello" by Allie X',
+    '"You Oughta Know" by Alanis Morissette',
+    '"Closer" by Tegan and Sara',
+    '"You\'re A Superstar" by Love Inc.',
+    '"Maneater" by Nelly Furtado',
+    '"Stupid Shit" by Girlicious',
+    '"Ghost" by Fefe Dobson',
+    '"Happiness" by Alexis Jordan',
+    '"I Love Myself Today" by Bif Naked',
+    '"Heaven" by DJ Sammy',
+    '"Get Down" by B4-4',
+    '"Everbody Say Love" by Mitsou',
+    '"Main Event" by RuPaul',
+    '"Born Naked" by RuPaul',
+    '"Call Me Mother" by RuPaul',
+    '"It\'s All Coming Back to Me Now" by Celine Dion'
+  ];
+
+  let songses = [
+    '"Sobreviviré" by Mónica Naranjo',
+    '"Veneno pa\' tu piel" by La Veneno',
+    '"Mocatriz" by Ojete Calor',
+    '"Pussy" by Bad Gyal',
+    '"Espectacular" by Fangoria',
+    '"Aute Cuture" by Rosalía',
+    '"Cuando tú vas" by Chenoa',
+    '"La gata bajo la lluvia" by Rocío Dúrcal',
+    '"Todos Me Miran" by Gloria Trevi',
+    '"Yo quiero bailar" by Sonia & Selena',
+    '"Un año de amor" by Luz Casal',
+    '"Baloncesto" by La Prohibida',
+    '"Arrasando" by Thalía',
+    '"Se nos rompió el amor" by Rocío Jurado',
+    '"Rhythm Is Gonna Get You" by Gloria Estefan',
+    '"Dance A Little Bit Closer" by Charo',
+    '"Libertad" by Christian Chàvez',
+    '"Timida" by Pabllo Vittar & Thalía',
+    '"Loca" by Shakira',
+    '"Envolver" by Anitta',
+    '"SAOKO" by Rosalía',
+    '"El Chico Del Apartamento 512" by Selena',
+    '"Bidi Bidi Bom Bom" by Selena',
+    '"Can\'t Remember To Forget You" by Shakira (ft Shakira)'
+  ];
+
+  let songsit = [
+    '""Occhi di gatto" by Cristina D\'Avena',
+    '"Comprami" by Viola Valentino',
+    '"Fiesta (Spanish Version)" by Raffaella Carrà',
+    '"Champion" by RuPaul',
+    '"Kobra" by Donatella Rettore',
+    '"Cicale" by Heather Parisi',
+    '"Non sono una signora" by Loredana Bertè',
+    '"Credo" by Giorgia',
+    '"Come Neve" by Giorgia and Marco Mengoni',
+    '"Guerriero" by Marco Mengoni',
+    '"Cosa ti aspetti da me" by Loredana Berté',
+    '"Tanti Auguri (com\'è bello far l\'amore...)" By Raffaella Carrà',
+    '"Tuca Tuca" by Raffaellà Carrà',
+    '"Freed From Desire" by Gala',
+    '"All\'arrembaggio" by Cristina D\'Avena',
+    '"Doraemon" by Cristna D\'Avena',
+    '"Paloma" by Anitta and Fred De Palma',
+    '"Fatti Bella Per Te" by Paola Turci',
+    '"I Am What I Am" by Emma Muscat',
+    '"I wanna be your slave" by Maneskin',
+    '"Pistolero" by Elettra Lamborghini',
+    '"Roma Bangkok" by Baby K and Giusy Ferreri',
+    '"Non Ti Scordar mai di" me by Giusi Ferreri'
+  ];
+
+  let songth = [
+    '"Born This Way" by Lady Gaga',
+    '"I Don\'t Want Love Yet" by Marsha Vadhanapanich',
+    '"O.K. Yes" by Katreeya English',
+    '"Dhoom Dhoom" by Tata Young',
+    '"Toxic" by Brintey Spears',
+    '"Last Song" by Suda Chuenban',
+    '"Crazy In Love" by Beyoncé',
+    '"Born Naked" by RuPaul',
+    '"I Will Survive Mor Lam" by Saisunee Sukkrit',
+    '"I Want Her to Exchange Her Phone Number" by Yinglee SriJumpol',
+    '"A Letter From A Wife" by Mani Maniwan',
+    '"Suprit Suddet" by Mai Charoenpura',
+    '"It Hurt\'s A Little... A Little" by Rhatha Phongam',
+    '"Eat Kiss Jib" by Pornchita na Songkhla',
+    '"Lady Marmalade" by Christina Aguilera, Lil\' Kim, Mýa and Pink',
+    '"Dancer" by Sukanya Nakpradit',
+    '"This Is Me" by Keala Settle',
+    '"Last Dance" by Selena'
+  ];
+
+  let songdu = [
+    '"Tragedy" by Bee Gees',
+    '"I\'m That Bitch" by RuPaul',
+    '"Shake Your Groove Thing" by Peaches & Herb',
+    '"I Begin To Wonder" by Dannii Minogue',
+    '"Absolutely Everybody" by Vanessa Amorosi',
+    '"Better The Devil You Know" by Kylie Minogue',
+    '"Untouched" by The Veronicas',
+    '"Physical" by Olivia Newton-John',
+  ];
+
+  let songho = [
+    '"Express Yourself" by Madonna',
+    '"Roar" by Katy Perry',
+    '"Why Tell Me Why" by Anita Meyer',
+    '"I Wanna Dance With Somebody" by Whitney Houston',
+    '"Girl" by Anouk',
+    '"9 To 5" by Dolly Parton',
+    '"Stronger (What Doesn\'t Kill You)" by Kelly Clarkson',
+    '"Born This Way" by Lady Gaga',
+    '"Physical" by Dua Lipa',
+    '"Don\'t Leave Me This Way" by Thelma Houston',
+    '"It\'s All Coming Back to Me Now" by Celine Dion',
+    '"Free Your Mind" by En Vogue',
+    '"Call Me Mother" by RuPaul',
+    '"Lekker met de Meiden" by Merol',
+    '"Don\'t Stop Me Now" by Queen',
+    '"This Is My Life" by Shirley Bassey'
+  ];
+
+
+  let songfr = [
+    '"Le sens de la vie" by TAL',
+    '"Femme est la nuit" by Dalida ',
+    '"Mourir sur scène" by Dalida',
+    '"Euphories" by Video Club',
+    '"Partenaire Particulier" by Partenaire Particulier',
+    '"Le Passé" by TAL',
+    '"Amour Censure" by Hoshi',
+    '"Aurélie" by Colonel Reyel',
+    '"Tiago" by Kendji Girac',
+    '"Mafiosa" by Lartiste (ft. Caroliina)',
+    '"Pookie" by Aya Nakamura',
+    '"Salope" by Therapie TAXI',
+    '"Candide Crush" by Therapie TAXI',
+    '"À l\'international" by TAL',
+    '"Dernière Danse" by Indila',
+    '"Et même après je t\'aimerai" by Hoshi',
+    '"Je Suis Malade" by Lara Fabian',
+    '"Je T\'aime" by Lara Fabian'
+  ];
+
 function GetSong(){
   switch(CurrentSeason.country)
   {
     case "US":
-      let songsus = [
-        '"Supermodel" by RuPaul',
-        '"We Break The Dawn" by Michelle Williams',
-        '"Would I Lie to You?" by Eurythmics',
-        '"Stronger" by Britney Spears',
-        '"Shackles (Praise You)" by Mary Mary',
-        '"Cover Girl (Put The Bass In Your Walk)" by RuPaul',
-        '"My Lovin\' (You\'re Never Gonna Get It)" by En Vogue',
-        '"I Hear You Knocking" by Wynonna Judd',
-        '"Two of Hearts" by Stacey Q',
-        '"Carry On" by Martha Wash',
-        '"Black Velvet" by Alannah Myles',
-        '"He\'s the Greatest Dancer" by Sister Sledge',
-        '"Shake Your Love" by Debbie Gibson',
-        '"Something He Can Feel" by Aretha Franklin',
-        '"Jealous of My Boogie" by RuPaul',
-        '"The Right Stuff" by Vanessa Williams',
-        '"Bad Romance" by Lady Gaga',
-        '"Don\'t Leave Me This Way" by Thelma Houston',
-        '"Meeting in the Ladies Room" by Klymaxx',
-        '"Lookin For A New Love" by Jody Watley',
-        '"Knock On Wood" by Amii Stewart',
-        '"MacArthur Park" by Donna Summer',
-        '"Hey Mickey (Spanish Version)" by Toni Basil',
-        '"Believe" By Cher',
-        '"Even Angels" by Fantasia',
-        '"Straight Up" by Paula Abdul',
-        '"I Think About You" by Patti LaBelle',
-        '"Champion" by RuPaul',
-        '"Toxic" by Britney Spears',
-        '"Bad Girls" by Donna Summer',
-        '"This Will Be (An Everlasting Love)" by Natalie Cole',
-        '"Trouble" by Pink',
-        '"Vogue" by Madonna',
-        '"Born This Way" by Lady Gaga',
-        '"Mi Vida Loca" by Pam Tillis',
-        '"It\'s Raining Men (The Sequel)" by Martha Wash and RuPaul',
-        '"I\'ve Got To Use My Imagination" by Gladys Knight',
-        '"(You Make Me Feel Like) A Natural Woman" by Aretha Franklin',
-        '"No One Else On Earth" by Wynonna Judd',
-        '"Glamazon" by RuPaul',
-        '"Party in the U.S.A" by Miley Cyrus',
-        '"Only Girl (In The World)" by Rihanna',
-        '"Oops!...I Did It Again" by Britney Spears',
-        '"Take Me Home" by Cher',
-        '"I\'m So Excited" by The Pointer Sisters',
-        '"Whip My Hair" by Willow Smith',
-        '"Ain\'t Nothin\' Going on but the Rent" by Gwen Guthrie',
-        '"Cold Hearted" by Paula Abdul',
-        '"(It Takes) Two To Make It Right" by Seduction',
-        '"Malambo No. 1" by Yma Sumac',
-        '"The Beginning" by RuPaul',
-        '"Express Yourself" by Madonna',
-        '"Turn The Beat Around" by Vicky Sue Robinson',
-        '"Shake it Up" by Selena Gomez',
-        '"I\'m Every Woman" by Chaka Khan',
-        '"Head to Toe" by Lisa Lisa & Cult Jam',
-        '"Whatta Man" by Salt-n-Pepa feat. En Vogue',
-        '"Point of No Return" by Exposé',
-        '"Stupid Girls" by P!nk',
-        '"Vibeology" by Paula Abdul',
-        '"Think" by Aretha Franklin',
-        '"Stronger (What Doesn\'t Kill You)" by Kelly Clarkson',
-        '"Sissy That Walk" by RuPaul',
-        '"Geronimo" by RuPaul feat. Lucian Piane',
-        '"Twist of Fate" by Olivia Newton-John',
-        '"I Was Gonna Cancel" by Kylie Minogue',
-        '"Dreaming" by Blondie',
-        '"Lovergirl" by Teena Marie',
-        '"Break Free" by Ariana Grande',
-        '"No More Lies" by Michel\'le',
-        '"I Think We\'re Alone Now" By Tiffany',
-        '"Really Don\'t Care" by Demi Lovato feat. Cher Lloyd',
-        '"Show Me Love" by Robin S.',
-        '"Roar" by Katy Perry',
-        '"Born Naked" by RuPaul feat. Clairy Brown',
-        '"Applause" by Lady Gaga',
-        '"I Will Survive" by Gloria Gaynor',
-        '"Mesmerized" by Faith Evans',
-        '"Call Me" by Blondie',
-        '"Causing A Commotion" by Madonna',
-        '"I Love It" by Icona Pop',
-        '"And I Am Telling You I\'m Not Going" by Jennifer Holliday',
-        '"You Make Me Feel (Mighty Real)" by Sylvester',
-        '"The Realness" by RuPaul',
-        '"Love Shack" by The B-52\'s',
-        '"Holding Out For A Hero" by Bonnie Tyler',
-        '"I Wanna Go" by Britney Spears',
-        '"Woman Up" by Meghan Trainor',
-        '"Music" by Madonna',
-        '"Finally" by Cece Peniston',
-        '"Baby I\'m Burnin\'" by Dolly Parton',
-        '"Greedy" by Ariana Grande',
-        '"Macho Man" by The Village People',
-        '"U Wear It Well" by RuPaul',
-        '"Stronger" by Britney Spears',
-        '"So Emotional" by Whitney Houston',
-        '"It\'s Not Right but It\'s Okay (Thunderpuss Mix)" by Whitney Houston',
-        '"Ain\'t No Other Man" by Christina Aguilera',
-        '"Best Of My Love" by The Emotions',
-        '"Celebrity Skin" by Hole',
-        '"Pound The Alarm" by Nicki Minaj',
-        '"Man! I Feel Like A Woman" by Shania Twain',
-        '"Cut To The Feeling" by Carly Rae Jepsen',
-        '"I\'m Coming Out" by Diana Ross',
-        '"Groove Is In The Heart" by Deee-Lite',
-        '"New Attitude" by Patti LaBelle',
-        '"Good As Hell" by Lizzo',
-        '"Nasty Girl" by Vanity 6',
-        '"Call Me Mother" by RuPaul',
-        '"Nasty" by Janet Jackson',
-        '"If" by Janet Jackson', 
-        '"Bang Bang" by Jessie J, Ariana Grande and Nicki Minaj',
-        '"Best of Both Worlds" by Miley Cyrus',
-        '"Work Bitch" by Britney Spears',
-        '"Waiting For Tonight (Hex Hector Remix)" by Jennifer Lopez',
-        '"Living in America" by James Brown',
-        '"I\'m Your Baby Tonight" by Whitney Houston',
-        '"Last Dance" by Donna Summer',
-        '"Strut" by Sheena Easton',
-        '"Sorry Not Sorry" by Demi Lovato',
-        '"Hood Boy" by Fantasia',
-        '"No More Drama" by Mary J. Blige',
-        '"No Scrubs" by TLC',
-        '"Pride: A Deeper Love" by Aretha Franklin',
-        '"Bootylicious" by Destiny\'s Child',
-        '"SOS" by Rihanna',
-        '"The Edge of Glory" by Lady Gaga',
-        '"Starships" by Nicki Minaj',
-        '"Call Your Girlfriend" by Robyn',
-        '"Problem" by Ariana Grande feat. Iggy Azalea',
-        '"S&M" by Rihanna',
-        '"Heart to Break" by Kim Petras',
-        '"Let It Go" by Caissie Levy',
-        '"Burning Up" by Madonna',
-        '"This Is My Night" by Chaka Khan',
-        '"Firework" by Katy Perry',
-        '"Kill The Lights" by Alex Newell',
-        '"1999" by Prince',
-        '"On The Floor" by Jennifer Lopez feat. Pitbull',
-        '"Bring Back My Girls" by RuPaul',
-        '"I\'m Like a Bird" by Nelly Furtado',
-        '"Take On Me" by a-ha',
-        '"Get Up" by Ciara',
-        '"Survivor" by Destiny\'s Child',
-        '"Call Me Maybe" by Carly Rae Jepsen',
-        '"When I Grow Up" by The Pussycat Dolls',
-        '"The Pleasure Principle" by Janet Jackson',
-        '"Rumors" by Lindsay Lohan',
-        '"Ex\'s & Oh\'s" by Elle King',
-        '"Lady Marmalade" by Christina Aguilera, Lil\' Kim, Mýa & Pink',
-        '"Break My Heart" by Dua Lipa',
-        '"If U Seek Amy" by Britney Spears',
-        '"100% Pure Love" by Crystal Waters',
-        '"Fancy" by Iggy Azalea feat. Charli XCX',
-        '"Hit \'Em Up Style (Oops!)" by Blu Cantrell',
-        '"Whole Lotta Woman" by Kelly Clarkson',
-        '"BO$$" by Fifth Harmony',
-        '"Fascinated" by Company B',
-        '"My Humps" by Black Eyed Peas',
-        '"No Tears Left To Cry" by Ariana Grande',
-        '"Strong Enough" by Cher',
-        '"Be My Lover" by La Bouche',
-        '"I Learned from the Best (HQ2 Radio Mix)" by Whitney Houston',
-        '"Gimme More" by Britney Spears',
-        '"Till the World Ends" by Britney Spears',
-        '"One Way or Another" by Blondie',
-        '"Water Me" by Lizzo',
-        '"Fallin\'" by Alicia Keys',
-        '"I Love It" by Kylie Minogue',
-        '"Play" by Jennifer Lopez',
-        '"My Head & My Heart" by Ava Max',
-        '"Suga Mama" by Beyoncé',
-        '"Un-Break My Heart (Hex Hector Remix)" by Toni Braxton',
-        '"Something\'s Got A Hold On Me" by Etta James',
-        '"Heartbreak Hotel (Hex Hector Remix)" by Whitney Houston',
-        '"good 4 u" by Olivia Rodrigo',
-        '"Telephone" by Lady Gaga ft. Beyoncé',
-        '"Respect" by Aretha Franklin',
-        '"Never Too Much" by Luther Vandross',
-        '"Radio" by Beyoncé',
-        '"Don\'t Let Go (Love)" by En Vogue',
-        '"Love Don\'t Cost a Thing" by Jennifer Lopez',
-        '"Swept Away" by Diana Ross',
-        '"Gimme! Gimme! Gimme! (A Man After Midnight)" by Cher',
-        '"Opposites Attract" by Paula Abdul',
-        '"There\'s No Business Like Show Business" by Ethel Merman',
-        '"Don\'t Cha" by The Pussycat Dolls',
-        '"Dancing On My Own" by Robyn',
-        '"Shake It Off" by Taylor Swift',
-        '"Le Freak (Freak Out)" by Chic',
-        '"Tell It To My Heart" by Taylor Dayne',
-        '"Got To Be Real" by Cheryl Lynn',
-        '"Shut Up & Drive" by Rihanna',
-        '"Cherry Bomb" by Joan Jett and the Blackhearts',
-        '"Step It Up" by RuPaul feat. Dave Audé',
-        '"If I Were Your Woman" by Gladys Knight & The Pips',
-        '"Anaconda" by Nicki Minaj',
-        '"Jump (For My Love)" by The Pointer Sisters',
-        '"Green Light" by Lorde',
-        '"I Kissed a Girl" by Katy Perry',
-        '"The Boss" by Diana Ross',
-        '"Nobody\'s Supposed to be Here (Hex Hector Dance Mix)" by Deborah Cox',
-        '"Freaky Money" by RuPaul feat. Big Freedia',
-        '"Wrecking Ball" by Miley Cyrus',
-        '"Emotions" by Mariah Carey',
-        '"Into You" by Ariana Grande',
-        '"How Will I Know" by Whitney Houston',
-        '"The B!tch is Back" by Tina Turner',
-        '"Jump To It" by Aretha Franklin',
-        '"You Spin Me Round (Like a Record)" by Dead or Alive',
-        '"Come Rain or Come Shine" by Judy Garland',
-        '"When I Think of You" by Janet Jackson',
-        '"Peanut Butter" by RuPaul feat. Big Freedia',
-        '"Kitty Girl" by RuPaul',
-        '"Adrenaline" by RuPaul',
-        '"Sissy That Walk"by RuPaul',
-        '"Fighter" by Christina Aguilera',
-        '"Livin\' La Vida Loca" by Ricky Martin',
-        '"Neutron Dance" by The Pointer Sisters',
-        '"Juice" by Lizzo',
-        '"Where Have You Been" by Rihanna',
-        '"Open Your Heart" by Madonna',
-        '"One Last Time" by Ariana Grande',
-        '"Fancy" by Reba McEntire',
-        '"Make Me Feel" by Janelle Monáe',
-        '"Uptown Funk" by Mark Ronson feat. Bruno Mars',
-        '"Miss You Much" by Janet Jackson',
-        '"Physical" by Dua Lipa',
-        '"Womanizer" by Britney Spears',
-        '"Phone" by Lizzo',
-        '"Dirrty" by Christina Aguilera',
-        '"Dance Again" by Jennifer Lopez feat. Pitbull',
-        '"Sugar Walls" by Sheena Easton',
-        '"Boom Clap" by Charli XCX',
-        '"Good Golly Miss Molly" by Little Richard',
-        '"Free Your Mind" by En Vogue',
-        '"Girls Just Wanna Have Fun" by Cyndi Lauper',
-        '"Song for the Lonely" by Cher',
-        '"Barbie Girl" by Aqua',
-        '"Heartbreaker" by Pat Benatar',
-        '"Focus" by Ariana Grande',
-        '"Since U Been Gone" by Kelly Clarkson',
-        '"Stupid Love" by Lady Gaga',
-        '"Old MacDonald" by Ella Fitzgerald',
-        '"Rumor Has It" by Adele',
-        '"Greenlight" by Beyoncé'
-      ];
+     
       let chosen = songsus[getRandomInt(0,songsus.length-1)];
       songsus.splice(songsus.indexOf(chosen),1);
       return(chosen);
       break;
 
     case "UK":
-      let songsuk = [
-        '"New Rules" by Dua Lipa',
-        '"Venus" by Bananarama',
-        '"Would I Lie To You?" by Eurythmics',
-        '"Spice Up Your Life" by Spice Girls',
-        '"Power" by Little Mix',
-        '"Call My Name (Wideboys Remix)" by Cheryl Cole',
-        '"Tears Dry On Their Own" by Amy Winehouse',
-        '"I\'m Your Man" by Wham!',
-        '"Relax" by Frankie Goes to Hollywood',
-        '"Memory" by Elaine Paige',
-        '"Don\'t Start Now" by Dua Lipa',
-        '"You Keep Me Hangin\' On" by Kim Wilde',
-        '"Don\'t Leave Me This Way" by The Communards',
-        '"Touch Me" by Cathy Dennis',
-        '"Don\'t Be So Hard On Yourself" by Jess Glynne',
-        '"You Don\'t Have To Say You Love Me" by Dusty Springfield',
-        '"Last Thing On My Mind" by Steps',
-        '"I\'m Still Standing" by Elton John',
-        '"Total Eclipse of the Heart" by Bonnie Tyler',
-        '"Something New" by Girls Aloud',
-        '"Sweet Melody" by Little Mix',
-        '"Moving On Up" by M People',
-        '"I\'ve Got The Music In Me" by The Kiki Dee Band',
-        '"Who Do You Think You Are" by Spice Girls',
-        '"Big Spender" by Shirley Bassey',
-        '"Shout" by Lulu',
-        '"Scandalous" by Mis-Teeq',
-        '"Hallucinate" by Dua Lipa',
-        '"You Don\'t Own Me" by Dusty Springfield',
-        '"Say You\'ll Be There" by Spice Girls',
-        '"Supermodel (El Lay Toya Jam)" by RuPaul',
-        '"We Like To Party! (The Vengabus)" by Vengaboys',
-        '"Let It Go" by Alexandra Burke',
-        '"Toy" by Netta',
-        '"Domino" by Jessie J',
-        '"The Reflex" by Duran Duran',
-        '"Supernova" by Kylie Minogue'
-      ];
+
       let chosenuk = songsuk[getRandomInt(0,songsuk.length-1)];
       songsuk.splice(songsuk.indexOf(chosenuk),1);
       return(chosenuk);
       break;
 
     case "CANADA":
-      let songscan = [
-        '"I Really Like You" by Carly Rae Jepsen',
-        '"If You Could Read My Mind" by Ultra Naté, Amber, and Jocelyn Enriquez',
-        '"Absolutely Not (Chanel Club Mix)" by Deborah Cox',
-        '"Girlfriend" by Avril Lavigne',
-        '"I Drove All Night" by Céline Dion',
-        '"Scars To Your Beautiful" by Alessia Cara',
-        '"Hello" by Allie X',
-        '"You Oughta Know" by Alanis Morissette',
-        '"Closer" by Tegan and Sara',
-        '"You\'re A Superstar" by Love Inc.',
-        '"Maneater" by Nelly Furtado',
-        '"Stupid Shit" by Girlicious',
-        '"Ghost" by Fefe Dobson',
-        '"Happiness" by Alexis Jordan',
-        '"I Love Myself Today" by Bif Naked',
-        '"Heaven" by DJ Sammy',
-        '"Get Down" by B4-4',
-        '"Everbody Say Love" by Mitsou',
-        '"Main Event" by RuPaul',
-        '"Born Naked" by RuPaul',
-        '"Call Me Mother" by RuPaul',
-        '"It\'s All Coming Back to Me Now" by Celine Dion'
-      ];
+
       let chosencan = songscan[getRandomInt(0,songscan.length-1)];
       songscan.splice(songscan.indexOf(chosencan),1);
       return(chosencan);
       break;
 
     case "ESPANA":
-      let songses = [
-        '"Sobreviviré" by Mónica Naranjo',
-        '"Veneno pa\' tu piel" by La Veneno',
-        '"Mocatriz" by Ojete Calor',
-        '"Pussy" by Bad Gyal',
-        '"Espectacular" by Fangoria',
-        '"Aute Cuture" by Rosalía',
-        '"Cuando tú vas" by Chenoa',
-        '"La gata bajo la lluvia" by Rocío Dúrcal',
-        '"Todos Me Miran" by Gloria Trevi',
-        '"Yo quiero bailar" by Sonia & Selena',
-        '"Un año de amor" by Luz Casal',
-        '"Baloncesto" by La Prohibida',
-        '"Arrasando" by Thalía',
-        '"Se nos rompió el amor" by Rocío Jurado',
-        '"Rhythm Is Gonna Get You" by Gloria Estefan',
-        '"Dance A Little Bit Closer" by Charo',
-        '"Libertad" by Christian Chàvez',
-        '"Timida" by Pabllo Vittar & Thalía',
-        '"Loca" by Shakira',
-        '"Envolver" by Anitta',
-        '"SAOKO" by Rosalía',
-        '"El Chico Del Apartamento 512" by Selena',
-        '"Bidi Bidi Bom Bom" by Selena',
-        '"Can\'t Remember To Forget You" by Shakira (ft Shakira)'
-      ];
+
       let chosenes = songses[getRandomInt(0,songses.length-1)];
       songses.splice(songses.indexOf(chosenes),1);
       return(chosenes);
       break;
 
     case "ITALIA":
-      let songsit = [
-        '""Occhi di gatto" by Cristina D\'Avena',
-        '"Comprami" by Viola Valentino',
-        '"Fiesta (Spanish Version)" by Raffaella Carrà',
-        '"Champion" by RuPaul',
-        '"Kobra" by Donatella Rettore',
-        '"Cicale" by Heather Parisi',
-        '"Non sono una signora" by Loredana Bertè',
-        '"Credo" by Giorgia',
-        '"Come Neve" by Giorgia and Marco Mengoni',
-        '"Guerriero" by Marco Mengoni',
-        '"Cosa ti aspetti da me" by Loredana Berté',
-        '"Tanti Auguri (com\'è bello far l\'amore...)" By Raffaella Carrà',
-        '"Tuca Tuca" by Raffaellà Carrà',
-        '"Freed From Desire" by Gala',
-        '"All\'arrembaggio" by Cristina D\'Avena',
-        '"Doraemon" by Cristna D\'Avena',
-        '"Paloma" by Anitta and Fred De Palma',
-        '"Fatti Bella Per Te" by Paola Turci',
-        '"I Am What I Am" by Emma Muscat',
-        '"I wanna be your slave" by Maneskin',
-        '"Pistolero" by Elettra Lamborghini',
-        '"Roma Bangkok" by Baby K and Giusy Ferreri',
-        '"Non Ti Scordar mai di" me by Giusi Ferreri'
-      ];
+
       let chosenit = songsit[getRandomInt(0,songsit.length-1)];
       songsit.splice(songsit.indexOf(chosenit),1);
       return(chosenit);
@@ -11601,92 +12858,28 @@ function GetSong(){
 
 
     case "THAILAND":
-      let songth = [
-        '"Born This Way" by Lady Gaga',
-        '"I Don\'t Want Love Yet" by Marsha Vadhanapanich',
-        '"O.K. Yes" by Katreeya English',
-        '"Dhoom Dhoom" by Tata Young',
-        '"Toxic" by Brintey Spears',
-        '"Last Song" by Suda Chuenban',
-        '"Crazy In Love" by Beyoncé',
-        '"Born Naked" by RuPaul',
-        '"I Will Survive Mor Lam" by Saisunee Sukkrit',
-        '"I Want Her to Exchange Her Phone Number" by Yinglee SriJumpol',
-        '"A Letter From A Wife" by Mani Maniwan',
-        '"Suprit Suddet" by Mai Charoenpura',
-        '"It Hurt\'s A Little... A Little" by Rhatha Phongam',
-        '"Eat Kiss Jib" by Pornchita na Songkhla',
-        '"Lady Marmalade" by Christina Aguilera, Lil\' Kim, Mýa and Pink',
-        '"Dancer" by Sukanya Nakpradit',
-        '"This Is Me" by Keala Settle',
-        '"Last Dance" by Selena'
-      ];
+
       let chosenth = songth[getRandomInt(0,songth.length-1)];
       songth.splice(songth.indexOf(chosenth),1);
       return(chosenth);
       break;
 
     case "AUSTRALIA":
-      let songdu = [
-        '"Tragedy" by Bee Gees',
-        '"I\'m That Bitch" by RuPaul',
-        '"Shake Your Groove Thing" by Peaches & Herb',
-        '"I Begin To Wonder" by Dannii Minogue',
-        '"Absolutely Everybody" by Vanessa Amorosi',
-        '"Better The Devil You Know" by Kylie Minogue',
-        '"Untouched" by The Veronicas',
-        '"Physical" by Olivia Newton-John',
-      ];
+
       let chosendu = songdu[getRandomInt(0,songdu.length-1)];
       songdu.splice(songdu.indexOf(chosendu),1);
       return(chosendu);
       break;
     
     case "HOLLAND":
-      let songho = [
-        '"Express Yourself" by Madonna',
-        '"Roar" by Katy Perry',
-        '"Why Tell Me Why" by Anita Meyer',
-        '"I Wanna Dance With Somebody" by Whitney Houston',
-        '"Girl" by Anouk',
-        '"9 To 5" by Dolly Parton',
-        '"Stronger (What Doesn\'t Kill You)" by Kelly Clarkson',
-        '"Born This Way" by Lady Gaga',
-        '"Physical" by Dua Lipa',
-        '"Don\'t Leave Me This Way" by Thelma Houston',
-        '"It\'s All Coming Back to Me Now" by Celine Dion',
-        '"Free Your Mind" by En Vogue',
-        '"Call Me Mother" by RuPaul',
-        '"Lekker met de Meiden" by Merol',
-        '"Don\'t Stop Me Now" by Queen',
-        '"This Is My Life" by Shirley Bassey'
-      ];
+
       let chosenho = songho[getRandomInt(0,songho.length-1)];
       songho.splice(songho.indexOf(chosenho),1);
       return(chosenho);
       break;
 
     case "FRANCE":
-      let songfr = [
-        '"Le sens de la vie" by TAL',
-        '"Femme est la nuit" by Dalida ',
-        '"Mourir sur scène" by Dalida',
-        '"Euphories" by Video Club',
-        '"Partenaire Particulier" by Partenaire Particulier',
-        '"Le Passé" by TAL',
-        '"Amour Censure" by Hoshi',
-        '"Aurélie" by Colonel Reyel',
-        '"Tiago" by Kendji Girac',
-        '"Mafiosa" by Lartiste (ft. Caroliina)',
-        '"Pookie" by Aya Nakamura',
-        '"Salope" by Therapie TAXI',
-        '"Candide Crush" by Therapie TAXI',
-        '"À l\'international" by TAL',
-        '"Dernière Danse" by Indila',
-        '"Et même après je t\'aimerai" by Hoshi',
-        '"Je Suis Malade" by Lara Fabian',
-        '"Je T\'aime" by Lara Fabian'
-      ];
+   
       let chosenfr = songfr[getRandomInt(0,songfr.length-1)];
       songfr.splice(songfr.indexOf(chosenfr),1);
       return(chosenfr);
@@ -11698,7 +12891,7 @@ function GetSong(){
     switch(queen.ogseason.substring(0,2))
     {
       default:
-        let songsus = [
+        let entus = [
           'Wooh, my God! Look at this! Wow, crazy, crazy, crazy!',
           'Hi!',
           'Hello, what\'s up?',
@@ -11770,12 +12963,12 @@ function GetSong(){
           'Maybe she’s born with it, maybe it’s body dysmorphia.',
           'Did somebody order a delivery? Because I’m about to take away the crown!'
         ];
-        let chosen = songsus[getRandomInt(0,songsus.length-1)];
+        let chosen = entus[getRandomInt(0,entus.length-1)];
         return(chosen);
         break;
   
       case "ES":
-        let songses = [
+        let entes = [
           '¿Alguien ha pedido una cebra a domicilio?',
           'No soy perra, no soy gata. Soy una estrella y eso te mata.',
           'Hola, chicas. No me toquéis el chichi, que todavía no me lo han puesto.',
@@ -11790,12 +12983,12 @@ function GetSong(){
           'Vaya cuadro.',
           '¿Tenéis un enchufe?'
         ];
-        let chosenes = songses[getRandomInt(0,songses.length-1)];
+        let chosenes = entes[getRandomInt(0,entes.length-1)];
         return(chosenes);
         break;
   
       case "IT":
-        let songsit = [
+        let entit = [
           'La stallona piemontese è approdata negli studi, stronzette.',
           'LET\'S GOOOOOOOOOOOOOO... sì.',
           'Scusate, ma chi sono queste? Non avevate detto che ero sola? Vabbè. Potete scaricare i miei bauli allora.',
@@ -11805,12 +12998,12 @@ function GetSong(){
           'The queen of Italia, has arrived.',
           'Occhi di gatto, ecco fatto!',
         ];
-        let chosenit = songsit[getRandomInt(0,songsit.length-1)];
+        let chosenit = entit[getRandomInt(0,entit.length-1)];
         return(chosenit);
         break;
       
       case "HO":
-        let songho = [
+        let entho = [
           'Buongiorno, principesse. The queen has arrived.',
           'I\'ve got some tricks up my sleeve.',
           'If eyes linger any longer, I\'ll have to charge rent.',
@@ -11824,7 +13017,7 @@ function GetSong(){
           'Je dacht toch niet dat ik het feestje echt aan mij voorbij liet gaan?',
           'The OG fish is back!',
         ];
-        let chosenho = songho[getRandomInt(0,songho.length-1)];
+        let chosenho = entho[getRandomInt(0,entho.length-1)];
         return(chosenho);
         break;
     }
@@ -11840,5 +13033,61 @@ function RemoveFromCustomQueen(){
   var clean = document.getElementById("ct");
   clean.innerHTML = "";
   LoadCasts();
+}
+
+function AddRandomCast(){
+  let whotoadd = 0;
+  let nbmsctadded = 0;
+  let numtoadd = document.getElementById("rdnnum").value;
+  let drq = document.getElementById("drqueens");
+  let ctq = document.getElementById("ctqueens");
+  console.log(drq.checked);
+  for (let index = 0; index < numtoadd; index++) {
+    if(drq.checked == true && ctq.checked == true)
+    {
+      if(getRandomInt(0,100)>50 && (nbmsctadded < customqueens.length))
+      {
+        whotoadd = getRandomInt(0,customqueens.length-1);
+        while(CustomCast.indexOf(customqueens[whotoadd])!=-1)
+        {
+          whotoadd = getRandomInt(0,customqueens.length-1);
+        }
+        CustomCast.push(customqueens[whotoadd])
+        nbmsctadded++;
+      }
+      else
+      {
+        whotoadd = getRandomInt(0,DragRaceQueens.length-1);
+        while(CustomCast.indexOf(DragRaceQueens[whotoadd])!=-1)
+        {
+          whotoadd = getRandomInt(0,DragRaceQueens.length-1);
+        }
+        CustomCast.push(DragRaceQueens[whotoadd]);
+      }
+    }
+    else if(drq.checked == true)
+    {
+      whotoadd = getRandomInt(0,DragRaceQueens.length-1);
+        while(CustomCast.indexOf(DragRaceQueens[whotoadd])!=-1)
+        {
+          whotoadd = getRandomInt(0,DragRaceQueens.length-1);
+        }
+        CustomCast.push(DragRaceQueens[whotoadd]);
+    }
+    else if(ctq.checked == true)
+    {
+      if((nbmsctadded < customqueens.length))
+      {
+        whotoadd = getRandomInt(0,customqueens.length-1);
+        while(CustomCast.indexOf(customqueens[whotoadd])!=-1)
+        {
+          whotoadd = getRandomInt(0,customqueens.length-1);
+        }
+        CustomCast.push(customqueens[whotoadd])
+        nbmsctadded++;
+      }
+    }
+  }
+  UpdateCustomCast();
 }
 //#endregion

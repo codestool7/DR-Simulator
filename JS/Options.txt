@@ -11,14 +11,29 @@ LIFE
 
 NORMAL
 
-
-Bonjour! Here's Miss Dupree Williams spitting some bars.
-I want that whole fame, don't be shy just donne moi une part.
-The bitch is so iconic, y'all are all has-beens.
-To the sound of my own, I will make y'all spin.
-I'm coming here to show the french glamour.
-All of the fans for me will only have gazes of amour.
-Now girls, enough of chits-chats.
-I'm ready to claw my way into this competition, watch out for the cat!
-C'est bon les filles assez de cacophonie!
-Because the crown belong to Miss Dupree.
+for(let i = 0; i < CurrentSeason.currentCast.length; i++)
+      {
+        if(CurrentSeason.currentCast[i].miniwinner == true && CurrentChallenge.roles[CurrentChallenge.chosen].length!=0)
+        {
+          
+          Main.createImage(CurrentSeason.currentCast[i].image,'blue');
+          Main.createText(CurrentSeason.currentCast[i].GetName()+" as the winner of this week mini-challenge! You get to assign the roles of the rusical to the other queens.")
+          Main.createLine();
+        }
+      }
+      shuffle(CurrentSeason.currentCast);
+      for(let i = 0; i < CurrentSeason.currentCast.length; i++)
+      {
+        if(CurrentChallenge.roles[CurrentChallenge.chosen].length!=0)
+        {
+          let randomrole = getRandomInt(0,CurrentChallenge.roles[CurrentChallenge.chosen].length-1);
+          Main.createImage(CurrentSeason.currentCast[i].image,'black');
+          Main.createText(CurrentSeason.currentCast[i].GetName()+" as been assigned to the role of : \""+CurrentChallenge.roles[CurrentChallenge.chosen][randomrole]+"\".");
+          CurrentSeason.currentCast.rusicalrole = CurrentChallenge.roles[CurrentChallenge.chosen][randomrole];
+          CurrentChallenge.roles[CurrentChallenge.chosen].splice(randomrole,1);
+          if(CurrentChallenge.roles[CurrentChallenge.chosen].length==0)
+          {
+            Main.createLine();
+          }
+        }
+      }
