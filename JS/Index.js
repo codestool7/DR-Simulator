@@ -127,7 +127,7 @@ class Animal{
       this.kindness = Kindness;
       this.shadyness = Shadyness;
 
-      if(this.iscustom==false)
+      if(IsCustom==false)
       {
         this.image = "Images/Queens/Animals/"+Image+".webp";
       }
@@ -208,11 +208,14 @@ class Season {
     this.snatchgame = 0;
 
     this.immunity = false;
+    this.animals = false;
   }
 
   checkTwists(Twists){
     if(Twists.indexOf("Immunities")!= -1)
       this.immunity = true;
+    if(Twists.indexOf("Animals")!= -1)
+      this.animals = true;
   }
 
   getFullCast()
@@ -1366,6 +1369,10 @@ class Screen {
 
       qname.innerHTML = CurrentSeason.currentCast[q].GetName();
 
+      if(CurrentSeason.animals == true){
+        qname.innerHTML += "<br><small>("+CurrentSeason.currentCast[q].animal.name+")</small>";
+      }
+
       qname.setAttribute("class","trq");
 
       qname.setAttribute("style","height : 50px;");
@@ -1526,6 +1533,10 @@ class Screen {
       let qname = document.createElement("td");
 
       qname.innerHTML = CurrentSeason.eliminatedCast[q].GetName();
+
+      if(CurrentSeason.animals == true){
+        qname.innerHTML += "<br><small>("+CurrentSeason.eliminatedCast[q].animal.name+")</small>";
+      }
 
       qname.setAttribute("class","trq");
 
@@ -1723,7 +1734,7 @@ class Screen {
       this.MainScreen.append(br);
     }
     
-    /*immunity = document.createElement("input")
+    immunity = document.createElement("input")
     immunity.setAttribute("type","checkbox");
     immunity.setAttribute("id","animal");
     lbl = document.createElement("label");
@@ -1731,7 +1742,7 @@ class Screen {
     lbl.innerHTML = " Enable Animals"
     lbl.setAttribute("style","font-weight: bold; font-size: 20px;");
     this.MainScreen.append(immunity);
-    this.MainScreen.append(lbl);*/
+    this.MainScreen.append(lbl);
   }
 
   createPromoTable(){
@@ -8693,19 +8704,19 @@ let xihouete = new Queen("Xilhouete",7 ,7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Xilhouete
 let PH1 = shuffle([brigi, cora, evale, gigie, ladymor, marinas, minty, precious, prince, turing, vinas, xihouete]);
 
 let dog = new Animal("Dog", 0, -5, -5, 5, 0, 0, 5, 0, 0, 0, 0, "Dog", false);
-let cat = new Animal("Cat", 0, 5, -5,);
-let parrot = new Animal("Parrot");
-let hamster = new Animal("Hamster");
-let axolot = new Animal("Axolot");
-let blob = new Animal("Blob Fish");
-let sug = new Animal("Sugar Glider");
-let capy = new Animal("Capybara");
-let alpaca = new Animal("Alpaca");
-let koala = new Animal("Koala")
-let sea = new Animal("Sea Cucumber");
-let snake = new Animal("Snake")
+let cat = new Animal("Cat", 0, 5, -5, 0, 0, 5, -5, 0, 0, 0, 0, "Cat", false);
+let parrot = new Animal("Parrot", 5, 0, 0, 0, -5, 0, 5, 0, 5, 0, 0, "Parrot", false);
+let hamster = new Animal("Hamster", -5, 0, 0, 5, 5, -5, 0, 0, 0, 0,0,"Hamster",false);
+let axolot = new Animal("Axolotl", 0, 0, 0, 5, 0, 0, -5, 5, -5, 0, 0, "Axolotl", false);
+let blob = new Animal("Blob Fish", 0, 0, 5, -5, 0, 5, -5, 0, 0, 0, 0, "Blobfish", false);
+let sug = new Animal("Sugar Glider", 5, 0, 0, 0, 0, 5, -5, 0, -5, 0, 0, "Sugar", false);
+let capy = new Animal("Capybara", 5, -5, 0, 0, 0, 0, 0, 5, -5, 0, 0, "Capy", false);
+let alpaca = new Animal("Alpaca", 0, 0, 0, 0, 5, 5, -5, -5, 0, 0, 0, "Alpaca", false);
+let koala = new Animal("Koala", 0, 0, 5, 0, -5, 0, 5, 0, -5, 0, 0, "Koala", false);
+let sea = new Animal("Sea Cucumber", 0, 0, -5, 5, 0, 0, 5, -5, 0, 0, 0, "Sea", false);
+let snake = new Animal("Snake", 5, -5,0 ,0, 0, 0, 0, 5, -5, 0, 0, "Snake", false);
 
-let animals = shuffle[ dog, cat, parrot, hamster, axolot, blob, sug, capy, alpaca, koala];
+let animals = shuffle([dog, cat, parrot, hamster, axolot, blob, sug, capy, alpaca, koala, sea, snake]);
 
 let goldenserena = new Queen("Golden Serena Chacha", 15, 15, 15, 15, 15, 15, 15, 15, 15, 5, 0, "GSerena", "GSerena", "AS6", false);
 
@@ -12789,21 +12800,34 @@ function RandomizeStats(){
 
 function CreateEntrances()
 {
+  
   if(CurrentSeason.episodes.length==0)
   {
     let twists = [];
     let getcheckimmu = document.getElementById("immu");
+    let getcheckanim = document.getElementById("animal");
 
     if(getcheckimmu != undefined && getcheckimmu.checked == true)
     {
       twists.push("Immunities");
     }
-      
+
+    if(getcheckanim != undefined && getcheckanim.checked == true)
+    {
+      twists.push("Animals");
+    }
 
     CurrentSeason.checkTwists(twists);
 
     let Main = new Screen();
     Main.clean();
+
+    for (let index = 0; index < CurrentSeason.fullCast.length; index++) {
+      if(CurrentSeason.fullCast[index].animal == "" && CurrentSeason.animals == true)
+      {
+        CurrentSeason.fullCast[index].animal = animals[getRandomInt(0,animals.length-1)]
+      }
+    }
     
     if(CurrentSeason.premiereformat!="NORMAL" && groupmaking == false)
     {
@@ -12830,14 +12854,27 @@ function CreateEntrances()
           if(Steps == 0)
           {
             Main.createImage("Images/Queens/Hidden.webp");
+            if(CurrentSeason.animals == true)
+            {
+              Main.createImage("Images/Queens/Hidden.webp");
+            }
             Main.createText(GetEntrance(firstprem[entrancepos]),'Bold');
             Main.createText('Entering the work-room : It is ...','Bold');
+           
             Steps++;
           }
           else
           {
             Main.createImage(firstprem[entrancepos].image);
+            if(CurrentSeason.animals == true)
+            {
+              Main.createImage(firstprem[entrancepos].animal.image);
+            }
             Main.createText('Entering the work-room : It is '+firstprem[entrancepos].GetName()+' !','Bold');
+            if(CurrentSeason.animals == true)
+            {
+              Main.createText('She\'s entering with a '+firstprem[entrancepos].animal.name+' ??','Bold');
+            }
             Steps = 0;
             entrancepos++;
           }
@@ -12850,14 +12887,28 @@ function CreateEntrances()
           if(Steps == 0)
           {
             Main.createImage("Images/Queens/Hidden.webp");
+            if(CurrentSeason.animals == true)
+            {
+              Main.createImage("Images/Queens/Hidden.webp");
+            }
             Main.createText(GetEntrance(CurrentSeason.fullCast[entrancepos]),'Bold');
+            
             Main.createText('Entering the work-room : It is ...','Bold');
             Steps++;
           }
           else
           {
             Main.createImage(CurrentSeason.fullCast[entrancepos].image);
+            if(CurrentSeason.animals == true)
+            {
+              Main.createImage(CurrentSeason.fullCast[entrancepos].animal.image);
+            }
             Main.createText('Entering the work-room : It is '+CurrentSeason.fullCast[entrancepos].GetName()+' !','Bold');
+            if(CurrentSeason.animals == true)
+            {
+              Main.createText('She\'s entering with a '+CurrentSeason.fullCast[entrancepos].animal.name+' ??','Bold');
+            }
+
             Steps = 0;
             entrancepos++;
           }
@@ -12889,14 +12940,27 @@ function CreateEntrances()
           if(Steps == 0)
           {
             Main.createImage("Images/Queens/Hidden.webp");
+            if(CurrentSeason.animals == true)
+            {
+              Main.createImage("Images/Queens/Hidden.webp");
+            }
             Main.createText(GetEntrance(secondprem[entrancepos]),'Bold');
             Main.createText('Entering the work-room : It is ...','Bold');
             Steps++;
           }
           else
           {
+            
             Main.createImage(secondprem[entrancepos].image);
+            if(CurrentSeason.animals == true)
+            {
+              Main.createImage(secondprem[entrancepos].animal.image);
+            }
             Main.createText('Entering the work-room : It is '+secondprem[entrancepos].GetName()+' !','Bold');
+            if(CurrentSeason.animals == true)
+            {
+              Main.createText('She\'s entering with a '+secondprem[entrancepos].animal.name+' ??','Bold');
+            }
             Steps = 0;
             entrancepos++;
           }
