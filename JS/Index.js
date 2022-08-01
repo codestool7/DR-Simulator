@@ -8360,7 +8360,7 @@ let US14 = shuffle([alyssah, angeria, bosco, daya, deja, jasminek, jorgeous, jun
 let AS1;
 
 let adoreas2 = new Queen("Adore Delano", 9, 10, 11, 7, 6, 11, 9, 10, 15, 4, 1, "Adore", "Adore", "AS2", false)
-let alaskaas2 = new Queen("Alaska Thunderfuck", 10, 11, 10, 7, 7, 8, 10, 14, 8, 2, 4, "Alaska", "Alaska", "AS2", false);
+let alaskaas2 = new Queen("Alaska Thunderfuck", 13, 14, 13, 7, 7, 8, 10, 14, 12, 2, 4, "Alaska", "Alaska", "AS2", false);
 let alyssaeas2 = new Queen("Alyssa Edwards", 7, 8, 12, 14, 8, 5, 14, 15, 15, 3, 2, "Alyssa", "Alyssa", "AS2", false);
 let cocoas2 = new Queen("Coco Montrese", 8, 9, 8, 14, 12, 10, 13, 7, 9, 4, 2, "Coco", "Coco", "AS2", false);
 let detoxas2 = new Queen("Detox", 9, 10, 13, 10, 11, 13, 12, 10, 11, 4, 2, "Detox", "Detox", "AS2", false);
@@ -8409,7 +8409,7 @@ let rajaas7 = new Queen("Raja", 14, 11, 12, 11, 14, 13, 12, 11, 13, 4, 1, "Raja"
 let sheaas7 = new Queen("Shea Coulée", 11, 12, 13, 12, 12, 14, 14, 13, 12, 3, 1, "Shea", "Shea", "AS7", false);
 let vivas7 = new Queen("The Vivienne", 14, 12, 11, 10, 13, 12, 14, 13, 12, 3, 2, "Viv", "Viv", "AS7", false);
 let trinityas7 = new Queen("Trinity The Tuck", 14, 14, 11, 13, 14, 14, 12, 12, 11, 2, 1, "Trinity", "Trinity", "AS7", false);
-let yvieas7 = new Queen("Yvie Oddly", 12, 11, 10, 15, 12, 12, 14, 15, 13, 4, 2, "Yvie", "Yvie", "AS7", false);
+let yvieas7 = new Queen("Yvie Oddly", 12, 11, 10, 14, 11, 12, 14, 13, 12, 4, 2, "Yvie", "Yvie", "AS7", false);
 
 let AS7 = shuffle([jaidaas7, jinkxas7, monetas7, rajaas7, sheaas7, vivas7, trinityas7, yvieas7]);
 
