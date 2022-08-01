@@ -8705,7 +8705,9 @@ let koala = new Animal("Koala")
 let sea = new Animal("Sea Cucumber");
 let snake = new Animal("Snake")
 
-let animals = shuffle[ dog, cat, parrot, hamster, axolot, blob, sug, capy, alpaca, koala ];
+let animals = shuffle[ dog, cat, parrot, hamster, axolot, blob, sug, capy, alpaca, koala];
+
+let goldenserena = new Queen("Golden Serena Chacha", 15, 15, 15, 15, 15, 15, 15, 15, 15, 5, 0, "GSerena", "GSerena", "AS6", false);
 
 let DragRaceQueens = [
 
@@ -8732,12 +8734,13 @@ let DragRaceQueens = [
   vanessa, puny, vivaldi, keta, countess, ivy, masisi, reggy, juicy,
 
   adoreas2, alaskaas2, alyssaeas2, cocoas2, detoxas2, gingeras2, katyaas2, jaremyas2, roxxxyas2, tatias2,
-  ajaas3, bebeas3,delaas3,chichias3,kennedyas3,milkas3,morganas3,shangelaas3, thorgy,
+  ajaas3, bebeas3,delaas3,chichias3,kennedyas3,milkas3,morganas3,shangelaas3, thorgy, trixieas3,
   farrahas4, giagas4, jasmineas4, latriceas4, manilaas4, monetas4, moas4, naomias4, tttas4, valentinas4,
   jaidaas7, jinkxas7, monetas7, rajaas7, sheaas7, vivas7, trinityas7, yvieas7,
 
   anastarzia,boa,ilona,jimbo,juice,kiara,kyne,lemon,priyanka,rita,scarlettbobo,tynomi,
   icesis, kendall, eve, giam, pythia, adriana, kimoraa, synthia, suki, oceane, beth, stephanie,
+  bombae, chelazon, gisele, halal, irma, jada, kaos, kimmy, ladybb, fiercalicious, moço, vivian,
 
   carmenf, killer, sagi, pupi, dovima, hug, arantxa, inti, dragv, macarena,
   marina, estrella, venedita, juriji, sethlas, diamante, onyx, jota, samantha, arielr, marisa,
@@ -8750,8 +8753,11 @@ let DragRaceQueens = [
 
   ava ,divinity ,elecktra, enorma, farida, ivana, leriche, luquisha,
 
-  elips, kam, bertha, briochée, dame, kahena, lolita, lova, paloma, soa
+  elips, kam, bertha, briochée, dame, kahena, lolita, lova, paloma, soa,
 
+  brigi, cora, evale, gigie, ladymor, marinas, minty, precious, prince, turing, vinas, xihouete,
+
+  goldenserena
 ].sort((a, b) => a.GetName().localeCompare(b.GetName()));
 
 //#endregion
