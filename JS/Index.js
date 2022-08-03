@@ -4,6 +4,7 @@ let CurrentChallenge;
 let CurrentEpisode;
 
 let villain = false;
+let hero = false;
 
 let songschosen = "";
 let premreform = false;
@@ -10820,6 +10821,8 @@ function Lipsync() {
     let points = 0;
     let cv = 0;
     let q;
+    let h;
+    let cvs = 0;
     for (let index = 0; index < CurrentSeason.currentCast.length; index++) {
       points = 0;
       for (let re = 0; re < CurrentSeason.currentCast[index].relationsships.length; re++) {
@@ -10831,6 +10834,12 @@ function Lipsync() {
         q = CurrentSeason.currentCast[index];
         cv = points;
       }
+
+      if(hero == false && points >= 20 && points > cv)
+      {
+        h = CurrentSeason.currentCast[index];
+        cvs = points;
+      }
     }
   
     if(q!=null)
@@ -10838,6 +10847,14 @@ function Lipsync() {
       villain = true;
       CurrentSeason.currentCast[index].storylines.push("VI");
       let storyline = new StoryLine([q],"Relations Related", "This queen is getting considered as the villain of the season.", CurrentSeason.episodes.length, "Not finished yet.");
+      CurrentSeason.storylines.push(storyline);
+    }
+
+    if(h!=null)
+    {
+      hero = true;
+      CurrentSeason.currentCast[index].storylines.push("HE");
+      let storyline = new StoryLine([q],"Relations Related", "This queen is getting considered as the hero of the season.", CurrentSeason.episodes.length, "Not finished yet.");
       CurrentSeason.storylines.push(storyline);
     }
 
