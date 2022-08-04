@@ -10854,7 +10854,7 @@ function Lipsync() {
     {
       hero = true;
       CurrentSeason.currentCast[index].storylines.push("HE");
-      let storyline = new StoryLine([q],"Relations Related", "This queen is getting considered as the hero of the season.", CurrentSeason.episodes.length, "Not finished yet.");
+      let storyline = new StoryLine([h],"Relations Related", "This queen is getting considered as the hero of the season.", CurrentSeason.episodes.length, "Not finished yet.");
       CurrentSeason.storylines.push(storyline);
     }
 
