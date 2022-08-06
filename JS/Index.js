@@ -11993,7 +11993,7 @@ function GenerateRusicalRoles(){
       }
       for(let i = 0; i < CurrentSeason.currentCast.length; i++)
       {
-          if(numberofroles[2] > 0 && getRandomInt(0,50) > 10)
+          /*if(numberofroles[2] > 0 && getRandomInt(0,50) > 10)
           {
             if(mainroles[2].length != 0)
             {
@@ -12028,7 +12028,7 @@ function GenerateRusicalRoles(){
               mainroles[0].splice(mainroles[1].indexOf(chosenrole));
               numberofroles[0]--;
             }
-          }  
+          }*/  
       }
       Main.createButton("Proceed","GenerateChallenge()");
 
