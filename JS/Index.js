@@ -8186,7 +8186,7 @@ let lashauwn = new Queen("Lashauwn Beyond",6,4,7,6,12,11,8,6,7,1,5,"Lashauwn","L
 let latrice = new Queen("Latrice Royale",12,5,9,12,5,6,14,6,15,5,1,"Latrice","Latrice","US4",false);
 let madamel = new Queen("Madame LaQueer",4,7,7,11,7,8,7,6,7,3,1,"Madame","Madame","US4",false);
 let milan = new Queen("Milan",5,4,6,11,5,7,12,7,8,4,1,"Milan","Milan","US4",false);
-let jaremy = new Queen("Jaremy Carey",10,5,10,6,12,12,11,12,5,1,5,'Jaremy',"Jaremy","US4",false);
+let jaremy = new Queen("Jaremi Carey",10,5,10,6,12,12,11,12,5,1,5,'Jaremy',"Jaremy","US4",false);
 let princess = new Queen("The Princess",5,4,6,4,10,10,11,4,7,4,1,"Princess","Princess","US4",false);
 let willam = new Queen("Willam",10,12,12,10,11,10,7,4,7,1,5,"Willam","Willam","US4",false);
 
@@ -8367,7 +8367,7 @@ let cocoas2 = new Queen("Coco Montrese", 8, 9, 8, 14, 12, 10, 13, 7, 9, 4, 2, "C
 let detoxas2 = new Queen("Detox", 9, 10, 13, 10, 11, 13, 12, 10, 11, 4, 2, "Detox", "Detox", "AS2", false);
 let gingeras2 = new Queen("Ginger Minj",13, 11, 10, 8, 9, 4, 8, 9, 8, 2, 2, "Ginger", "Ginger", "AS2", false);
 let katyaas2 = new Queen("Katya", 11, 12, 13, 10, 11, 10, 10, 10, 9, 4, 1,"Katya", "Katya", "AS2", false);
-let jaremyas2 = new Queen("Jaremy Carey", 8, 10, 11, 9, 13, 15, 10, 11, 14, 4, 4, "Jaremy", "Jaremy", "AS2", false);
+let jaremyas2 = new Queen("Jaremi Carey", 8, 10, 11, 9, 13, 15, 10, 11, 14, 4, 4, "Jaremy", "Jaremy", "AS2", false);
 let roxxxyas2 = new Queen("Roxxxy Andrews", 8, 10, 7, 10, 9, 14, 15, 10, 15, 4, 1, "Roxxxy", "Roxxxy", "AS2", false);
 let tatias2 = new Queen("Tatianna", 10, 13, 10, 12, 9, 8, 15, 10, 15, 5, 1, "Tatianna", "Tatianna", "AS2", false);
 
@@ -8399,9 +8399,34 @@ let valentinas4 = new Queen("Valentina", 10, 9, 8, 9, 12, 11, 15, 11, 13, 4, 3, 
 
 let AS4 = shuffle([farrahas4, giagas4, jasmineas4, latriceas4, manilaas4, monetas4, moas4, naomias4, tttas4, valentinas4]);
 
-let AS5;
+let alexisas5 = new Queen("Alexis Mateo", 12, 11, 10, 10, 11, 8, 12, 10, 13, 4, 1, "Alexis", "Alexis", "AS5", false);
+let blairas5 = new Queen("Blair St. Clair", 9, 10, 7, 8, 13, 12, 9, 8, 13, 4, 3, "Blair","Blair", "AS5", false);
+let derrickas5 = new Queen("Derrick Barry", 10, 8, 12, 10, 5, 7, 10, 12, 14, 4, 4, "Derrick", "Derrick", "AS5", false);
+let indiaas5 = new Queen("India Ferrah", 7, 7, 7, 7, 7, 10, 12, 10, 9, 2, 4, "India", "India", "AS5", false);
+let jujubeeas5 = new Queen("Jujubee", 11, 10, 9, 11, 8, 13, 10, 10, 15, 4, 2, "Juju", "Juju", "AS5", false);
+let mariahas5 = new Queen("Mariah Paris Balenciaga", 9, 10, 7, 9, 7, 13, 11, 12, 13, 5, 0, "Mariah", "Mariah", 'AS5', false);
+let mayhemas5 = new Queen("Mayhem Miller", 10, 11, 12, 8, 9, 11, 13, 8, 13, 5, 1, "Mayhem", "Mayhem", "AS5", false);
+let mizas5 = new Queen("Miz Cracker", 12, 11, 14, 10, 9, 89, 7, 12, 13, 2, 4, "Cracker", "Cracker", "AS5", false);
+let onginaas5 = new Queen("Ongina", 8, 7, 9, 7, 10, 12, 6, 7, 12, 5, 0, "Ongina", "Ongina", "AS5", false);
+let sheaas5 = new Queen("Shea Coulée", 12, 11, 13, 14, 12, 13, 14, 10, 11, 4, 1, "Shea", "Shea", "AS5", false);
 
-let AS6;
+let AS5 = shuffle([alexisas5, blairas5, derrickas5, indiaas5, jujubeeas5, mariahas5, mayhemas5, mizas5, onginaas5, sheaas5]);
+
+let akeriaas6 = new Queen("Akeria C. Davenport", 10, 11, 7, 9, 12, 15, 10, 8, 13, 5, 0, "Akeria", "Akeria", "AS6", false);
+let eurekaas6 = new Queen("Eureka!", 12, 11, 13, 12, 10, 9, 11, 8, 11, 4, 2, "Eureka", "Eureka", "AS6", false);
+let gingeras6 = new Queen("Ginger Minj", 13, 14, 15, 9, 8, 5, 13, 12, 14, 3, 1, "Ginger", "Ginger", "AS6", false);
+let janas6 = new Queen("Jan Sport", 8, 9, 8, 10, 12, 12, 4, 10, 9, 4, 2, "Jan", "Jan", "AS6", false);
+let jigglyas6 = new Queen("Jiggly Caliente", 10, 9, 11, 9, 5, 12, 10, 11, 12, 5, 1, "Jiggly", 'Jiggly', "AS6", false);
+let kylieas6 = new Queen("Kylie Sonique Love", 12, 11, 13, 12, 10, 13, 14, 9, 11, 5, 1, "Kylie", "Kylie", "AS6", false);
+let pandoraas6 = new Queen("Pandora Boxx", 11, 12, 9, 7, 6, 8, 7, 10, 11, 4, 1, "Pandora", "Pandore", "AS6", false);
+let rajahas6 = new Queen("Ra'Jah O'Hara", 12, 11, 13, 12, 11, 13, 15, 12, 13, 4, 2, "Rajah", 'Rajah', "AS6", false);
+let scarletas6 = new Queen("Scarlet Envy", 9, 11, 10, 8, 9, 13, 8, 12, 10, 4, 2, "Scarlet", "Scarlet" , "AS6", false);
+let serenaas6 = new Queen("Serena ChaCha", 9, 8, 9, 12, 10, 13, 8, 9, 10, 5, 1, "Serena", "Serena", "AS6", false);
+let silkyas6 = new Queen("Silky Nutmeg Ganache", 12, 11, 9, 10, 9, 8, 15, 10, 13, 4, 2, "Silky", "Silky", 'AS6', false);
+let trinityas6 = new Queen("Trinity K. Bonet", 12, 11, 8, 13, 12, 13, 10, 11, 12, 4, 2, "TKB", "TKB", "AS6", false);
+let yaraas6 = new Queen("Yara Sofia", 9, 10, 11, 13, 11, 12, 10, 11, 9, 4, 3, "Yara", "Yara", "AS6", false);
+
+let AS6 = shuffle([akeriaas6, eurekaas6, gingeras6, janas6, jigglyas6, kylieas6, pandoraas6, rajahas6, scarletas6, serenaas6, silkyas6, trinityas6, yaraas6]);
 
 let jaidaas7 = new Queen("Jaida Essence Hall", 10, 11, 10, 12, 12, 14, 12, 13, 12, 5, 0,"Jaida", "Jaida", "AS7", false);
 let jinkxas7 = new Queen("Jinkx Monsoon", 14, 12, 15, 10, 11, 11, 13, 12, 13, 4, 1, "Jinkx", "Jinkx", "AS7", false);
@@ -9379,7 +9404,7 @@ function UntuckedPart2() {
     Main.createText(safestext+" all grab a drink, and sit down together.","Bold");
   }
   UntuckedEvent(false);
-  if((CurrentSeason.currentCast.length == 3 && (CurrentSeason.finaleformat == "TOP3" || CurrentSeason.finaleformat == "TOP3NE")) || (CurrentSeason.currentCast.length==4 && (CurrentSeason.finaleformat=="LSFTC")))
+  if((CurrentSeason.currentCast.length == 3 && (CurrentSeason.finaleformat == "TOP3" || CurrentSeason.finaleformat == "TOP3NE")) || (CurrentSeason.currentCast.length==4 && (CurrentSeason.finaleformat=="LSFTC")) && (CurrentSeason.premiereformat != "NORMAL" && CurrentSeason.episodes.length > 2))
   {
     CurrentSeason.currentCast[0].favoritism += 3;
     CurrentSeason.currentCast[2].favoritism += -3;
@@ -11894,7 +11919,12 @@ function Intro()
 }
 
 function GenerateRusicalRoles(){
-
+      let miniwinner;
+      let mainroles = [[],[],[]];
+      let sideroles = [[],[],[]];
+      let forgetroles = [[],[],[]];
+      let numberofroles = [0,0,0];
+      let chosenrole;
       Main = new Screen();
       Main.clean();
       for(let i = 0; i < CurrentSeason.currentCast.length; i++)
@@ -11904,23 +11934,99 @@ function GenerateRusicalRoles(){
             Main.createImage(CurrentSeason.currentCast[i].image,'blue');
             Main.createText(CurrentSeason.currentCast[i].GetName()+" as the winner of this week mini-challenge! You get to assign the roles of the rusical to the other queens.")
             Main.createLine();
+            miniwinner = CurrentSeason.currentCast[i];
           }
       }
       shuffle(CurrentSeason.currentCast);
+
+      for(let i = 0 ; i < CurrentChallenge.roles[CurrentChallenge.chosen].length ; i++)
+      {
+        if(CurrentChallenge.roles[CurrentChallenge.chosen][i].type == "Main")
+        {
+          switch(CurrentChallenge.roles[CurrentChallenge.chosen][i].difficulty){
+            case "Hard":
+              mainroles[0].push(CurrentChallenge.roles[CurrentChallenge.chosen][i]);
+              break;
+            case "Medium":
+              mainroles[1].push(CurrentChallenge.roles[CurrentChallenge.chosen][i]);
+              break;
+            case "Easy":
+              mainroles[2].push(CurrentChallenge.roles[CurrentChallenge.chosen][i]);
+              break;
+          }
+          numberofroles[0]++;
+        }
+
+        if(CurrentChallenge.roles[CurrentChallenge.chosen][i].type == "Side")
+        {
+          switch(CurrentChallenge.roles[CurrentChallenge.chosen][i].difficulty){
+            case "Hard":
+              sideroles[0].push(CurrentChallenge.roles[CurrentChallenge.chosen][i]);
+              break;
+            case "Medium":
+              sideroles[1].push(CurrentChallenge.roles[CurrentChallenge.chosen][i]);
+              break;
+            case "Easy":
+              sideroles[2].push(CurrentChallenge.roles[CurrentChallenge.chosen][i]);
+              break;
+          }
+          numberofroles[1]++;
+        }
+
+        if(CurrentChallenge.roles[CurrentChallenge.chosen][i].type == "Forgettable")
+        {
+          switch(CurrentChallenge.roles[CurrentChallenge.chosen][i].difficulty){
+            case "Hard":
+              forgetroles[0].push(CurrentChallenge.roles[CurrentChallenge.chosen][i]);
+              break;
+            case "Medium":
+              forgetroles[1].push(CurrentChallenge.roles[CurrentChallenge.chosen][i]);
+              break;
+            case "Easy":
+              forgetroles[2].push(CurrentChallenge.roles[CurrentChallenge.chosen][i]);
+              break;       
+          }
+          numberofroles[2]++;
+        }
+      }
       for(let i = 0; i < CurrentSeason.currentCast.length; i++)
       {
-        if(CurrentChallenge.roles[CurrentChallenge.chosen].length!=0)
-        {
-          let randomrole = getRandomInt(0,CurrentChallenge.roles[CurrentChallenge.chosen].length-1);
-          Main.createImage(CurrentSeason.currentCast[i].image,'black');
-          Main.createText(CurrentSeason.currentCast[i].GetName()+" as been assigned to the role of : \""+CurrentChallenge.roles[CurrentChallenge.chosen][randomrole]+"\".");
-          CurrentSeason.currentCast.rusicalrole = CurrentChallenge.roles[CurrentChallenge.chosen][randomrole];
-          CurrentChallenge.roles[CurrentChallenge.chosen].splice(randomrole,1);
-          if(CurrentChallenge.roles[CurrentChallenge.chosen].length==0)
+          if(numberofroles[2] > 0 && getRandomInt(0,50) > 10)
           {
-            Main.createLine();
-          }
-        }
+            if(mainroles[2].length != 0)
+            {
+              chosenrole = mainroles[2][getRandomInt(0,mainroles[2].length-1)];
+              Main.createImage(CurrentSeason.currentCast[i].image,'black');
+              Main.createText(CurrentSeason.currentCast[i].GetName()+", notice that the role of \""+chosenrole.name+"\" looks quite easy to do and is a main role.");
+              Main.createText(CurrentSeason.currentCast[i].GetName()+", ask "+miniwinner.GetName()+", if they can get the role.");
+              Main.createText(miniwinner.GetName()+" agrees and give them the role of : \""+chosenrole.name+"\".");
+              CurrentSeason.currentCast[i].rusicalrole = chosenrole;
+              mainroles[2].splice(mainroles[2].indexOf(chosenrole));
+              numberofroles[0]--;
+            }
+            else if(mainroles[1].length != 0 && ((CurrentSeason.currentCast[i].charisma + CurrentSeason.currentCast[i].acting + CurrentSeason.currentCast[i].dance) > 20))
+            {
+              chosenrole = mainroles[1][getRandomInt(0,mainroles[1].length-1)];
+              Main.createImage(CurrentSeason.currentCast[i].image,'black');
+              Main.createText(CurrentSeason.currentCast[i].GetName()+", notice that the role of \""+chosenrole.name+"\"  is a main role. The role is pretty challenging, but they are sure in their ability.");
+              Main.createText(CurrentSeason.currentCast[i].GetName()+", ask "+miniwinner.GetName()+", if they can get the role.");
+              Main.createText(miniwinner.GetName()+" agrees and give them the role of : \""+chosenrole.name+"\".");
+              CurrentSeason.currentCast[i].rusicalrole = chosenrole;
+              mainroles[1].splice(mainroles[1].indexOf(chosenrole));
+              numberofroles[0]--;
+            }
+            else if(mainroles[0].length != 0 && ((CurrentSeason.currentCast[i].charisma + CurrentSeason.currentCast[i].acting + CurrentSeason.currentCast[i].dance) > 30))
+            {
+              chosenrole = mainroles[1][getRandomInt(0,mainroles[1].length-1)];
+              Main.createImage(CurrentSeason.currentCast[i].image,'black');
+              Main.createText(CurrentSeason.currentCast[i].GetName()+", notice that the role of \""+chosenrole.name+"\"  is a main role. The role is extremely challenging. They really want to shine and think they can do it with this role.");
+              Main.createText(CurrentSeason.currentCast[i].GetName()+", ask "+miniwinner.GetName()+", if they can get the role.");
+              Main.createText(miniwinner.GetName()+" agrees and give them the role of : \""+chosenrole.name+"\".");
+              CurrentSeason.currentCast[i].rusicalrole = chosenrole;
+              mainroles[0].splice(mainroles[1].indexOf(chosenrole));
+              numberofroles[0]--;
+            }
+          }  
       }
       Main.createButton("Proceed","GenerateChallenge()");
 
