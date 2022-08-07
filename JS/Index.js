@@ -10707,7 +10707,7 @@ function Placements() {
         }
         else
         {
-          if(Bottoms[i].finalscore >= 30)
+          if(Bottoms[i].finalscore >= 15)
           {
             BottomQueens.push(Bottoms[i]);
           }
@@ -10748,6 +10748,8 @@ function Placements() {
         Main.createImage(TopsQueens[1].image,"deepskyblue");
         Main.createText(TopsQueens[0].GetName()+" and "+TopsQueens[1].GetName()+" ! ", "Bold");
         Main.createText("Congratulations, you are both the top two of this week challenge.", "Bold");
+        TopsQueens[0].favoritism += 3;
+        TopsQueens[1].favoritism += 3;
         if(TopsQueens.length == Tops.length)
         {
           if(BottomQueens.length == Bottoms.length)
@@ -10766,6 +10768,7 @@ function Placements() {
           if(TopsQueens.indexOf(Tops[index]) == -1)
           {
           Main.createImage(Tops[index].image,"#17d4ff");
+          Tops[index].favoritism += 1;
             {
               topsnames += Tops[index].GetName();
               if(index != Tops.length-1)
@@ -10799,6 +10802,7 @@ function Placements() {
           if(BottomQueens.indexOf(Bottoms[index]) == -1)
           {
             Main.createImage(Bottoms[index].image,"lightpink");
+            Bottoms[index].favoritism += -1;
             {
               lownames += Bottoms[index].GetName();
               if(index != Bottoms.length-2 && index != Bottoms.length-1)
@@ -10823,6 +10827,7 @@ function Placements() {
         for (let index = 0; index < BottomQueens.length; index++) {
             Main.createImage(BottomQueens[index].image,"tomato");
             btmnames += BottomQueens[index].GetName();
+            BottomQueens[index].favoritism += -3;
               if(index != BottomQueens.length-2 && index != BottomQueens.length-1)
               {
                 btmnames += ", ";
@@ -12626,28 +12631,14 @@ function RankQueens(){
         {
             Tops.push(CurrentSeason.currentCast[0]);
             Tops.push(CurrentSeason.currentCast[1]);
-              if(CurrentSeason.currentCast[2].finalscore <= 10)
-              {
-                Tops.push(CurrentSeason.currentCast[2]);
-              }
-              else
-              {
-                Bottoms.push(CurrentSeason.currentCast[2]);
-              }
+            Bottoms.push(CurrentSeason.currentCast[2]);
             Bottoms.push(CurrentSeason.currentCast[3]);
             Bottoms.push(CurrentSeason.currentCast[4]);
         }
         else if(CurrentSeason.currentCast.length==4)
         {
           Tops.push(CurrentSeason.currentCast[0]);
-            if(CurrentSeason.currentCast[1].finalscore <= 10)
-            {
-              Tops.push(CurrentSeason.currentCast[1]);
-            }
-            else
-            {
-              Bottoms.push(CurrentSeason.currentCast[1]);
-            }
+          Tops.push(CurrentSeason.currentCast[1]);
           Bottoms.push(CurrentSeason.currentCast[2]);
           Bottoms.push(CurrentSeason.currentCast[3]);
         }
