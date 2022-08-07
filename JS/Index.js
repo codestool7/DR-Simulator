@@ -8406,7 +8406,7 @@ let indiaas5 = new Queen("India Ferrah", 7, 7, 7, 7, 7, 10, 12, 10, 9, 2, 4, "In
 let jujubeeas5 = new Queen("Jujubee", 11, 10, 9, 11, 8, 13, 10, 10, 15, 4, 2, "Juju", "Juju", "AS5", false);
 let mariahas5 = new Queen("Mariah Paris Balenciaga", 9, 10, 7, 9, 7, 13, 11, 12, 13, 5, 0, "Mariah", "Mariah", 'AS5', false);
 let mayhemas5 = new Queen("Mayhem Miller", 10, 11, 12, 8, 9, 11, 13, 8, 13, 5, 1, "Mayhem", "Mayhem", "AS5", false);
-let mizas5 = new Queen("Miz Cracker", 12, 11, 14, 10, 9, 89, 7, 12, 13, 2, 4, "Cracker", "Cracker", "AS5", false);
+let mizas5 = new Queen("Miz Cracker", 12, 11, 14, 10, 9, 9, 7, 12, 13, 2, 4, "Cracker", "Cracker", "AS5", false);
 let onginaas5 = new Queen("Ongina", 8, 7, 9, 7, 10, 12, 6, 7, 12, 5, 0, "Ongina", "Ongina", "AS5", false);
 let sheaas5 = new Queen("Shea Coulée", 12, 11, 13, 14, 12, 13, 14, 10, 11, 4, 1, "Shea", "Shea", "AS5", false);
 
@@ -9406,14 +9406,29 @@ function UntuckedPart2() {
     Main.createText(safestext+" all grab a drink, and sit down together.","Bold");
   }
   UntuckedEvent(false);
-  if((CurrentSeason.currentCast.length == 3 && (CurrentSeason.finaleformat == "TOP3" || CurrentSeason.finaleformat == "TOP3NE")) || (CurrentSeason.currentCast.length==4 && (CurrentSeason.finaleformat=="LSFTC")) && (CurrentSeason.premiereformat != "NORMAL" && CurrentSeason.episodes.length > 2))
+
+  if((CurrentSeason.currentCast.length == 3 && (CurrentSeason.finaleformat == "TOP3" || CurrentSeason.finaleformat == "TOP3NE"))  || (CurrentSeason.currentCast.length==4 && CurrentSeason.finaleformat=="LSFTC"))
   {
-    CurrentSeason.currentCast[0].favoritism += 3;
-    CurrentSeason.currentCast[2].favoritism += -3;
-    for (let index = 0; index < CurrentSeason.currentCast.length; index++) {
-      CurrentSeason.currentCast[index].ppe += 4;
+    if((CurrentSeason.premiereformat != "NORMAL" && CurrentSeason.episodes.length > 2))
+    {
+      if(CurrentSeason.lipsyncformat == "LSFYL")
+      {
+        Main.createButton("Proceed", "Lipsync()");
+      }
+      else
+      {
+        Main.createButton("Proceed", "Placements()");
+      } 
     }
-    Main.createButton("Proceed", "Finale()");
+    else
+    {
+      CurrentSeason.currentCast[0].favoritism += 3;
+      CurrentSeason.currentCast[2].favoritism += -3;
+      for (let index = 0; index < CurrentSeason.currentCast.length; index++) {
+        CurrentSeason.currentCast[index].ppe += 4;
+      }
+      Main.createButton("Proceed", "Finale()");
+    }
   }
   else
   {
