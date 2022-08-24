@@ -8711,16 +8711,16 @@ let tati;
 
 let FL3 = shuffle([valestal,brianna,tommy,jordyn, beyos3, izzys3, dyslelareina, aaliyah, virgo, ericc, rusha, mishu, linx, tati]);
 
-let elips = new Queen("Elips",7 ,7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Elips","Elips","FR1",false);
-let kam = new Queen("Kam Hugh", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Kam","Kam", "FR1",false);
-let bertha = new Queen("La Big Bertha", 7,7,7,7,7,7,7,7,7,2,2, "Bertha", "Bertha", "FR1", false);
-let briochée = new Queen("La Briochée", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Briochée", "Briochée", "FR1", false);
-let dame = new Queen("La Grande Dame", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Dame", "Dame", "FR1", false);
-let kahena = new Queen("La Kahena", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Kahena", "Kahena", "FR1", false);
-let lolita = new Queen("Lolita Banana", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Lolita", "Lolita", "FR1", false);
-let lova = new Queen("Lova Ladiva", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Lova", "Lova", "FR1", false);
-let paloma = new Queen("Paloma", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Paloma", "Paloma", "FR1", false);
-let soa = new Queen("Soa De Muse", 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, "Soa", "Soa","FR1", false);
+let elips = new Queen("Elips", 9, 8, 12, 9, 11, 8, 8, 9, 8, 5, 1, "Elips","Elips","FR1",false);
+let kam = new Queen("Kam Hugh", 8, 9, 7, 10, 13, 15, 8, 10, 9, 4, 1, "Kam","Kam", "FR1",false);
+let bertha = new Queen("La Big Bertha", 12, 11, 10, 8, 7, 9, 13, 12, 11, 5, 2, "Bertha", "Bertha", "FR1", false);
+let briochée = new Queen("La Briochée", 11, 8, 9, 7, 7, 13, 12, 11, 13, 5, 1, "Briochée", "Briochée", "FR1", false);
+let dame = new Queen("La Grande Dame", 9, 10, 11, 10, 13, 14, 8, 9, 8, 4, 1, "Dame", "Dame", "FR1", false);
+let kahena = new Queen("La Kahena", 8, 9, 7, 8, 10, 7, 9, 12, 11, 4, 2, "Kahena", "Kahena", "FR1", false);
+let lolita = new Queen("Lolita Banana", 12, 13, 12, 14, 8, 10, 12, 13, 10, 5, 2, "Lolita", "Lolita", "FR1", false);
+let lova = new Queen("Lova Ladiva", 11, 10, 9, 11, 7, 8, 9, 7, 9, 5, 3, "Lova", "Lova", "FR1", false);
+let paloma = new Queen("Paloma", 13, 12, 14, 8, 11, 12, 11, 12, 10, 5, 2, "Paloma", "Paloma", "FR1", false);
+let soa = new Queen("Soa De Muse", 11, 12, 14, 10, 8, 9, 14, 11, 15, 5, 2, "Soa", "Soa","FR1", false);
 
 let FR1 = shuffle([elips, kam, bertha, briochée, dame, kahena, lolita, lova, paloma, soa]);
 
