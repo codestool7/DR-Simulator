@@ -9499,7 +9499,23 @@ function Finale()
           break;
           
         case 3:
-          let missc = getRandomInt(0,CurrentSeason.eliminatedCast.length-1);
+          let misscpoints = 0;
+          let missc;
+          let points;
+          for (let index = 0; index < CurrentSeason.eliminatedCast.length; index++) {
+            points = 0;
+
+            for (let re = 0; re < CurrentSeason.eliminatedCast[index].relationsships.length; re++) {
+              points += CurrentSeason.eliminatedCast[index].relationsships[re].GetRelation();
+            }
+      
+            if(misscpoints <= points)
+            {
+              missc = CurrentSeason.eliminatedCast[index];
+              misscpoints = points;
+            }
+          }
+
           for (let q = 0; q < CurrentSeason.eliminatedCast.length; q++) {
             if(q == missc)
             {
@@ -9678,7 +9694,23 @@ function Finale()
             Main.createImage(CurrentSeason.currentCast[i].image,"springgreen");
           }
 
-          let missc = getRandomInt(0,CurrentSeason.eliminatedCast.length-1);
+          let misscpoints = 0;
+          let missc;
+          let points;
+          for (let index = 0; index < CurrentSeason.eliminatedCast.length; index++) {
+            points = 0;
+
+            for (let re = 0; re < CurrentSeason.eliminatedCast[index].relationsships.length; re++) {
+              points += CurrentSeason.eliminatedCast[index].relationsships[re].GetRelation();
+            }
+      
+            if(misscpoints <= points)
+            {
+              missc = CurrentSeason.eliminatedCast[index];
+              misscpoints = points;
+            }
+          }
+
           for (let q = 0; q < CurrentSeason.eliminatedCast.length; q++) {
             if(q == missc)
             {
