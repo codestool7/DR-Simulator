@@ -9407,7 +9407,7 @@ function UntuckedPart2() {
   }
   UntuckedEvent(false);
 
-  if((CurrentSeason.currentCast.length == 3 && (CurrentSeason.finaleformat == "TOP3" || CurrentSeason.finaleformat == "TOP3NE"))  || (CurrentSeason.currentCast.length==4 && CurrentSeason.finaleformat=="LSFTC"))
+  if((CurrentSeason.currentCast.length == 3 && (CurrentSeason.finaleformat == "TOP3" || CurrentSeason.finaleformat == "TOP3NE")) || (CurrentSeason.currentCast.length==4 && (CurrentSeason.finaleformat=="LSFTC")) && ( (CurrentSeason.premiereformat != "NORMAL" && CurrentSeason.episodes.length > 2) || (CurrentSeason.premiereformat == "NORMAL")))
   {
     if((CurrentSeason.premiereformat != "NORMAL" && CurrentSeason.episodes.length > 2))
     {
